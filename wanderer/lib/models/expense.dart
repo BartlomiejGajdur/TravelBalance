@@ -53,11 +53,11 @@ class Expense {
       case Category.food:
         return 'Food';
       case Category.health:
-        return 'health';
+        return 'Health';
       case Category.transport:
-        return 'transport';
+        return 'Transport';
       case Category.activities:
-        return 'activities';
+        return 'Activities';
       default:
         return 'Unknown';
     }
