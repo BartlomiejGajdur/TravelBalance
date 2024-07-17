@@ -3,9 +3,9 @@ testFlight:
   environment:
     ios_signing:
       provisioning_profiles:
-        - TravelBalance_ProvProfile
+        - TravelBalance_ProvProfileDevelopement
       certificates:
-        - Development_Certificate
+        - Iphone_Development_Certificate
   integrations:
     app_store_connect: Codemagic API Key
     scripts:
