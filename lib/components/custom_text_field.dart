@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../components/globals.dart';
 
 class CustomTextField extends StatelessWidget {
-  final dynamic controller;
+  final TextEditingController controller;
   final bool obscureText;
   final String hintText;
   final Color cursorColor;
@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final double shadowSpreadRadius;
   final Offset shadowOffset;
   final double horizontalPadding;
+  final Widget? suffixIcon;
 
   const CustomTextField({
     super.key,
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     this.shadowBlurRadius = 5.0,
     this.shadowSpreadRadius = 2.0,
     this.shadowOffset = const Offset(0, 3),
+    this.suffixIcon,
   });
 
   @override
@@ -62,6 +64,7 @@ class CustomTextField extends StatelessWidget {
             hintText: hintText,
             filled: true,
             fillColor: Colors.white,
+            suffixIcon: suffixIcon,
           ),
           cursorColor: cursorColor,
         ),
