@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:wanderer/services/api_service.dart';
+import 'package:TravelBalance/services/api_service.dart';
 
 class AuthProvider with ChangeNotifier {
   bool _isLoading = false;

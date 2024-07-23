@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wanderer/models/user.dart';
-import 'package:wanderer/services/api_service.dart';
+import 'package:TravelBalance/models/user.dart';
+import 'package:TravelBalance/services/api_service.dart';
 
 class UserProvider with ChangeNotifier {
   User? _user;

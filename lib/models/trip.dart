@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wanderer/models/expense.dart';
+import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
   int _id;

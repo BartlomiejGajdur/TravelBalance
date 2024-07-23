@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wanderer/components/expense_component.dart';
-import 'package:wanderer/models/expense.dart';
+import 'package:TravelBalance/components/expense_component.dart';
+import 'package:TravelBalance/models/expense.dart';
 
 class ExpenseSheetComponent extends StatelessWidget {
   final List<Expense> expenses;
@@ -13,7 +12,7 @@ class ExpenseSheetComponent extends StatelessWidget {
     super.key,
     required this.expenses,
     required this.dateTime,
-  })  : yearMonthDayString =
+  }) : yearMonthDayString =
             '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
 
   @override

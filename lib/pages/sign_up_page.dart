@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wanderer/components/custom_text_field.dart';
-import 'package:wanderer/components/signup_button_component.dart';
-import 'package:wanderer/pages/login_page.dart';
-import 'package:wanderer/services/api_service.dart';
+import 'package:TravelBalance/components/custom_text_field.dart';
+import 'package:TravelBalance/components/signup_button_component.dart';
+import 'package:TravelBalance/pages/login_page.dart';
+import 'package:TravelBalance/services/api_service.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();

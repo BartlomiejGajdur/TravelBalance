@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:wanderer/components/globals.dart';
-import 'package:wanderer/providers/user_provider.dart';
-import 'package:wanderer/pages/login_page.dart'; // Import the LoginPage
+import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/pages/login_page.dart'; // Import the LoginPage
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});

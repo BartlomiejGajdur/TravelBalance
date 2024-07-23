@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:wanderer/models/user.dart';
+import 'package:TravelBalance/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wanderer/models/expense.dart';
+import 'package:TravelBalance/models/expense.dart';
 
 Widget categoryIcon(Category category, [double sizeMultipier = 1]) {
   Map<Category, MapEntry<IconData, Color>> categoryIcon = {

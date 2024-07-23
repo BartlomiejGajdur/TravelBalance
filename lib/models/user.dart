@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wanderer/models/trip.dart';
+import 'package:TravelBalance/models/trip.dart';
 
 class User {
   List<Trip>? _trips;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wanderer/components/globals.dart';
-import 'package:wanderer/components/trip_component.dart';
-import 'package:wanderer/models/trip.dart';
-import 'package:wanderer/pages/expense_list_page.dart';
-import 'package:wanderer/providers/user_provider.dart';
-import 'package:wanderer/components/app_drawer.dart';
+import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/components/trip_component.dart';
+import 'package:TravelBalance/models/trip.dart';
+import 'package:TravelBalance/pages/expense_list_page.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/components/app_drawer.dart';
 
 class TripListPage extends StatefulWidget {
   const TripListPage({super.key});

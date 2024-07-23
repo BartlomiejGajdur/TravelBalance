@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wanderer/components/category_item.dart';
-import 'package:wanderer/models/expense.dart';
+import 'package:TravelBalance/components/category_item.dart';
+import 'package:TravelBalance/models/expense.dart';
 
 class ModalBottomSheetExpense extends StatelessWidget {
   Expense expense;

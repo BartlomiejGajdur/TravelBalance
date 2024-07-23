@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wanderer/components/custom_text_field.dart';
-import 'package:wanderer/components/login_button_component.dart';
-import 'package:wanderer/pages/forgot_password_page.dart';
-import 'package:wanderer/pages/sign_up_page.dart';
+import 'package:TravelBalance/components/custom_text_field.dart';
+import 'package:TravelBalance/components/login_button_component.dart';
+import 'package:TravelBalance/pages/forgot_password_page.dart';
+import 'package:TravelBalance/pages/sign_up_page.dart';
 import '../components/globals.dart';
 
 class LoginPage extends StatelessWidget {

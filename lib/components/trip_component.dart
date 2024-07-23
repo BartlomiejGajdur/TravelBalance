@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:wanderer/components/globals.dart';
-import 'package:wanderer/models/trip.dart';
+import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/models/trip.dart';
 
 class TripComponent extends StatelessWidget {
   final Trip trip;

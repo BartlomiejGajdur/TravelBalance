@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wanderer/components/expense_sheet_component.dart';
-import 'package:wanderer/components/globals.dart';
-import 'package:wanderer/models/expense.dart';
-import 'package:wanderer/models/trip.dart';
+import 'package:TravelBalance/components/expense_sheet_component.dart';
+import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/models/expense.dart';
+import 'package:TravelBalance/models/trip.dart';
 
 class ExpenseListPage extends StatelessWidget {
   final Trip trip;

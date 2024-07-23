@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wanderer/components/globals.dart';
+import 'package:TravelBalance/components/globals.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});
