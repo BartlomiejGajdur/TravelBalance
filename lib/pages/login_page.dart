@@ -19,9 +19,9 @@ class LoginPage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 22.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 20.h),
@@ -34,13 +34,13 @@ class LoginPage extends StatelessWidget {
                 Text(
                   "Welcome back wanderer!",
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 28.sp),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 24.sp),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: Text(
                     "Create your next journey here.",
-                    style: TextStyle(fontSize: 18.sp),
+                    style: TextStyle(fontSize: 16.sp),
                   ),
                 ),
                 SizedBox(
