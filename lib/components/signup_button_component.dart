@@ -63,11 +63,12 @@ class _SignupButtonComponentState extends State<SignupButtonComponent> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    if (result)
+                    if (result) {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const LoginPage()));
+                    }
                   },
                   style: ButtonStyle(
                     minimumSize:
