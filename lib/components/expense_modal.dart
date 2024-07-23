@@ -5,8 +5,6 @@ import 'package:wanderer/models/expense.dart';
 
 class ModalBottomSheetExpense extends StatelessWidget {
   Expense expense;
-  //Function on Save
-  //Function on
   ModalBottomSheetExpense({super.key, required this.expense});
 
   @override

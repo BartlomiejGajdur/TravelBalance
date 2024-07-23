@@ -112,7 +112,7 @@ class _SignupButtonComponentState extends State<SignupButtonComponent> {
                 width: 24.w,
                 height: 24.h,
                 child: CircularProgressIndicator(
-                  color: Colors.white, // Kolor kółka ładowania
+                  color: Colors.white,
                   strokeWidth: 2.0.w,
                 ),
               )
