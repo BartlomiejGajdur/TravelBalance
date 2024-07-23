@@ -40,9 +40,14 @@ class ApiService {
 
   Future<bool> login(String username, String password) async {
     try {
+      // Map<String, dynamic> body = {
+      //   'username': 'testowy_user',
+      //   'password': 'testowehaslo123!',
+      // };
+
       Map<String, dynamic> body = {
-        'username': 'testowy_user',
-        'password': 'testowehaslo123!',
+        'username': username,
+        'password': password,
       };
       var endpoint = 'login/';
       var response = await http.post(
@@ -84,6 +89,46 @@ class ApiService {
       }
     } catch (e) {
       debugPrint("Error in Logout: $e");
+    }
+  }
+
+  Future<bool> signup(String username, String email, String password,
+      String repeatedPassword) async {
+    try {
+      // Map<String, dynamic> body = {
+      //   "username": "bartlo",
+      //   "email": "afu62040@doolk.com",
+      //   "password": "ZXCVBNM1!",
+      //   "password2": "ZXCVBNM1!"
+      // };
+
+      Map<String, dynamic> body = {
+        "username": username,
+        "email": email,
+        "password": password,
+        "password2": repeatedPassword
+      };
+
+      var endpoint = 'user/';
+      var response = await http.post(
+        Uri.parse('$_baseUrl$endpoint'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 201) {
+        var responseBody = jsonDecode(response.body);
+        debugPrint('Signup Response: $responseBody');
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error in Signup: $e");
+      return false;
     }
   }
 }

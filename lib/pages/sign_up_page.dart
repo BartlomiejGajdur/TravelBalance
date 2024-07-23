@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wanderer/components/custom_text_field.dart';
+import 'package:wanderer/components/signup_button_component.dart';
 import 'package:wanderer/pages/login_page.dart';
+import 'package:wanderer/services/api_service.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -10,6 +12,14 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController =
       TextEditingController();
+
+  Future<bool> signup() async {
+    return await ApiService().signup(
+        usernameController.text,
+        emailController.text,
+        passwordController.text,
+        repeatPasswordController.text);
+  }
 
   SignUpPage({super.key});
 
@@ -101,21 +111,9 @@ class SignUpPage extends StatelessWidget {
                       horizontalPadding: 22.w,
                     ),
                     SizedBox(height: 16.h),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 22.w),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            minimumSize: WidgetStateProperty.all(
-                                Size(double.infinity, 50.h)),
-                            backgroundColor:
-                                WidgetStateProperty.all(Colors.green[400]),
-                          ),
-                          child: const Text(
-                            "SIGNUP",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )),
+                    SignupButtonComponent(
+                      onClick: signup,
+                    ),
                     SizedBox(height: 16.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
