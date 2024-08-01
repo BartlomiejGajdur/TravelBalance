@@ -1,4 +1,4 @@
-package com.example.wanderer
+package com.TravelBalance
 
 import io.flutter.embedding.android.FlutterActivity
 
