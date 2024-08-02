@@ -1,6 +1,6 @@
 {
-    "name": "wanderer",
-    "short_name": "wanderer",
+    "name": "TravelBalance",
+    "short_name": "TravelBalance",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
