@@ -1,4 +1,4 @@
-# wanderer
+# TravelBalance
 
 A new Flutter project.
 
