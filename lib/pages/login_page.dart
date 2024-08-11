@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:TravelBalance/components/custom_text_field.dart';
 import 'package:TravelBalance/components/login_button_component.dart';
 import 'package:TravelBalance/pages/forgot_password_page.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
 import '../components/globals.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+  _LoginPageState createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  String appleCredentials = '';
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -58,6 +66,44 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   horizontalPadding: 22.w,
                 ),
+                SignInWithAppleButton(
+                  onPressed: () async {
+                    try {
+                      final AuthorizationCredentialAppleID credential =
+                          await SignInWithApple.getAppleIDCredential(
+                        scopes: [
+                          AppleIDAuthorizationScopes.email,
+                          AppleIDAuthorizationScopes.fullName,
+                        ],
+                        // webAuthenticationOptions: WebAuthenticationOptions(
+                        //   clientId: 'SignInWithAppleKey',
+                        //   redirectUri: Uri.parse('your_redirect_uri'),
+                        // ),
+                      );
+
+                      setState(() {
+                        appleCredentials = '''
+                        Email: ${credential.email ?? 'N/A'}
+                        Full Name: ${credential.givenName ?? 'N/A'} ${credential.familyName ?? 'N/A'}
+                        User ID: ${credential.userIdentifier}
+                        ''';
+                      });
+                    } catch (error) {
+                      print('Error during Apple Sign-In: $error');
+                    }
+                  },
+                ),
+                if (appleCredentials.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.all(20.h),
+                    child: Text(
+                      appleCredentials,
+                      style: TextStyle(
+                        fontSize: 6.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 SizedBox(height: 10.h),
                 LoginButtonComponent(
                   usernameController: usernameController,
