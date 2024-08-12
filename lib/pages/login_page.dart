@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  String appleCredentials = '';
+  String appleCredentials = 'NONE';
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,10 @@ class _LoginPageState extends State<LoginPage> {
                         ''';
                       });
                     } catch (error) {
-                      print('Error during Apple Sign-In: $error');
+                      setState(() {
+                        appleCredentials =
+                            "Error during Apple Sign-In: ${error}";
+                      });
                     }
                   },
                 ),
