@@ -43,16 +43,14 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>CFBundleURLTypes</key>
-<array>
-  <dict>
-    <key>CFBundleTypeRole</key>
-    <string>Editor</string>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>com.domainname.travelbalance</string>
-    </array>
-  </dict>
-</array>
+	<array>
+    	<dict>
+    	<key>CFBundleURLSchemes</key>
+        	<array>
+        	<string>com.domainname.travelbalance</string>
+        	</array>
+    	</dict>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
