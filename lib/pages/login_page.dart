@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:TravelBalance/components/custom_text_field.dart';
-import 'package:TravelBalance/components/login_button_component.dart';
-import 'package:TravelBalance/pages/forgot_password_page.dart';
-import 'package:TravelBalance/pages/sign_up_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import '../services/google_signin_api.dart';
+import '../components/custom_text_field.dart';
+import '../components/login_button_component.dart';
+import '../pages/forgot_password_page.dart';
+import '../pages/sign_up_page.dart';
 import '../components/globals.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  GoogleSignInAccount? _user; // Przechowywanie danych zalogowanego użytkownika
+
+  Future<void> signIn() async {
+    final user = await GoogleSignInApi.login();
+    setState(() {
+      _user = user;
+    });
+  }
+
+  Future<void> logOut() async {
+    bool isUserLogedOut = await GoogleSignInApi.logout();
+    if (isUserLogedOut) {
+      setState(() {
+        _user = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -43,9 +68,7 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(fontSize: 16.sp),
                   ),
                 ),
-                SizedBox(
-                  height: 80.h,
-                ),
+                SizedBox(height: 80.h),
                 CustomTextField(
                   hintText: "Username",
                   controller: usernameController,
@@ -73,10 +96,11 @@ class LoginPage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordPage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ForgotPasswordPage()),
+                          );
                         },
                         child: const Text(
                           "Forgot password?",
@@ -86,16 +110,47 @@ class LoginPage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpPage()),
+                          );
                         },
-                        child: const Text("Sign up",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: const Text(
+                          "Sign up",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
-                )
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                  icon:
+                      const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                  label: const Text('Sign Up with Google'),
+                  onPressed: signIn,
+                ),
+                if (_user != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.h),
+                    child: Column(
+                      children: [
+                        Text(
+                          '''
+                          Logged in as: ${_user!.displayName} 
+                          ${_user!.email}
+                          ${_user!.id}
+                          ${_user!.serverAuthCode}''',
+                          style: TextStyle(fontSize: 8.sp),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (_user != null)
+                  ElevatedButton(onPressed: logOut, child: Text("Logout"))
               ],
             ),
           ),
