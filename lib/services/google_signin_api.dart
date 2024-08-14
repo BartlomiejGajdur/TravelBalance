@@ -9,7 +9,13 @@ class GoogleSignInApi {
       final GoogleSignInAccount? user = await _googleSignIn.signIn();
       if (user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Successfully signed in as ${user.displayName}')),
+          SnackBar(
+              content: Text('Successfully signed in as ${user.displayName}')),
+        );
+      }
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Nie jest to errorr ale te user jest null')),
         );
       }
       return user;
