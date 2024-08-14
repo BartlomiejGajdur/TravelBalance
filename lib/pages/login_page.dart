@@ -132,8 +132,6 @@ class _LoginPageState extends State<LoginPage> {
                       const FaIcon(FontAwesomeIcons.google, color: Colors.red),
                   label: const Text('Sign Up with Google'),
                   onPressed: () {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Clicked Login')));
                     signIn(context);
                   },
                 ),
