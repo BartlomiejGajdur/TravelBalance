@@ -20,12 +20,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   GoogleSignInAccount? _user; // Przechowywanie danych zalogowanego użytkownika
-
+  GoogleSignInAuthentication? _googleAuth;
   Future<void> signIn(BuildContext context) async {
     final user = await GoogleSignInApi.login(context);
     setState(() {
       _user = user;
     });
+    if (_user != null) {
+      final googleAuth = await _user!.authentication;
+      setState(() {
+        _googleAuth = googleAuth;
+      });
+    }
   }
 
   Future<void> logOut(BuildContext context) async {
@@ -144,8 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                           '''
                           Logged in as: ${_user!.displayName} 
                           ${_user!.email}
-                          ${_user!.id}
-                          ${_user!.serverAuthCode}''',
+                          ${_user!.id}''',
                           style: TextStyle(fontSize: 8.sp),
                         ),
                       ],
@@ -153,7 +158,22 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 if (_user != null)
                   ElevatedButton(
-                      onPressed: () => logOut(context), child: Text("Logout"))
+                      onPressed: () => logOut(context), child: Text("Logout")),
+                if (_googleAuth != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.h),
+                    child: Column(
+                      children: [
+                        Text(
+                          '''
+                          Authorization in as: 
+                          ${_googleAuth!.idToken} 
+                          ${_googleAuth!.accessToken}''',
+                          style: TextStyle(fontSize: 8.sp),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
