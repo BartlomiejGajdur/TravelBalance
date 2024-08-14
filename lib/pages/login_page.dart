@@ -21,15 +21,15 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   GoogleSignInAccount? _user; // Przechowywanie danych zalogowanego użytkownika
 
-  Future<void> signIn() async {
-    final user = await GoogleSignInApi.login();
+  Future<void> signIn(BuildContext context) async {
+    final user = await GoogleSignInApi.login(context);
     setState(() {
       _user = user;
     });
   }
 
-  Future<void> logOut() async {
-    bool isUserLogedOut = await GoogleSignInApi.logout();
+  Future<void> logOut(BuildContext context) async {
+    bool isUserLogedOut = await GoogleSignInApi.logout(context);
     if (isUserLogedOut) {
       setState(() {
         _user = null;
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   icon:
                       const FaIcon(FontAwesomeIcons.google, color: Colors.red),
                   label: const Text('Sign Up with Google'),
-                  onPressed: signIn,
+                  onPressed: () => signIn(context),
                 ),
                 if (_user != null)
                   Padding(
@@ -150,7 +150,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 if (_user != null)
-                  ElevatedButton(onPressed: logOut, child: Text("Logout"))
+                  ElevatedButton(
+                      onPressed: () => logOut(context), child: Text("Logout"))
               ],
             ),
           ),

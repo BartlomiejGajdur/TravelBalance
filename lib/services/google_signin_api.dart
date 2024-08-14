@@ -1,28 +1,37 @@
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInApi {
   static final _googleSignIn = GoogleSignIn();
 
-  static Future<GoogleSignInAccount?> login() async {
+  static Future<GoogleSignInAccount?> login(BuildContext context) async {
     try {
-      // Attempt to sign in the user
       final GoogleSignInAccount? user = await _googleSignIn.signIn();
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Successfully signed in as ${user.displayName}')),
+        );
+      }
       return user;
     } on Exception catch (e) {
-      // Handle any exceptions that occur during the sign-in process
-      print('Error during Google Sign-In: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during Google Sign-In: $e')),
+      );
       return null;
     }
   }
 
-  static Future<bool> logout() async {
+  static Future<bool> logout(BuildContext context) async {
     try {
       await _googleSignIn.signOut();
-      print('User signed out successfully.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User signed out successfully.')),
+      );
       return true;
     } on Exception catch (e) {
-      // Handle any exceptions that occur during the sign-out process
-      print('Error during Google Sign-Out: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during Google Sign-Out: $e')),
+      );
       return false;
     }
   }
