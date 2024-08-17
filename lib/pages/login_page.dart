@@ -133,6 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(horizontal: 22.w),
+                    minimumSize: Size(double.infinity, 0),
                   ),
                   icon:
                       const FaIcon(FontAwesomeIcons.google, color: Colors.red),
@@ -159,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (_user != null)
                   ElevatedButton(
                       onPressed: () => logOut(context), child: Text("Logout")),
-                if (_googleAuth != null)
+                if (_googleAuth != null && _user != null)
                   Padding(
                     padding: EdgeInsets.only(top: 20.h),
                     child: Column(
