@@ -4,8 +4,8 @@ import 'package:TravelBalance/components/category_item.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class ModalBottomSheetExpense extends StatelessWidget {
-  Expense expense;
-  ModalBottomSheetExpense({super.key, required this.expense});
+  final Expense expense;
+  const ModalBottomSheetExpense({super.key, required this.expense});
 
   @override
   Widget build(BuildContext context) {

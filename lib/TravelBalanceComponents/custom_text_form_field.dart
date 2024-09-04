@@ -33,7 +33,7 @@ class CustomTextFormField extends StatefulWidget {
   final Icon? prefixIcon;
   final bool toggleText; 
 
-  CustomTextFormField({
+  const CustomTextFormField({super.key, 
     required this.controller,
     required this.formKey,
     required this.labelText,
@@ -73,7 +73,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       controller: widget.controller,
       obscureText: widget.toggleText ? !showText : false, 
       decoration: InputDecoration(
-        prefixIcon: widget.prefixIcon ?? null,
+        prefixIcon: widget.prefixIcon,
         suffixIcon: widget.toggleText
             ? IconButton(
                 icon: Icon(showText ? Icons.visibility : Icons.visibility_off),
@@ -87,19 +87,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         labelText: widget.labelText,
         hintText: widget.hintText,
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green, width: 2.0),
+          borderSide: const BorderSide(color: Colors.green, width: 2.0),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(255, 5, 99, 33), width: 2.0),
+          borderSide: const BorderSide(color: Color.fromARGB(255, 5, 99, 33), width: 2.0),
           borderRadius: BorderRadius.circular(10),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+          borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(10),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 2.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2.0),
           borderRadius: BorderRadius.circular(10),
         ),
       ),

@@ -35,7 +35,7 @@ void showCustomSnackBar({
         message,
         textAlign: TextAlign.center,
       ),
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       behavior: SnackBarBehavior.floating,
       backgroundColor: backgroundColor,
       shape: RoundedRectangleBorder(

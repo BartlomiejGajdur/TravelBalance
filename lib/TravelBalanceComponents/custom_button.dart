@@ -9,11 +9,11 @@ class CustomButton extends StatefulWidget {
   final Function() onSuccess;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.buttonText,
     this.onSuccess = _emptyCallback,
-  }) : super(key: key);
+  });
 
   static void _emptyCallback() {}
 

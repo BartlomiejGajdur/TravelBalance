@@ -21,7 +21,7 @@ class GoogleSignInApi {
       }
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Nie jest to errorr ale te user jest null')),
+          const SnackBar(content: Text('Nie jest to errorr ale te user jest null')),
         );
       }
       return user;
@@ -37,7 +37,7 @@ class GoogleSignInApi {
     try {
       await _googleSignIn.signOut();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User signed out successfully.')),
+        const SnackBar(content: Text('User signed out successfully.')),
       );
       return true;
     } on Exception catch (e) {

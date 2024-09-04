@@ -11,7 +11,7 @@ import '../pages/sign_up_page.dart';
 import '../Utils/globals.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           if (_user != null)
             ElevatedButton(
-                onPressed: () => logOut(context), child: Text("Logout")),
+                onPressed: () => logOut(context), child: const Text("Logout")),
           if (_googleAuth != null)
             Padding(
               padding: EdgeInsets.only(top: 20.h),
