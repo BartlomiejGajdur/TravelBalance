@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/trip.dart';
 
 class TripComponent extends StatelessWidget {
@@ -93,7 +93,7 @@ class TripComponent extends StatelessWidget {
                         onPressed: moveToDetails,
                         style: ButtonStyle(
                           backgroundColor:
-                              WidgetStateProperty.all(leadingColor),
+                              WidgetStateProperty.all(primaryColor),
                         ),
                         child: const Text(
                           "Details",

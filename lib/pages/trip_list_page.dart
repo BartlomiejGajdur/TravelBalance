@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/components/trip_component.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/pages/expense_list_page.dart';
@@ -39,7 +39,7 @@ class _TripListPageState extends State<TripListPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: leadingColor,
+        backgroundColor: primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       endDrawer: const AppDrawer(),
@@ -52,7 +52,7 @@ class _TripListPageState extends State<TripListPage> {
             );
           } else {
             return RefreshIndicator(
-              color: leadingColor,
+              color: primaryColor,
               onRefresh: () async {
                 await userProvider.fetchWholeUserData();
               },

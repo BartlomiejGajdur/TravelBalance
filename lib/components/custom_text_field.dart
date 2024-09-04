@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../components/globals.dart';
+import '../Utils/globals.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     required this.obscureText,
     required this.horizontalPadding,
-    this.cursorColor = leadingColor,
+    this.cursorColor = primaryColor,
     this.borderColor = Colors.grey,
     this.borderRadius = 24.0,
     this.shadowColor = Colors.grey,

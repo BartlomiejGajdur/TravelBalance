@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});
@@ -9,7 +9,7 @@ class ForgotPasswordPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("ForgotPasswordPage"),
-        backgroundColor: leadingColor,
+        backgroundColor: primaryColor,
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/pages/login_page.dart'; // Import the LoginPage
 
@@ -17,7 +17,7 @@ class AppDrawer extends StatelessWidget {
           Container(
             width: double.infinity,
             height: 180.h,
-            decoration: const BoxDecoration(color: leadingColor),
+            decoration: const BoxDecoration(color: primaryColor),
             child: Center(
               child: Text(
                 "Menu",

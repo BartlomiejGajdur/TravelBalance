@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/components/expense_sheet_component.dart';
-import 'package:TravelBalance/components/globals.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 
@@ -21,7 +21,7 @@ class ExpenseListPage extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: leadingColor,
+        backgroundColor: primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       backgroundColor: Colors.grey[100],
