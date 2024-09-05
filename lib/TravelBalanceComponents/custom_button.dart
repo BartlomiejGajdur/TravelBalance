@@ -55,12 +55,17 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: buttonHorizontalPadding),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: ElevatedButton(
         onPressed: isLoading ? null : handleOnPressed,
         style: ButtonStyle(
-          minimumSize: WidgetStateProperty.all(Size(double.infinity, 50.h)),
+          minimumSize: WidgetStateProperty.all(Size(double.infinity, 56.h)),
           backgroundColor: WidgetStateProperty.all(primaryColor),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(buttonRadius),
+            ),
+          ),
         ),
         child: isLoading
             ? const SizedBox(

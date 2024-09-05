@@ -29,3 +29,6 @@ TextStyle secondaryTextStyle = GoogleFonts.outfit(
 );
 
 double buttonHorizontalPadding = 22.w;
+double horizontalPadding = 28.w;
+double buttonRadius = 16.r;
+double textFieldRadius = 16.r;
