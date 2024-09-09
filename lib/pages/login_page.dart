@@ -12,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../services/google_signin_api.dart';
 import '../pages/forgot_password_page.dart';
 import '../Utils/globals.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -53,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isUserLogedOut) {
       setState(() {
         _user = null;
+        _googleAuth = null;
       });
     }
   }
@@ -147,6 +149,36 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
               ]),
+              if (_googleAuth != null)
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[100],
+                      foregroundColor: Colors.black,
+                    ),
+                    child: const Text("Copy accessToken"),
+                    onPressed: () async {
+                      await Clipboard.setData(ClipboardData(
+                          text: _googleAuth!.accessToken.toString()));
+                    },
+                  ),
+                ),
+              if (_googleAuth != null)
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[200],
+                      foregroundColor: Colors.black,
+                    ),
+                    child: const Text("Copy idToken"),
+                    onPressed: () async {
+                      await Clipboard.setData(
+                          ClipboardData(text: _googleAuth!.idToken.toString()));
+                    },
+                  ),
+                ),
             ],
           ),
         ),
