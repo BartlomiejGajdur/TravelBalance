@@ -7,7 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 class GoogleSignInApi {
   static final _googleSignIn = GoogleSignIn(
     clientId: Platform.isIOS
-        ? '1007518232866-aqth9ace072tfoi7smssfmm9vfkapa8k.apps.googleusercontent.com'
+        ? '1007518232866-9ef0serrldjq7ti29b7apbhtoqp6tbb6.apps.googleusercontent.com'
         : null,
   );
 
