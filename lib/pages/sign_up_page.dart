@@ -34,11 +34,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<bool> signup() async {
-    return await ApiService().signup(
-        usernameController.text,
-        emailController.text,
-        passwordController.text,
-        repeatPasswordController.text);
+    if (formKey.currentState?.validate() ?? false) {
+      return await ApiService().signup(
+          usernameController.text,
+          emailController.text,
+          passwordController.text,
+          repeatPasswordController.text);
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -48,60 +52,62 @@ class _SignUpPageState extends State<SignUpPage> {
         preferredSize: Size.fromHeight(40.0.h),
         child: AppBar(),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 16.h),
-          Padding(
-            padding: EdgeInsets.only(left: horizontalPadding),
-            child: Text("Sign Up", style: mainTextStyle),
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey, // Użyj jednego klucza formularza dla wszystkich pól
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 16.h),
+              Padding(
+                padding: EdgeInsets.only(left: horizontalPadding),
+                child: Text("Sign Up", style: mainTextStyle),
+              ),
+              SizedBox(height: 24.h),
+              CustomTextFormField(
+                  controller: usernameController,
+                  labelText: 'Username',
+                  hintText: 'Enter your username',
+                  prefixIcon: Icons.person),
+              SizedBox(height: 12.h),
+              CustomTextFormField(
+                  controller: emailController,
+                  labelText: 'Email',
+                  hintText: 'Enter your email address',
+                  prefixIcon: Icons.email),
+              SizedBox(height: 12.h),
+              CustomTextFormField(
+                  controller: passwordController,
+                  labelText: 'Password',
+                  hintText: 'Enter your password',
+                  prefixIcon: Icons.lock,
+                  toggleText: true),
+              SizedBox(height: 12.h),
+              CustomTextFormField(
+                  controller: repeatPasswordController,
+                  labelText: 'Confirm Password',
+                  hintText: 'Re-enter your password',
+                  prefixIcon: Icons.lock,
+                  toggleText: true),
+              SizedBox(height: 24.h),
+              CustomButton(onPressed: signup, buttonText: "Sign up"),
+              SizedBox(height: 30.h),
+              const CustomDivider(text: "Or Sign in with"),
+              SizedBox(height: 24.h),
+              const MockButton(
+                  buttonType: ButtonType.apple, actionType: ActionType.signUp),
+              SizedBox(height: 24.h),
+              const MockButton(
+                  buttonType: ButtonType.google, actionType: ActionType.signUp),
+              SizedBox(height: 30.h),
+              const DoubleLineText(
+                  first: "Have an account?",
+                  second: "Sign In!",
+                  moveTo: "LoginPage"),
+              SizedBox(height: 50.h),
+            ],
           ),
-          SizedBox(height: 24.h),
-          CustomTextFormField(
-              controller: usernameController,
-              formKey: formKey,
-              labelText: 'Username',
-              hintText: 'Please insert a username',
-              prefixIcon: Icons.person),
-          SizedBox(height: 12.h),
-          CustomTextFormField(
-              controller: emailController,
-              formKey: formKey,
-              labelText: 'Email',
-              hintText: 'Please insert a Email',
-              prefixIcon: Icons.email),
-          SizedBox(height: 12.h),
-          CustomTextFormField(
-              controller: passwordController,
-              formKey: formKey,
-              labelText: 'Password',
-              hintText: 'Please insert a password',
-              prefixIcon: Icons.lock,
-              toggleText: true),
-          SizedBox(height: 12.h),
-          CustomTextFormField(
-              controller: repeatPasswordController,
-              formKey: formKey,
-              labelText: 'Confirm Password',
-              hintText: 'Please repeat password',
-              prefixIcon: Icons.lock,
-              toggleText: true),
-          SizedBox(height: 24.h),
-          CustomButton(onPressed: signup, buttonText: "Sign up"),
-          SizedBox(height: 30.h),
-          const CustomDivider(text: "Or Sign in with"),
-          SizedBox(height: 24.h),
-          const MockButton(
-              buttonType: ButtonType.apple, actionType: ActionType.signUp),
-          SizedBox(height: 24.h),
-          const MockButton(
-              buttonType: ButtonType.google, actionType: ActionType.signUp),
-          SizedBox(height: 30.h),
-          const DoubleLineText(
-              first: "Have an account?",
-              second: "Sign In!",
-              moveTo: "LoginPage"),
-        ],
+        ),
       ),
     );
   }

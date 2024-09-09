@@ -57,110 +57,117 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<bool> loginAS() async {
-    return await ApiService()
-        .login(usernameController.text, passwordController.text);
+    if (formKey.currentState?.validate() ?? false) {
+      return await ApiService()
+          .login(usernameController.text, passwordController.text);
+    } else {
+      throw "Check input errors!";
+    }
   }
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 108.h),
-          Padding(
-            padding: EdgeInsets.only(left: horizontalPadding),
-            child: Text("Welcome back wanderer!", style: mainTextStyle),
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 108.h),
+              Padding(
+                padding: EdgeInsets.only(left: horizontalPadding),
+                child: Text("Welcome back wanderer!", style: mainTextStyle),
+              ),
+              SizedBox(height: 8.h),
+              Padding(
+                padding: EdgeInsets.only(left: horizontalPadding),
+                child: Text(
+                  "Sign In to your account",
+                  style: secondaryTextStyle,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              CustomTextFormField(
+                  controller: usernameController,
+                  labelText: 'Username',
+                  hintText: 'Enter your username',
+                  prefixIcon: Icons.person),
+              SizedBox(height: 16.h),
+              CustomTextFormField(
+                  controller: passwordController,
+                  labelText: 'Password',
+                  hintText: 'Enter your password',
+                  prefixIcon: Icons.lock,
+                  toggleText: true),
+              SizedBox(height: 16.h),
+              ForgotPassword(context),
+              SizedBox(height: 20.h),
+              CustomButton(onPressed: loginAS, buttonText: "Login"),
+              SizedBox(height: 40.h),
+              const CustomDivider(text: "Or login with"),
+              SizedBox(height: 24.h),
+              const MockButton(
+                  buttonType: ButtonType.apple, actionType: ActionType.login),
+              SizedBox(height: 24.h),
+              const MockButton(
+                  buttonType: ButtonType.google, actionType: ActionType.login),
+              SizedBox(height: 88.h),
+              const DoubleLineText(
+                  first: "Don’t have an account?",
+                  second: "Sign Up!",
+                  moveTo: "SignUpPage"),
+              SizedBox(height: 50.h),
+              // ElevatedButton.icon(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.white,
+              //     foregroundColor: Colors.black,
+              //   ),
+              //   icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+              //   label: const Text('Sign Up with Google'),
+              //   onPressed: () {
+              //     signIn(context);
+              //   },
+              // ),
+              // if (_user != null)
+              //   Padding(
+              //     padding: EdgeInsets.only(top: 20.h),
+              //     child: Column(
+              //       children: [
+              //         Text(
+              //           '''
+              //           Logged in as: ${_user!.displayName}
+              //           ${_user!.email}
+              //           ${_user!.id}''',
+              //           style: TextStyle(fontSize: 8.sp),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // if (_user != null)
+              //   ElevatedButton(
+              //       onPressed: () => logOut(context), child: const Text("Logout")),
+              // if (_googleAuth != null)
+              //   Padding(
+              //     padding: EdgeInsets.only(top: 20.h),
+              //     child: Column(
+              //       children: [
+              //         Text(
+              //           '''
+              //           Authorization in as:
+              //           IDToken:
+              //           ${_googleAuth!.idToken}
+              //           AccessToken:
+              //           ${_googleAuth!.accessToken}''',
+              //           style: TextStyle(fontSize: 8.sp),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+            ],
           ),
-          SizedBox(height: 8.h),
-          Padding(
-            padding: EdgeInsets.only(left: horizontalPadding),
-            child: Text(
-              "Sign In to your account",
-              style: secondaryTextStyle,
-            ),
-          ),
-          SizedBox(height: 24.h),
-          CustomTextFormField(
-              controller: usernameController,
-              formKey: formKey,
-              labelText: 'Username',
-              hintText: 'Please write a username',
-              prefixIcon: Icons.person),
-          SizedBox(height: 16.h),
-          CustomTextFormField(
-              controller: passwordController,
-              formKey: formKey,
-              labelText: 'Password',
-              hintText: 'Please insert a password',
-              prefixIcon: Icons.lock,
-              toggleText: true),
-          SizedBox(height: 16.h),
-          ForgotPassword(context),
-          SizedBox(height: 20.h),
-          CustomButton(onPressed: loginAS, buttonText: "Login"),
-          SizedBox(height: 40.h),
-          const CustomDivider(text: "Or login with"),
-          SizedBox(height: 24.h),
-          const MockButton(
-              buttonType: ButtonType.apple, actionType: ActionType.login),
-          SizedBox(height: 24.h),
-          const MockButton(
-              buttonType: ButtonType.google, actionType: ActionType.login),
-          SizedBox(height: 88.h),
-          const DoubleLineText(
-              first: "Don’t have an account?",
-              second: "Sign Up!",
-              moveTo: "SignUpPage")
-          // ElevatedButton.icon(
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.white,
-          //     foregroundColor: Colors.black,
-          //   ),
-          //   icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
-          //   label: const Text('Sign Up with Google'),
-          //   onPressed: () {
-          //     signIn(context);
-          //   },
-          // ),
-          // if (_user != null)
-          //   Padding(
-          //     padding: EdgeInsets.only(top: 20.h),
-          //     child: Column(
-          //       children: [
-          //         Text(
-          //           '''
-          //           Logged in as: ${_user!.displayName}
-          //           ${_user!.email}
-          //           ${_user!.id}''',
-          //           style: TextStyle(fontSize: 8.sp),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // if (_user != null)
-          //   ElevatedButton(
-          //       onPressed: () => logOut(context), child: const Text("Logout")),
-          // if (_googleAuth != null)
-          //   Padding(
-          //     padding: EdgeInsets.only(top: 20.h),
-          //     child: Column(
-          //       children: [
-          //         Text(
-          //           '''
-          //           Authorization in as:
-          //           IDToken:
-          //           ${_googleAuth!.idToken}
-          //           AccessToken:
-          //           ${_googleAuth!.accessToken}''',
-          //           style: TextStyle(fontSize: 8.sp),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-        ],
+        ),
       ),
     );
   }

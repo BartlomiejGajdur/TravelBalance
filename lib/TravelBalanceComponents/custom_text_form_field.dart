@@ -1,33 +1,8 @@
-/*
-@@@<NAME>_PAGE@@@
-  final TextEditingController controller = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-@@@@@@@@@@@
-
-@@@Usage@@@
-CustomTextFormField(
-    controller: controller,
-    formKey: formKey, 
-    labelText: 'Username',
-    hintText: 'Please write a username',
-    prefixIcon: Icon(Icons.percent),
-    toggleText: true),
-@@@@@@@@@@@
-
-*/
-
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
-  final GlobalKey<FormState> formKey;
   final String labelText;
   final String hintText;
   final String? Function(String?)? validator;
@@ -38,7 +13,6 @@ class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     super.key,
     required this.controller,
-    required this.formKey,
     required this.labelText,
     required this.hintText,
     this.prefixIcon,
@@ -64,26 +38,23 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return null;
   }
 
-  void defaultOnChanged(String value) {
-    final FormState? form = widget.formKey.currentState;
-    if (form != null) {
-      form.validate();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: widget.textFieldHorizontalPadding ?? horizontalPadding),
+          horizontal: widget.textFieldHorizontalPadding ??
+              horizontalPadding), // default padding
       child: TextFormField(
+        onTapOutside: (event) {
+          print('onTapOutside');
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         controller: widget.controller,
         obscureText: widget.toggleText ? !showText : false,
         decoration: InputDecoration(
-          prefixIcon: Icon(
-            widget.prefixIcon,
-            color: Colors.grey[600],
-          ),
+          prefixIcon: widget.prefixIcon != null
+              ? Icon(widget.prefixIcon, color: Colors.grey[600])
+              : null,
           suffixIcon: widget.toggleText
               ? IconButton(
                   icon: Icon(
@@ -101,25 +72,28 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           labelStyle: TextStyle(color: Colors.grey[600]),
           hintText: widget.hintText,
           border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.green, width: 2.0),
-            borderRadius: BorderRadius.circular(textFieldRadius),
+            borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+            borderRadius: BorderRadius.circular(8.0), // radius for text field
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: primaryColor, width: 2.0),
-            borderRadius: BorderRadius.circular(textFieldRadius),
+            borderSide: const BorderSide(color: secondaryColor, width: 2.0),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(textFieldRadius),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.red, width: 2.0),
-            borderRadius: BorderRadius.circular(textFieldRadius),
+            borderRadius: BorderRadius.circular(8.0),
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
         ),
         validator: widget.validator ?? defaultValidator,
-        onChanged: (value) => defaultOnChanged(value),
+        onChanged: (value) {
+          final FormState form = Form.of(context);
+          form.validate();
+        },
       ),
     );
   }

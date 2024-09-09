@@ -35,7 +35,6 @@ class _CustomButtonState extends State<CustomButton> {
 
     try {
       bool success = await widget.onPressed();
-      print(success);
       if (success) {
         widget.onSuccess();
       } else {
