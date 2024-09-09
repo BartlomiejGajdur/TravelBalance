@@ -1,17 +1,37 @@
+import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
+import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
+import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
+import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:TravelBalance/components/custom_text_field.dart';
-import 'package:TravelBalance/components/signup_button_component.dart';
-import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/api_service.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController =
       TextEditingController();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    repeatPasswordController.dispose();
+    super.dispose();
+  }
 
   Future<bool> signup() async {
     return await ApiService().signup(
@@ -21,133 +41,66 @@ class SignUpPage extends StatelessWidget {
         repeatPasswordController.text);
   }
 
-  SignUpPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      backgroundColor: Colors.green[400],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0.h),
+        child: AppBar(),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 16.h),
           Padding(
-            padding: EdgeInsets.fromLTRB(19.w, 88.h, 0, 37.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Create Account!",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  "To get started now.",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 23.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+            padding: EdgeInsets.only(left: horizontalPadding),
+            child: Text("Sign Up", style: mainTextStyle),
           ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 70.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomTextField(
-                      hintText: "Username",
-                      controller: usernameController,
-                      obscureText: false,
-                      horizontalPadding: 22.w,
-                      suffixIcon: const Icon(Icons.person),
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextField(
-                      hintText: "Email",
-                      controller: emailController,
-                      obscureText: false,
-                      horizontalPadding: 22.w,
-                      suffixIcon: const Icon(Icons.email),
-                    ),
-                    SizedBox(height: 16.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomTextField(
-                          hintText: "Password",
-                          controller: passwordController,
-                          obscureText: true,
-                          horizontalPadding: 22.w,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 22.w),
-                          child: Text(
-                            "Password should be at least 8 characters long",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 9.sp,
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF656565),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    CustomTextField(
-                      hintText: "Repeat Password",
-                      controller: repeatPasswordController,
-                      obscureText: true,
-                      horizontalPadding: 22.w,
-                    ),
-                    SizedBox(height: 16.h),
-                    SignupButtonComponent(
-                      onClick: signup,
-                    ),
-                    SizedBox(height: 16.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have an account? ",
-                          style: GoogleFonts.montserrat(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
-                          ),
-                          child: Text(
-                            "Login",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.green[400],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
+          SizedBox(height: 24.h),
+          CustomTextFormField(
+              controller: usernameController,
+              formKey: formKey,
+              labelText: 'Username',
+              hintText: 'Please insert a username',
+              prefixIcon: Icons.person),
+          SizedBox(height: 12.h),
+          CustomTextFormField(
+              controller: emailController,
+              formKey: formKey,
+              labelText: 'Email',
+              hintText: 'Please insert a Email',
+              prefixIcon: Icons.email),
+          SizedBox(height: 12.h),
+          CustomTextFormField(
+              controller: passwordController,
+              formKey: formKey,
+              labelText: 'Password',
+              hintText: 'Please insert a password',
+              prefixIcon: Icons.lock,
+              toggleText: true),
+          SizedBox(height: 12.h),
+          CustomTextFormField(
+              controller: repeatPasswordController,
+              formKey: formKey,
+              labelText: 'Confirm Password',
+              hintText: 'Please repeat password',
+              prefixIcon: Icons.lock,
+              toggleText: true),
+          SizedBox(height: 24.h),
+          CustomButton(onPressed: signup, buttonText: "Sign up"),
+          SizedBox(height: 30.h),
+          const CustomDivider(text: "Or Sign in with"),
+          SizedBox(height: 24.h),
+          const MockButton(
+              buttonType: ButtonType.apple, actionType: ActionType.signUp),
+          SizedBox(height: 24.h),
+          const MockButton(
+              buttonType: ButtonType.google, actionType: ActionType.signUp),
+          SizedBox(height: 30.h),
+          const DoubleLineText(
+              first: "Have an account?",
+              second: "Sign In!",
+              moveTo: "LoginPage"),
         ],
       ),
     );

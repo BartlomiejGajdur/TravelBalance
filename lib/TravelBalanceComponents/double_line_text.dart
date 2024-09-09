@@ -29,9 +29,9 @@ class DoubleLineText extends StatelessWidget {
               text: first,
             ),
             TextSpan(
-              text: " " + second,
+              text: " $second",
               style:
-                  TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+                  const TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   Navigator.pushNamed(context, moveTo);

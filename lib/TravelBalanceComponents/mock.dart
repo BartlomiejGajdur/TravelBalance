@@ -4,24 +4,31 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // Import dla ikon FontAwesome
 
-enum ButtonType { Google, Apple }
+enum ButtonType { google, apple }
+
+enum ActionType { login, signUp }
 
 class MockButton extends StatelessWidget {
   final ButtonType buttonType;
+  final ActionType actionType;
 
-  const MockButton({super.key, required this.buttonType});
+  const MockButton(
+      {super.key, required this.buttonType, required this.actionType});
 
   @override
   Widget build(BuildContext context) {
     // Ustalanie stylu przycisku w zależności od typu
     final Color backgroundColor =
-        buttonType == ButtonType.Google ? Colors.white : Colors.black;
+        buttonType == ButtonType.google ? Colors.white : Colors.black;
     final Color textColor =
-        buttonType == ButtonType.Google ? Colors.black : Colors.white;
+        buttonType == ButtonType.google ? Colors.black : Colors.white;
 
-    final String text = buttonType == ButtonType.Google
-        ? 'Sign in with Google'
-        : 'Sign in with Apple';
+    final String buttonTypeText =
+        buttonType == ButtonType.google ? 'with Google' : 'with Apple';
+    final String actionTypeText =
+        actionType == ActionType.login ? 'Log In' : 'Sign Up';
+
+    final String text = "$actionTypeText $buttonTypeText";
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -37,7 +44,7 @@ class MockButton extends StatelessWidget {
           mainAxisAlignment:
               MainAxisAlignment.center, // Wyśrodkowanie zawartości
           children: [
-            if (buttonType == ButtonType.Google)
+            if (buttonType == ButtonType.google)
               const FaIcon(FontAwesomeIcons.google, color: Colors.red)
             else
               Icon(Icons.apple, size: 24.sp, color: textColor),

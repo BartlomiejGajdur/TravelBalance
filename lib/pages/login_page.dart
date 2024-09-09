@@ -104,11 +104,13 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(height: 40.h),
           const CustomDivider(text: "Or login with"),
           SizedBox(height: 24.h),
-          const MockButton(buttonType: ButtonType.Apple),
+          const MockButton(
+              buttonType: ButtonType.apple, actionType: ActionType.login),
           SizedBox(height: 24.h),
-          const MockButton(buttonType: ButtonType.Google),
+          const MockButton(
+              buttonType: ButtonType.google, actionType: ActionType.login),
           SizedBox(height: 88.h),
-          DoubleLineText(
+          const DoubleLineText(
               first: "Don’t have an account?",
               second: "Sign Up!",
               moveTo: "SignUpPage")
