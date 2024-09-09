@@ -6,6 +6,7 @@ import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/google_signin_api.dart';
@@ -119,52 +120,33 @@ class _LoginPageState extends State<LoginPage> {
                   second: "Sign Up!",
                   moveTo: "SignUpPage"),
               SizedBox(height: 50.h),
-              // ElevatedButton.icon(
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.white,
-              //     foregroundColor: Colors.black,
-              //   ),
-              //   icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
-              //   label: const Text('Sign Up with Google'),
-              //   onPressed: () {
-              //     signIn(context);
-              //   },
-              // ),
-              // if (_user != null)
-              //   Padding(
-              //     padding: EdgeInsets.only(top: 20.h),
-              //     child: Column(
-              //       children: [
-              //         Text(
-              //           '''
-              //           Logged in as: ${_user!.displayName}
-              //           ${_user!.email}
-              //           ${_user!.id}''',
-              //           style: TextStyle(fontSize: 8.sp),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // if (_user != null)
-              //   ElevatedButton(
-              //       onPressed: () => logOut(context), child: const Text("Logout")),
-              // if (_googleAuth != null)
-              //   Padding(
-              //     padding: EdgeInsets.only(top: 20.h),
-              //     child: Column(
-              //       children: [
-              //         Text(
-              //           '''
-              //           Authorization in as:
-              //           IDToken:
-              //           ${_googleAuth!.idToken}
-              //           AccessToken:
-              //           ${_googleAuth!.accessToken}''',
-              //           style: TextStyle(fontSize: 8.sp),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                  icon:
+                      const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+                  label: const Text('Sign Up'),
+                  onPressed: () {
+                    signIn(context);
+                  },
+                ),
+                if (_user != null)
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                    ),
+                    icon: const FaIcon(FontAwesomeIcons.google,
+                        color: Colors.red),
+                    label: const Text('Log Out'),
+                    onPressed: () {
+                      logOut(context);
+                    },
+                  ),
+              ]),
             ],
           ),
         ),
