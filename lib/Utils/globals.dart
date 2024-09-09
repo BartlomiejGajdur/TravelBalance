@@ -10,6 +10,7 @@ const Color mainTextColor = Color(0xFF192048);
 const Color secondaryTextColor = Color(0xFF575555);
 const Color redWarningColor = Color(0xFFED5E68);
 const Color buttonTextColor = Colors.white;
+
 // Button Text Style with Google Fonts
 TextStyle buttonTextStyle = GoogleFonts.outfit(
   fontSize: 18.sp,

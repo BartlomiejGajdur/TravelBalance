@@ -1,3 +1,4 @@
+import 'package:TravelBalance/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +25,12 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (context, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: child,
+          home: const LoginPage(),
+          routes: {
+            'LoginPage': (context) => const LoginPage(),
+            'SignUpPage': (context) => SignUpPage(),
+          },
         ),
-        child: const LoginPage(),
       ),
     );
   }

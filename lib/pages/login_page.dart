@@ -1,6 +1,7 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -106,27 +107,11 @@ class _LoginPageState extends State<LoginPage> {
           const MockButton(buttonType: ButtonType.Apple),
           SizedBox(height: 24.h),
           const MockButton(buttonType: ButtonType.Google),
-          Align(
-            alignment: Alignment.center,
-            child: RichText(
-              text: TextSpan(
-                style: GoogleFonts.outfit(
-                  fontSize: 14.sp,
-                  color: secondaryTextColor,
-                ),
-                children: const [
-                  TextSpan(
-                    text: "Don't have an account?",
-                  ),
-                  TextSpan(
-                    text: ' Sign Up!',
-                    style: TextStyle(
-                        color: primaryColor, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          SizedBox(height: 88.h),
+          DoubleLineText(
+              first: "Don’t have an account?",
+              second: "Sign Up!",
+              moveTo: "SignUpPage")
           // ElevatedButton.icon(
           //   style: ElevatedButton.styleFrom(
           //     backgroundColor: Colors.white,
