@@ -42,6 +42,9 @@ class _CustomButtonState extends State<CustomButton> {
             context: context,
             message: "Something went wrong :(",
             type: SnackBarType.error);
+        // TEST ONLY
+        widget.onSuccess();
+        // TEST ONLY
       }
     } catch (e) {
       showCustomSnackBar(

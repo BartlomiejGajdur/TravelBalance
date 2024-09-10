@@ -3,6 +3,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
+import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,6 +70,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+// TEST ONLY
+
+  void moveToTrips() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TripListPage(),
+      ),
+    );
+  }
+
+// TEST ONLY
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +121,11 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 16.h),
               ForgotPassword(context),
               SizedBox(height: 20.h),
-              CustomButton(onPressed: loginAS, buttonText: "Login"),
+              CustomButton(
+                onPressed: loginAS,
+                buttonText: "Login",
+                onSuccess: moveToTrips,
+              ),
               SizedBox(height: 40.h),
               const CustomDivider(text: "Or login with"),
               SizedBox(height: 24.h),

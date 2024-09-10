@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/components/trip_component.dart';
@@ -15,6 +17,23 @@ class TripListPage extends StatefulWidget {
 }
 
 class _TripListPageState extends State<TripListPage> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    toggleLoading();
+    Provider.of<UserProvider>(context, listen: false).fetchWholeUserData();
+
+    toggleLoading();
+  }
+
+  void toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   void moveToDetails(Trip currentTrip) {
     Navigator.push(
       context,
@@ -25,60 +44,117 @@ class _TripListPageState extends State<TripListPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    Provider.of<UserProvider>(context, listen: false).fetchWholeUserData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "List of trips",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       endDrawer: const AppDrawer(),
-      backgroundColor: Colors.grey[100],
-      body: Consumer<UserProvider>(
-        builder: (context, userProvider, child) {
-          if (userProvider.user == null) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.green),
-            );
-          } else {
-            return RefreshIndicator(
-              color: primaryColor,
-              onRefresh: () async {
-                await userProvider.fetchWholeUserData();
-              },
-              child: ListView.builder(
-                itemCount: userProvider.user!.trips!.length,
-                itemBuilder: (context, index) {
-                  final currentTrip = userProvider.user!.trips![index];
-                  return TripComponent(
-                    trip: currentTrip,
-                    moveToDetails: () => moveToDetails(currentTrip),
-                    deleteFunction: (context) {
-                      Provider.of<UserProvider>(context, listen: false)
-                          .deleteTrip(index);
-                    },
-                  );
+      backgroundColor: secondaryColor,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(height: 53.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14.0.w),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "My Trips",
+                style: mainHeaderTextStyle,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14.0.w),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Your journeys, just a tap away.",
+                style: secondaryHeaderTextStyle,
+              ),
+            ),
+          ),
+          SizedBox(height: 19.h),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(21.r),
+                  topRight: Radius.circular(21.r),
+                ),
+              ),
+              child: Consumer<UserProvider>(
+                builder: (context, userProvider, child) {
+                  return _buildTripList(userProvider);
                 },
               ),
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  Widget _buildTripList(UserProvider userProvider) {
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: secondaryColor,
+        ),
+      );
+    } else if (userProvider.user == null) {
+      return NoTrips();
+    } else {
+      return RefreshIndicator(
+        color: primaryColor,
+        onRefresh: () async {
+          await userProvider.fetchWholeUserData();
+        },
+        child: ListView.builder(
+          itemCount: userProvider.user!.trips!.length,
+          itemBuilder: (context, index) {
+            final currentTrip = userProvider.user!.trips![index];
+            return TripComponent(
+              trip: currentTrip,
+              moveToDetails: () => moveToDetails(currentTrip),
+              deleteFunction: (context) {
+                Provider.of<UserProvider>(context, listen: false)
+                    .deleteTrip(index);
+              },
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Widget NoTrips() => Column(
+        children: [
+          SizedBox(height: 112.h),
+          Text("No trips here yet.", style: mainTextStyle),
+          SizedBox(height: 23.h),
+          Text("Tap the plus button below to create a\nnew trip.",
+              style: secondaryTextStyle, textAlign: TextAlign.center),
+          SizedBox(height: 70.h),
+          SvgPicture.asset(
+            "lib/assets/ArrowDown.svg",
+          ),
+        ],
+      );
+
+  Widget _buildFloatingActionButton() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 30.0.h),
+      child: FloatingActionButton(
         onPressed: () {
           Provider.of<UserProvider>(context, listen: false).addTrip();
         },
-        backgroundColor: Colors.green,
+        backgroundColor: secondaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32.0.r),
+        ),
         child: const Icon(
           Icons.add,
           color: Colors.white,

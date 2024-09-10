@@ -92,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 24.h),
               CustomButton(onPressed: signup, buttonText: "Sign up"),
               SizedBox(height: 30.h),
-              const CustomDivider(text: "Or Sign in with"),
+              const CustomDivider(text: "Or Sign up with"),
               SizedBox(height: 24.h),
               const MockButton(
                   buttonType: ButtonType.apple, actionType: ActionType.signUp),
@@ -102,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 30.h),
               const DoubleLineText(
                   first: "Have an account?",
-                  second: "Sign In!",
+                  second: "Log In!",
                   moveTo: "LoginPage"),
               SizedBox(height: 50.h),
             ],

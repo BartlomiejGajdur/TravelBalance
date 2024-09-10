@@ -29,6 +29,19 @@ TextStyle secondaryTextStyle = GoogleFonts.outfit(
   color: secondaryTextColor,
 );
 
+//Headers
+TextStyle mainHeaderTextStyle = GoogleFonts.outfit(
+  fontSize: 30.sp,
+  fontWeight: FontWeight.w800,
+  color: Colors.white,
+);
+
+TextStyle secondaryHeaderTextStyle = GoogleFonts.outfit(
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w500,
+  color: Colors.white,
+);
+
 double buttonHorizontalPadding = 22.w;
 double horizontalPadding = 28.w;
 double buttonRadius = 16.r;
