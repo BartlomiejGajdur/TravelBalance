@@ -10,10 +10,13 @@ class CustomButton extends StatefulWidget {
 
   const CustomButton({
     super.key,
-    required this.onPressed,
     required this.buttonText,
+    this.onPressed = emptyCallback,
     this.onSuccess = _emptyCallback,
   });
+  static Future<bool> emptyCallback() async {
+    return false;
+  }
 
   static void _emptyCallback() {}
 
@@ -42,9 +45,6 @@ class _CustomButtonState extends State<CustomButton> {
             context: context,
             message: "Something went wrong :(",
             type: SnackBarType.error);
-        // TEST ONLY
-        widget.onSuccess();
-        // TEST ONLY
       }
     } catch (e) {
       showCustomSnackBar(

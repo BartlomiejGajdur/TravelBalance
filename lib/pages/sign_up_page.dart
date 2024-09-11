@@ -4,6 +4,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dar
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/pages/email_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -33,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  Future<bool> signup() async {
+  Future<bool> signUp() async {
     if (formKey.currentState?.validate() ?? false) {
       return await ApiService().signup(
           usernameController.text,
@@ -43,6 +44,15 @@ class _SignUpPageState extends State<SignUpPage> {
     } else {
       return false;
     }
+  }
+
+  void moveToEmailConfirmation() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EmailConfirmation(),
+      ),
+    );
   }
 
   @override
@@ -90,7 +100,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   prefixIcon: Icons.lock,
                   toggleText: true),
               SizedBox(height: 24.h),
-              CustomButton(onPressed: signup, buttonText: "Sign up"),
+              CustomButton(
+                onPressed: signUp,
+                buttonText: "Sign up",
+                onSuccess: moveToEmailConfirmation,
+              ),
               SizedBox(height: 30.h),
               const CustomDivider(text: "Or Sign up with"),
               SizedBox(height: 24.h),

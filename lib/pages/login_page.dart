@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// State is not saved beetwen pages yet ! 
   GoogleSignInAccount? _user;
   GoogleSignInAuthentication? _googleAuth;
   Future<void> signIn(BuildContext context) async {
@@ -70,18 +71,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-// TEST ONLY
-
   void moveToTrips() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TripListPage(),
+        builder: (context) => const TripListPage(),
       ),
     );
   }
-
-// TEST ONLY
 
   @override
   Widget build(BuildContext context) {
@@ -132,15 +129,19 @@ class _LoginPageState extends State<LoginPage> {
               const MockButton(
                   buttonType: ButtonType.apple, actionType: ActionType.login),
               SizedBox(height: 24.h),
-              const MockButton(
-                  buttonType: ButtonType.google, actionType: ActionType.login),
+              GestureDetector(
+                onTap: () => signIn(context),
+                child: const MockButton(
+                    buttonType: ButtonType.google,
+                    actionType: ActionType.login),
+              ),
               SizedBox(height: 88.h),
               const DoubleLineText(
                   first: "Don’t have an account?",
                   second: "Sign Up!",
                   moveTo: "SignUpPage"),
               SizedBox(height: 50.h),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              if (_user != null)
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -148,25 +149,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   icon:
                       const FaIcon(FontAwesomeIcons.google, color: Colors.red),
-                  label: const Text('Sign Up'),
+                  label: const Text('Log Out'),
                   onPressed: () {
-                    signIn(context);
+                    logOut(context);
                   },
                 ),
-                if (_user != null)
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                    ),
-                    icon: const FaIcon(FontAwesomeIcons.google,
-                        color: Colors.red),
-                    label: const Text('Log Out'),
-                    onPressed: () {
-                      logOut(context);
-                    },
-                  ),
-              ]),
               if (_googleAuth != null)
                 Align(
                   alignment: Alignment.center,

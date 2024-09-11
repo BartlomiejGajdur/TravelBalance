@@ -7,7 +7,7 @@ import 'package:TravelBalance/components/trip_component.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/pages/expense_list_page.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
-import 'package:TravelBalance/components/app_drawer.dart';
+import 'package:TravelBalance/TravelBalanceComponents/app_drawer.dart';
 
 class TripListPage extends StatefulWidget {
   const TripListPage({super.key});
@@ -52,15 +52,30 @@ class _TripListPageState extends State<TripListPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(height: 53.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14.0.w),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "My Trips",
-                style: mainHeaderTextStyle,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14.0.w),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "My Trips",
+                    style: mainHeaderTextStyle,
+                  ),
+                ),
               ),
-            ),
+              Builder(builder: (context) {
+                return IconButton(
+                  iconSize: 26.sp,
+                  icon: const Icon(Icons.menu),
+                  color: Colors.white,
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                );
+              }),
+            ],
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 14.0.w),
