@@ -14,58 +14,60 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       width: 300.w,
-      child: Column(
-        children: [
-          SizedBox(height: 30.h),
-          Text("Hey, Captain of Control!",
-              style: GoogleFonts.outfit(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w800,
-                color: mainTextColor,
-              )),
-          SizedBox(height: 15.h),
-          Text(
-              "Feel like tweaking something?\nUpdate your settings here - your app, your rules!",
-              style: GoogleFonts.outfit(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-                color: secondaryTextColor,
-              ),
-              textAlign: TextAlign.center),
-          SizedBox(height: 15.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 21.w),
-            child: const Divider(color: Color(0xFFD9D9D9)),
-          ),
-          SizedBox(height: 15.h),
-          SvgPicture.asset(
-            "lib/assets/TwoGuysOneTent.svg",
-            height: 214.h,
-            width: 270.w,
-          ),
-          SizedBox(height: 53.h),
-          clickableListTile(context, "Currency"),
-          clickableListTile(context, "Change password"),
-          clickableListTile(context, "Send feedback"),
-          clickableListTile(context, "About"),
-          clickableListTile(context, "Help"),
-          SizedBox(height: 51.h),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (Route<dynamic> route) => false,
-              );
-              Provider.of<UserProvider>(context, listen: false).logout();
-            },
-            child: SvgPicture.asset(
-              "lib/assets/Logout.svg",
-              height: 27.h,
-              width: 114.w,
+      child: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: 15.h),
+            Text("Hey, Captain of Control!",
+                style: GoogleFonts.outfit(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w800,
+                  color: mainTextColor,
+                )),
+            SizedBox(height: 15.h),
+            Text(
+                "Feel like tweaking something?\nUpdate your settings here - your app, your rules!",
+                style: GoogleFonts.outfit(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: secondaryTextColor,
+                ),
+                textAlign: TextAlign.center),
+            SizedBox(height: 15.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 21.w),
+              child: const Divider(color: Color(0xFFD9D9D9)),
             ),
-          ),
-        ],
+            SizedBox(height: 15.h),
+            SvgPicture.asset(
+              "lib/assets/TwoGuysOneTent.svg",
+              height: 214.h,
+              width: 270.w,
+            ),
+            SizedBox(height: 53.h),
+            clickableListTile(context, "Currency"),
+            clickableListTile(context, "Change password"),
+            clickableListTile(context, "Send feedback"),
+            clickableListTile(context, "About"),
+            clickableListTile(context, "Help"),
+            SizedBox(height: 51.h),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (Route<dynamic> route) => false,
+                );
+                Provider.of<UserProvider>(context, listen: false).logout();
+              },
+              child: SvgPicture.asset(
+                "lib/assets/Logout.svg",
+                height: 27.h,
+                width: 114.w,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

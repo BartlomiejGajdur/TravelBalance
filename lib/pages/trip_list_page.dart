@@ -22,9 +22,13 @@ class _TripListPageState extends State<TripListPage> {
   @override
   void initState() {
     super.initState();
-    toggleLoading();
-    Provider.of<UserProvider>(context, listen: false).fetchWholeUserData();
+    fetchUserData();
+  }
 
+  Future<void> fetchUserData() async {
+    toggleLoading();
+    await Provider.of<UserProvider>(context, listen: false)
+        .fetchWholeUserData();
     toggleLoading();
   }
 
@@ -119,7 +123,7 @@ class _TripListPageState extends State<TripListPage> {
           color: secondaryColor,
         ),
       );
-    } else if (userProvider.user == null) {
+    } else if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
       return NoTrips();
     } else {
       return RefreshIndicator(
@@ -128,9 +132,9 @@ class _TripListPageState extends State<TripListPage> {
           await userProvider.fetchWholeUserData();
         },
         child: ListView.builder(
-          itemCount: userProvider.user!.trips!.length,
+          itemCount: userProvider.user!.trips.length,
           itemBuilder: (context, index) {
-            final currentTrip = userProvider.user!.trips![index];
+            final currentTrip = userProvider.user!.trips[index];
             return TripComponent(
               trip: currentTrip,
               moveToDetails: () => moveToDetails(currentTrip),

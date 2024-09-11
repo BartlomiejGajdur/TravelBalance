@@ -3,6 +3,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
+import 'package:TravelBalance/Utils/CustomScaffold.dart';
 import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// State is not saved beetwen pages yet ! 
+// State is not saved beetwen pages yet !
   GoogleSignInAccount? _user;
   GoogleSignInAuthentication? _googleAuth;
   Future<void> signIn(BuildContext context) async {
@@ -79,6 +80,21 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  //FOR DEBUG
+  void fillLoginAndPassword(
+      BuildContext context, String login, String password, bool haveTrips) {
+    usernameController.text = login;
+    passwordController.text = password;
+    String textMsg = "[DEBUG ONLY] - ";
+    textMsg += haveTrips
+        ? "User credentials with trips"
+        : "User credentials without trips";
+
+    showCustomSnackBar(
+        context: context, message: textMsg, type: SnackBarType.information);
+  }
+  //FOR DEBUG
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +140,16 @@ class _LoginPageState extends State<LoginPage> {
                 onSuccess: moveToTrips,
               ),
               SizedBox(height: 40.h),
-              const CustomDivider(text: "Or login with"),
+              const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              const MockButton(
-                  buttonType: ButtonType.apple, actionType: ActionType.login),
+              GestureDetector(
+                onTap: () => fillLoginAndPassword(
+                    context, "testowy_user", "testowehaslo123!", true),
+                onDoubleTap: () => fillLoginAndPassword(
+                    context, "noTrips", "testowehaslo123!", false),
+                child: const MockButton(
+                    buttonType: ButtonType.apple, actionType: ActionType.login),
+              ),
               SizedBox(height: 24.h),
               GestureDetector(
                 onTap: () => signIn(context),

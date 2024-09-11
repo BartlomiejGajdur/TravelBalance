@@ -3,6 +3,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
+import 'package:TravelBalance/Utils/CustomScaffold.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/pages/email_confirmation.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,18 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  //FOR DEBUG
+  void fillLoginAndPassword(BuildContext context) {
+    const String password = "testowehaslo123!";
+    passwordController.text = password;
+    repeatPasswordController.text = password;
+    String textMsg = "[DEBUG ONLY] - Default password set $password";
+
+    showCustomSnackBar(
+        context: context, message: textMsg, type: SnackBarType.information);
+  }
+  //FOR DEBUG
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +77,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: SingleChildScrollView(
         child: Form(
-          key: formKey, // Użyj jednego klucza formularza dla wszystkich pól
+          key: formKey, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -106,10 +119,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 onSuccess: moveToEmailConfirmation,
               ),
               SizedBox(height: 30.h),
-              const CustomDivider(text: "Or Sign up with"),
+              const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              const MockButton(
-                  buttonType: ButtonType.apple, actionType: ActionType.signUp),
+              GestureDetector(
+                onTap: () => fillLoginAndPassword(context),
+                child: const MockButton(
+                    buttonType: ButtonType.apple,
+                    actionType: ActionType.signUp),
+              ),
               SizedBox(height: 24.h),
               const MockButton(
                   buttonType: ButtonType.google, actionType: ActionType.signUp),
