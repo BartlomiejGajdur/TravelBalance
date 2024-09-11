@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
@@ -15,24 +15,28 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       width: 300.w,
       child: SafeArea(
+        bottom: true,
         child: Column(
           children: [
-            SizedBox(height: 15.h),
-            Text("Hey, Captain of Control!",
-                style: GoogleFonts.outfit(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w800,
-                  color: mainTextColor,
-                )),
+            SizedBox(height: 10.h),
+            Text(
+              "Hey, Captain of Control!",
+              style: GoogleFonts.outfit(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w800,
+                color: mainTextColor,
+              ),
+            ),
             SizedBox(height: 15.h),
             Text(
-                "Feel like tweaking something?\nUpdate your settings here - your app, your rules!",
-                style: GoogleFonts.outfit(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: secondaryTextColor,
-                ),
-                textAlign: TextAlign.center),
+              "Feel like tweaking something?\nUpdate your settings here - your app, your rules!",
+              style: GoogleFonts.outfit(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: secondaryTextColor,
+              ),
+              textAlign: TextAlign.center,
+            ),
             SizedBox(height: 15.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 21.w),
@@ -50,20 +54,23 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(context, "Send feedback"),
             clickableListTile(context, "About"),
             clickableListTile(context, "Help"),
-            SizedBox(height: 51.h),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                  (Route<dynamic> route) => false,
-                );
-                Provider.of<UserProvider>(context, listen: false).logout();
-              },
-              child: SvgPicture.asset(
-                "lib/assets/Logout.svg",
-                height: 27.h,
-                width: 114.w,
+            Spacer(), // Użyj Spacer, aby wypchnąć SVG na dół
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.h),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (Route<dynamic> route) => false,
+                  );
+                  Provider.of<UserProvider>(context, listen: false).logout();
+                },
+                child: SvgPicture.asset(
+                  "lib/assets/Logout.svg",
+                  height: 27.h,
+                  width: 114.w,
+                ),
               ),
             ),
           ],
@@ -86,15 +93,14 @@ class AppDrawer extends StatelessWidget {
           Icons.arrow_forward_ios_rounded,
           color: secondaryColor,
         ),
-        title: Text(givenText,
-            style: GoogleFonts.outfit(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              color: mainTextColor,
-            )),
-        onTap: () {
-          Navigator.pop(context);
-        },
+        title: Text(
+          givenText,
+          style: GoogleFonts.outfit(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+            color: mainTextColor,
+          ),
+        ),
       ),
     );
   }

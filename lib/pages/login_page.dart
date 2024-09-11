@@ -73,11 +73,12 @@ class _LoginPageState extends State<LoginPage> {
 // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   void moveToTrips() {
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => const TripListPage(),
       ),
+      (Route<dynamic> route) => false, // Usuwa wszystkie poprzednie strony
     );
   }
 

@@ -40,13 +40,8 @@ class ApiService {
 
   Future<bool> login(String username, String password) async {
     try {
-      // Map<String, dynamic> body = {
-      //   'username': 'testowy_user',
-      //   'password': 'testowehaslo123!',
-      // };
-
       Map<String, dynamic> body = {
-        'username': username,
+        'username': username,  
         'password': password,
       };
       var endpoint = 'login/';
