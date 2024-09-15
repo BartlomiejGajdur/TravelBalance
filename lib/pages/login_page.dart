@@ -52,6 +52,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
   Future<void> logOut(BuildContext context) async {
     bool isUserLogedOut = await GoogleSignInApi.logout(context);
     if (isUserLogedOut) {
@@ -70,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
       throw "Check input errors!";
     }
   }
-// Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   void moveToTrips() {
     Navigator.pushAndRemoveUntil(
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
       MaterialPageRoute(
         builder: (context) => const TripListPage(),
       ),
-      (Route<dynamic> route) => false, // Usuwa wszystkie poprzednie strony
+      (Route<dynamic> route) => false,
     );
   }
 
@@ -153,11 +154,16 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 24.h),
               GestureDetector(
-                onTap: () => signIn(context),
+                onTap: () async {
+                  bool result = await ApiService().loginGoogle(context);
+                  if (result) {
+                    moveToTrips();
+                  }
+                },
                 child: const MockButton(
                     buttonType: ButtonType.google,
                     actionType: ActionType.login),
-              ),
+              ), 
               SizedBox(height: 88.h),
               const DoubleLineText(
                   first: "Don’t have an account?",

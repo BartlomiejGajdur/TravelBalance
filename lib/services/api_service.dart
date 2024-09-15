@@ -1,30 +1,58 @@
-import 'package:flutter/foundation.dart';
+import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+enum BaseTokenType { Token, Bearer, None }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
 
   ApiService._internal();
-  static const String _baseToken = "Token ";
-  String? _token;
-  static const String _baseUrl =
+
+  factory ApiService() => _instance;
+
+  BaseTokenType _tokenType = BaseTokenType.Token;
+  String _token = "";
+  final String _baseUrl =
       "http://wanderer-test-fe529f1fdf47.herokuapp.com/api/v1/";
 
-  factory ApiService() {
-    return _instance;
-  }
-
-  void setUserToken(String token) {
+  void setToken(String token, BaseTokenType tokenType) {
     _token = token;
+    _tokenType = tokenType;
   }
 
-  Future<User?> fetchWholeUserData() async {
+  void clearToken() {
+    _token = "";
+    _tokenType = BaseTokenType.None;
+  }
+
+  String _getTokenPrefix() {
+    switch (_tokenType) {
+      case BaseTokenType.Bearer:
+        return 'Bearer ';
+      case BaseTokenType.Token:
+        return 'Token ';
+      case BaseTokenType.None:
+      default:
+        return '';
+    }
+  }
+
+  String _getAuthorizationHeader() {
+    final tokenPrefix = _getTokenPrefix();
+    return '$tokenPrefix$_token';
+  }
+
+  Future<User?> fetchUserData() async {
     try {
-      var endpoint = 'trip/get_trips_with_expenses/';
-      var response = await http.get(Uri.parse('$_baseUrl$endpoint'),
-          headers: {'Authorization': '$_baseToken$_token'});
+      const endPoint = 'trip/get_trips_with_expenses/';
+      final response = await http.get(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Authorization': _getAuthorizationHeader()},
+      );
 
       if (response.statusCode == 200) {
         return User.fromJson(jsonDecode(response.body));
@@ -33,96 +61,121 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      debugPrint("Error in fetchWholeUserData: $e");
+      debugPrint("Error fetching user data: $e");
       return null;
     }
   }
 
   Future<bool> login(String username, String password) async {
     try {
-      Map<String, dynamic> body = {
-        'username': username,  
+      final body = {
+        'username': username,
         'password': password,
       };
-      var endpoint = 'login/';
-      var response = await http.post(
-        Uri.parse('$_baseUrl$endpoint'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const endPoint = 'login/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {
-        var responseBody = jsonDecode(response.body);
-        setUserToken(responseBody['token']);
+        final responseBody = jsonDecode(response.body);
+        setToken(responseBody['token'], BaseTokenType.Token);
         debugPrint('Login successful: $responseBody');
         return true;
       } else {
-        debugPrint('Request failed with status: ${response.statusCode}');
+        debugPrint('Login failed with status: ${response.statusCode}');
         return false;
       }
     } catch (e) {
-      debugPrint("Error in login: $e");
+      debugPrint("Error logging in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> loginGoogle(BuildContext context) async {
+    try {
+      final user = await GoogleSignInApi.login(context);
+      if (user == null) {
+        debugPrint('[GOOGLE] Login failed on googleSignIn part.');
+        return false;
+      }
+      final GoogleSignInAuthentication googleAuth = await user.authentication;
+      final body = {
+        "grant_type": "convert_token",
+        "client_id":
+            "OoJlTyPxfFjtd4IxwioAE4Op2fWe2P7DkBBuMRim", // Must change before release!
+        "backend": "google-oauth2",
+        "token": googleAuth.accessToken.toString(),
+      };
+      const endPoint = 'auth/convert-token/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        setToken(responseBody['token'], BaseTokenType.Bearer);
+        debugPrint('[GOOGLE] Login successful: $responseBody');
+        return true;
+      } else {
+        debugPrint('[GOOGLE] Login failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("[GOOGLE] Error logging in: $e");
       return false;
     }
   }
 
   Future<void> logout() async {
     try {
-      var endpoint = 'logout/';
-      var response = await http.post(
-        Uri.parse('$_baseUrl$endpoint'),
-        headers: {'Authorization': '$_baseToken$_token'},
+      const endPoint = 'logout/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Authorization': _getAuthorizationHeader()},
       );
 
       if (response.statusCode == 204) {
-        setUserToken("");
+        clearToken();
         debugPrint('Logout successful');
       } else {
-        debugPrint('Logout Request failed with status: ${response.statusCode}');
+        debugPrint('Logout failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      debugPrint("Error in Logout: $e");
+      debugPrint("Error logging out: $e");
     }
   }
 
   Future<bool> signup(String username, String email, String password,
       String repeatedPassword) async {
     try {
-      // Map<String, dynamic> body = {
-      //   "username": "bartlo",
-      //   "email": "afu62040@doolk.com",
-      //   "password": "ZXCVBNM1!",
-      //   "password2": "ZXCVBNM1!"
-      // };
-
-      Map<String, dynamic> body = {
+      final body = {
         "username": username,
         "email": email,
         "password": password,
         "password2": repeatedPassword
       };
-
-      var endpoint = 'user/';
-      var response = await http.post(
-        Uri.parse('$_baseUrl$endpoint'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const endPoint = 'user/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );
 
       if (response.statusCode == 201) {
-        var responseBody = jsonDecode(response.body);
-        debugPrint('Signup Response: $responseBody');
+        final responseBody = jsonDecode(response.body);
+        debugPrint('Signup successful: $responseBody');
         return true;
       } else {
-        debugPrint('Request failed with status: ${response.statusCode}');
+        debugPrint('Signup failed with status: ${response.statusCode}');
         return false;
       }
     } catch (e) {
-      debugPrint("Error in Signup: $e");
+      debugPrint("Error signing up: $e");
       return false;
     }
   }

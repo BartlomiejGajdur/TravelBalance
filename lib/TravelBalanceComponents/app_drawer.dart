@@ -54,7 +54,7 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(context, "Send feedback"),
             clickableListTile(context, "About"),
             clickableListTile(context, "Help"),
-            Spacer(), // Użyj Spacer, aby wypchnąć SVG na dół
+            const Spacer(), // Użyj Spacer, aby wypchnąć SVG na dół
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
               child: GestureDetector(

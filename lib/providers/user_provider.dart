@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
 
   Future<void> fetchWholeUserData() async {
-    _user = await ApiService().fetchWholeUserData();
+    _user = await ApiService().fetchUserData();
     _user!.printDetails();
     notifyListeners();
   }

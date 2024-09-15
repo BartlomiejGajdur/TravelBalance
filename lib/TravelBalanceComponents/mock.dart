@@ -17,7 +17,6 @@ class MockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Ustalanie stylu przycisku w zależności od typu
     final Color backgroundColor =
         buttonType == ButtonType.google ? Colors.white : Colors.black;
     final Color textColor =
@@ -38,23 +37,23 @@ class MockButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius:
-              BorderRadius.circular(buttonRadius), // Dodajemy zaokrąglenia
+              BorderRadius.circular(buttonRadius), 
         ),
         child: Row(
           mainAxisAlignment:
-              MainAxisAlignment.center, // Wyśrodkowanie zawartości
+              MainAxisAlignment.center, 
           children: [
             if (buttonType == ButtonType.google)
               const FaIcon(FontAwesomeIcons.google, color: Colors.red)
             else
               Icon(Icons.apple, size: 24.sp, color: textColor),
-            SizedBox(width: 8.w), // Odstęp między ikoną a tekstem
+            SizedBox(width: 8.w), 
             Text(
               text,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: textColor, // Kolor tekstu
+                color: textColor, 
               ),
             ),
           ],
