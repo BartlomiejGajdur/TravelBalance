@@ -1,3 +1,5 @@
+import 'package:TravelBalance/services/api_service.dart';
+import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -64,7 +66,12 @@ class AppDrawer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                     (Route<dynamic> route) => false,
                   );
-                  Provider.of<UserProvider>(context, listen: false).logout();
+                  final tokenType = ApiService().getToken();
+                  if (tokenType == BaseTokenType.Token) {
+                    Provider.of<UserProvider>(context, listen: false).logout();
+                  } else if (tokenType == BaseTokenType.Bearer) {
+                    GoogleSignInApi().logout(context);
+                  }
                 },
                 child: SvgPicture.asset(
                   "lib/assets/Logout.svg",

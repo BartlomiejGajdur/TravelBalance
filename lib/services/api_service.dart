@@ -20,6 +20,10 @@ class ApiService {
   final String _baseUrl =
       "http://wanderer-test-fe529f1fdf47.herokuapp.com/api/v1/";
 
+  BaseTokenType getToken() {
+    return _tokenType;
+  }
+
   void setToken(String token, BaseTokenType tokenType) {
     _token = token;
     _tokenType = tokenType;
@@ -97,13 +101,8 @@ class ApiService {
 
   Future<bool> loginGoogle(BuildContext context) async {
     try {
-      final user = await GoogleSignInApi.login(context);
+      final user = await GoogleSignInApi().login(context);
       if (user == null) {
-        showCustomSnackBar(
-          context: context,
-          message: '[GOOGLE] Login failed on googleSignIn part.',
-          type: SnackBarType.error,
-        );
         return false;
       }
       final GoogleSignInAuthentication googleAuth = await user.authentication;
@@ -124,11 +123,6 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         setToken(responseBody['access_token'], BaseTokenType.Bearer);
-        showCustomSnackBar(
-          context: context,
-          message: 'Login successful: ${responseBody}',
-          type: SnackBarType.correct,
-        );
         return true;
       } else {
         showCustomSnackBar(

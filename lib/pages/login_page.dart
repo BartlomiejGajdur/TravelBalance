@@ -8,10 +8,7 @@ import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../services/google_signin_api.dart';
 import '../pages/forgot_password_page.dart';
 import '../Utils/globals.dart';
 import 'package:flutter/services.dart';
@@ -33,35 +30,6 @@ class _LoginPageState extends State<LoginPage> {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-// Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// State is not saved beetwen pages yet !
-  GoogleSignInAccount? _user;
-  GoogleSignInAuthentication? _googleAuth;
-  Future<void> signIn(BuildContext context) async {
-    final user = await GoogleSignInApi.login(context);
-    setState(() {
-      _user = user;
-    });
-    if (_user != null) {
-      final googleAuth = await _user!.authentication;
-      setState(() {
-        _googleAuth = googleAuth;
-      });
-    }
-  }
-
-  // Google Auth Part @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-  Future<void> logOut(BuildContext context) async {
-    bool isUserLogedOut = await GoogleSignInApi.logout(context);
-    if (isUserLogedOut) {
-      setState(() {
-        _user = null;
-        _googleAuth = null;
-      });
-    }
   }
 
   Future<bool> loginAS() async {
@@ -134,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                   prefixIcon: Icons.lock,
                   toggleText: true),
               SizedBox(height: 16.h),
-              ForgotPassword(context),
+              forgotPassword(context),
               SizedBox(height: 20.h),
               CustomButton(
                 onPressed: loginAS,
@@ -163,56 +131,13 @@ class _LoginPageState extends State<LoginPage> {
                 child: const MockButton(
                     buttonType: ButtonType.google,
                     actionType: ActionType.login),
-              ), 
+              ),
               SizedBox(height: 88.h),
               const DoubleLineText(
                   first: "Don’t have an account?",
                   second: "Sign Up!",
                   moveTo: "SignUpPage"),
               SizedBox(height: 50.h),
-              if (_user != null)
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                  ),
-                  icon:
-                      const FaIcon(FontAwesomeIcons.google, color: Colors.red),
-                  label: const Text('Log Out'),
-                  onPressed: () {
-                    logOut(context);
-                  },
-                ),
-              if (_googleAuth != null)
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[100],
-                      foregroundColor: Colors.black,
-                    ),
-                    child: const Text("Copy accessToken"),
-                    onPressed: () async {
-                      await Clipboard.setData(ClipboardData(
-                          text: _googleAuth!.accessToken.toString()));
-                    },
-                  ),
-                ),
-              if (_googleAuth != null)
-                Align(
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green[200],
-                      foregroundColor: Colors.black,
-                    ),
-                    child: const Text("Copy idToken"),
-                    onPressed: () async {
-                      await Clipboard.setData(
-                          ClipboardData(text: _googleAuth!.idToken.toString()));
-                    },
-                  ),
-                ),
             ],
           ),
         ),
@@ -220,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Padding ForgotPassword(BuildContext context) {
+  Padding forgotPassword(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(right: horizontalPadding),
       child: Align(
