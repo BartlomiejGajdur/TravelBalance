@@ -35,13 +35,14 @@ void showCustomSnackBar({
         message,
         textAlign: TextAlign.center,
       ),
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
       behavior: SnackBarBehavior.floating,
       backgroundColor: backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0.r),
       ),
       margin: EdgeInsets.all(16.0.w),
+      showCloseIcon: true,
     ),
   );
 }
