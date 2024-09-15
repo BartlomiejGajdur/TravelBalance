@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/CustomScaffold.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,11 @@ class ApiService {
     try {
       final user = await GoogleSignInApi.login(context);
       if (user == null) {
-        debugPrint('[GOOGLE] Login failed on googleSignIn part.');
+        showCustomSnackBar(
+          context: context,
+          message: '[GOOGLE] Login failed on googleSignIn part.',
+          type: SnackBarType.error,
+        );
         return false;
       }
       final GoogleSignInAuthentication googleAuth = await user.authentication;
@@ -119,14 +124,26 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         setToken(responseBody['token'], BaseTokenType.Bearer);
-        debugPrint('[GOOGLE] Login successful: $responseBody');
+        showCustomSnackBar(
+          context: context,
+          message: 'Login successful: ${responseBody}',
+          type: SnackBarType.correct,
+        );
         return true;
       } else {
-        debugPrint('[GOOGLE] Login failed with status: ${response.statusCode}');
+        showCustomSnackBar(
+          context: context,
+          message: 'Login failed with status: ${response.statusCode}',
+          type: SnackBarType.error,
+        );
         return false;
       }
     } catch (e) {
-      debugPrint("[GOOGLE] Error logging in: $e");
+      showCustomSnackBar(
+        context: context,
+        message: "Error logging in: $e",
+        type: SnackBarType.error,
+      );
       return false;
     }
   }
