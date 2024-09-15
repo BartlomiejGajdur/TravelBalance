@@ -107,11 +107,6 @@ class ApiService {
         return false;
       }
       final GoogleSignInAuthentication googleAuth = await user.authentication;
-      showCustomSnackBar(
-        context: context,
-        message: googleAuth.accessToken.toString(),
-        type: SnackBarType.error,
-      );
       final body = {
         "grant_type": "convert_token",
         "client_id":
@@ -128,12 +123,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        showCustomSnackBar(
-          context: context,
-          message: 'Jestesmy w correct response',
-          type: SnackBarType.correct,
-        );
-        setToken(responseBody['token'], BaseTokenType.Bearer);
+        setToken(responseBody['access_token'], BaseTokenType.Bearer);
         showCustomSnackBar(
           context: context,
           message: 'Login successful: ${responseBody}',
