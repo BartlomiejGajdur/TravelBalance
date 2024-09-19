@@ -62,7 +62,8 @@ class ApiService {
       if (response.statusCode == 200) {
         return User.fromJson(jsonDecode(response.body));
       } else {
-        debugPrint('Request failed with status: ${response.statusCode}');
+        debugPrint(
+            'Request FetchUserData failed with status: ${response.statusCode}');
         return null;
       }
     } catch (e) {
@@ -127,7 +128,7 @@ class ApiService {
       } else {
         showCustomSnackBar(
           context: context,
-          message: 'Login failed with status: ${response.statusCode}',
+          message: 'Login Google failed with status: ${response.statusCode}',
           type: SnackBarType.error,
         );
         return false;
@@ -135,7 +136,7 @@ class ApiService {
     } catch (e) {
       showCustomSnackBar(
         context: context,
-        message: "Error logging in: $e",
+        message: "Error Google logging in: $e",
         type: SnackBarType.error,
       );
       return false;
@@ -187,6 +188,87 @@ class ApiService {
       }
     } catch (e) {
       debugPrint("Error signing up: $e");
+      return false;
+    }
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    try {
+      final body = {
+        'email': email,
+      };
+      const endPoint = 'user/forgot_password/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Forgot Password successful');
+        return true;
+      } else {
+        debugPrint(
+            'Forgot Password failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error Forgot Password in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> validateVerificationCode(
+      String email, String verificationCode) async {
+    try {
+      final body = {'email': email, 'token': verificationCode};
+      const endPoint = 'user/forgot_password_check_token/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Validate Verification Code successful');
+        return true;
+      } else {
+        debugPrint(
+            'Validate Verification Code failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error Validate Verification Code in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> changeForgottenPassword(String email, String verificationCode,
+      String password, String repeatedPassword) async {
+    try {
+      final body = {
+        'email': email,
+        'token': verificationCode,
+        'password': password,
+        'password2': repeatedPassword
+      };
+      const endPoint = 'user/forgot_password_confirm/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Change Forgotten Password successful');
+        return true;
+      } else {
+        debugPrint(
+            'Change Forgotten Password failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error Change Forgotten Password in: $e");
       return false;
     }
   }

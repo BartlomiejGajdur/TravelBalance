@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,16 +19,14 @@ class CreateNewPasswordPage extends StatelessWidget {
       TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  Future<bool> resetPassword() async {
+  Future<bool> resetPassword(String password, String repeatedPassword) async {
     if (formKey.currentState?.validate() ?? false) {
-      return true;
-      //return await ApiService().resetpassword(email,verificationcode,password,repeatedpassword);
+      return await ApiService().changeForgottenPassword(
+          email, verificationCode, password, repeatedPassword);
     } else {
       throw "Check input errors!";
     }
   }
-
-  void passwordUpdatedSuccesfully() {}
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +63,13 @@ class CreateNewPasswordPage extends StatelessWidget {
                 prefixIcon: Icons.lock,
                 toggleText: true),
             const Spacer(),
-            Text("EMAIL - $email \nVERIFICATIONCODE - $verificationCode"),
-            ElevatedButton(
-                onPressed: () => showBlurDialog(context),
-                child: const Text("[Debug] PasswordUpdSuccesfull")),
+
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),
               child: CustomButton(
                   buttonText: "ResetPassword",
-                  onPressed: resetPassword,
+                  onPressed: () => resetPassword(
+                      passwordController.text, repeatPasswordController.text),
                   onSuccess: () => showBlurDialog(context)),
             )
           ],
