@@ -9,7 +9,7 @@ import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../pages/forgot_password_page.dart';
+import 'forgotPassword/reset_password_page.dart';
 import '../Utils/globals.dart';
 import 'package:flutter/services.dart';
 
@@ -42,13 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void moveToTrips() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const TripListPage(),
-      ),
-      (Route<dynamic> route) => false,
-    );
+    Navigator.pushNamed(context, "TripListPage");
   }
 
   //FOR DEBUG
@@ -152,11 +146,7 @@ class _LoginPageState extends State<LoginPage> {
         alignment: Alignment.centerRight,
         child: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ForgotPasswordPage()),
-            );
+            Navigator.pushNamed(context, "ForgotPasswordPage");
           },
           child: Text(
             "Forgot Password?",

@@ -5,6 +5,7 @@ import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/Utils/CustomScaffold.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/Utils/helper_functions.dart';
 import 'package:TravelBalance/pages/email_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: SingleChildScrollView(
         child: Form(
-          key: formKey, 
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -97,7 +98,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   controller: emailController,
                   labelText: 'Email',
                   hintText: 'Enter your email address',
-                  prefixIcon: Icons.email),
+                  prefixIcon: Icons.email,
+                  validator: validateEmail),
               SizedBox(height: 12.h),
               CustomTextFormField(
                   controller: passwordController,

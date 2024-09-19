@@ -1,5 +1,8 @@
+import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
+import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
 import 'package:TravelBalance/pages/introduction_screens.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
+import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +59,9 @@ class MyApp extends StatelessWidget {
           routes: {
             'LoginPage': (context) => const LoginPage(),
             'SignUpPage': (context) => const SignUpPage(),
+            'TripListPage': (context) => const TripListPage(),
+            'ForgotPasswordPage': (context) => ForgotPasswordPage(),
+            'VerificationCodePage': (context) => VerificationCodePage(),
           },
         ),
       ),
