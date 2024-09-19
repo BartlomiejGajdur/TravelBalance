@@ -67,7 +67,7 @@ class CreateNewPasswordPage extends StatelessWidget {
             Text("EMAIL - $email \nVERIFICATIONCODE - $verificationCode"),
             ElevatedButton(
                 onPressed: () => showBlurDialog(context),
-                child: Text("[Debug] PasswordUpdSucc")),
+                child: const Text("[Debug] PasswordUpdSuccesfull")),
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),
               child: CustomButton(
@@ -87,14 +87,13 @@ void showBlurDialog(BuildContext context) {
     barrierDismissible: false,
     barrierLabel: '',
     barrierColor: Colors.black38,
-    transitionDuration: Duration(milliseconds: 200),
+    transitionDuration: const Duration(milliseconds: 200),
     pageBuilder: (ctx, anim1, anim2) => Dialog(
-        insetPadding: EdgeInsets.all(0),
-        child: Container(
+        insetPadding: const EdgeInsets.all(0),
+        child: SizedBox(
           height: 400.h,
           width: 335.w,
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 25.h),
               SvgPicture.asset(
@@ -130,8 +129,8 @@ void showBlurDialog(BuildContext context) {
       filter:
           ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
       child: FadeTransition(
-        child: child,
         opacity: anim1,
+        child: child,
       ),
     ),
     context: context,

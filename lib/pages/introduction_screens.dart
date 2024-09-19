@@ -7,11 +7,11 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionPage extends StatelessWidget {
-  IntroductionPage({Key? key}) : super(key: key);
+  IntroductionPage({super.key});
 
   void goToLoginPage(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('wasIntroductionScreenShown', true);
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setBool('wasIntroductionScreenShown', true);
     Navigator.pushNamed(context, "LoginPage");
   }
 
@@ -24,7 +24,7 @@ class IntroductionPage extends StatelessWidget {
   final TextStyle bodyStyle = GoogleFonts.outfit(
     fontSize: 15.sp,
     fontWeight: FontWeight.w400,
-    color: Color(0xFF575555),
+    color: const Color(0xFF575555),
   );
 
   @override

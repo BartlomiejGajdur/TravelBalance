@@ -2,11 +2,10 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pinput/pinput.dart';
 
 class VerificationCodePage extends StatelessWidget {
   final String email;
-  VerificationCodePage({super.key, required this.email});
+  const VerificationCodePage({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +47,10 @@ class VerificationCodePage extends StatelessWidget {
                       'verificationCode': "12344",
                     },
                   ),
-              child: Text("[Debug] Przejdz dalej")),
+              child: const Text("[Debug] Przejdz dalej")),
           Padding(
             padding: EdgeInsets.only(bottom: 50.h),
-            child: CustomButton(
+            child: const CustomButton(
               buttonText: "Continue",
             ),
           )

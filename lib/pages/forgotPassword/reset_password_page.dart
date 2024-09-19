@@ -1,7 +1,6 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/helper_functions.dart';
-import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
   ForgotPasswordPage({super.key});
 
-  Future<bool> sendLink() async {
+  Future<bool> sendCode() async {
     if (formKey.currentState?.validate() ?? false) {
       return true;
       //return await ApiService().forgotPassword;
@@ -54,12 +53,12 @@ class ForgotPasswordPage extends StatelessWidget {
                 onPressed: () => Navigator.pushNamed(
                     context, "VerificationCodePage",
                     arguments: emailController.text),
-                child: Text("[Debug] Przejdz dalej")),
+                child: const Text("[Debug] Przejdz dalej")),
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),
               child: CustomButton(
-                buttonText: "Send Link",
-                onPressed: sendLink,
+                buttonText: "Send Code",
+                onPressed: sendCode,
                 onSuccess: () =>
                     Navigator.pushNamed(context, "VerificationCodePage"),
               ),
