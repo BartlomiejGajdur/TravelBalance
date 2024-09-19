@@ -4,14 +4,11 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dar
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/Utils/CustomScaffold.dart';
-import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'forgotPassword/reset_password_page.dart';
 import '../Utils/globals.dart';
-import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

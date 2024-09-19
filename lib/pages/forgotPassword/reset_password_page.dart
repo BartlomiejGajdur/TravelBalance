@@ -51,8 +51,9 @@ class ForgotPasswordPage extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "VerificationCodePage"),
+                onPressed: () => Navigator.pushNamed(
+                    context, "VerificationCodePage",
+                    arguments: emailController.text),
                 child: Text("[Debug] Przejdz dalej")),
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),

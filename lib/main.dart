@@ -1,3 +1,4 @@
+import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
 import 'package:TravelBalance/pages/introduction_screens.dart';
@@ -56,12 +57,37 @@ class MyApp extends StatelessWidget {
               appBarTheme: const AppBarTheme(
                 backgroundColor: Colors.white,
               )),
-          routes: {
-            'LoginPage': (context) => const LoginPage(),
-            'SignUpPage': (context) => const SignUpPage(),
-            'TripListPage': (context) => const TripListPage(),
-            'ForgotPasswordPage': (context) => ForgotPasswordPage(),
-            'VerificationCodePage': (context) => VerificationCodePage(),
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case 'LoginPage':
+                return MaterialPageRoute(
+                    builder: (context) => const LoginPage());
+              case 'SignUpPage':
+                return MaterialPageRoute(
+                    builder: (context) => const SignUpPage());
+              case 'TripListPage':
+                return MaterialPageRoute(
+                    builder: (context) => const TripListPage());
+              case 'ForgotPasswordPage':
+                return MaterialPageRoute(
+                    builder: (context) => ForgotPasswordPage());
+              case 'VerificationCodePage':
+                final email = settings.arguments as String;
+                return MaterialPageRoute(
+                  builder: (context) => VerificationCodePage(email: email),
+                );
+              case 'CreateNewPasswordPage':
+                final args = settings.arguments as Map<String, String>;
+                final email = args['email']!;
+                final verificationCode = args['verificationCode']!;
+                return MaterialPageRoute(
+                  builder: (context) => CreateNewPasswordPage(
+                      email: email, verificationCode: verificationCode),
+                );
+
+              default:
+                return null;
+            }
           },
         ),
       ),

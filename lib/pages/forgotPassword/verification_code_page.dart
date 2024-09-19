@@ -1,13 +1,12 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
-import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
-import 'package:TravelBalance/Utils/helper_functions.dart';
-import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pinput/pinput.dart';
 
 class VerificationCodePage extends StatelessWidget {
-  VerificationCodePage({super.key});
+  final String email;
+  VerificationCodePage({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +22,33 @@ class VerificationCodePage extends StatelessWidget {
           SizedBox(height: 8.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: Text(
-                "Enter the verification code that we have sent to your email",
-                style: secondaryTextStyle),
+            child: RichText(
+              text: TextSpan(
+                style: secondaryTextStyle,
+                children: [
+                  const TextSpan(
+                    text: "Enter the verification code that we have sent to",
+                  ),
+                  TextSpan(
+                      text: " $email",
+                      style: const TextStyle(
+                          color: primaryColor, fontWeight: FontWeight.bold))
+                ],
+              ),
+            ),
           ),
           SizedBox(height: 32.h),
           const Spacer(),
+          ElevatedButton(
+              onPressed: () => Navigator.pushNamed(
+                    context,
+                    "CreateNewPasswordPage",
+                    arguments: {
+                      'email': email,
+                      'verificationCode': "12344",
+                    },
+                  ),
+              child: Text("[Debug] Przejdz dalej")),
           Padding(
             padding: EdgeInsets.only(bottom: 50.h),
             child: CustomButton(

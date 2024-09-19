@@ -46,7 +46,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               horizontalPadding), // default padding
       child: TextFormField(
         onTapOutside: (event) {
-          print('onTapOutside');
           FocusManager.instance.primaryFocus?.unfocus();
         },
         controller: widget.controller,
