@@ -81,5 +81,15 @@ class Trip {
     }
   }
 
+  void addExpense() {
+    expenses.add(Expense(
+        id: id,
+        title: "chhc",
+        cost: 23,
+        category: Category.activities,
+        dateTime: DateTime(1999)));
+    debugPrint("EXpense added");
+  }
+
   //No setters - no editable.
 }

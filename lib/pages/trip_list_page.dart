@@ -1,6 +1,7 @@
+import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
+import 'package:TravelBalance/Utils/floating_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/components/trip_component.dart';
@@ -45,6 +46,10 @@ class _TripListPageState extends State<TripListPage> {
         builder: (context) => ExpenseListPage(trip: currentTrip),
       ),
     );
+  }
+
+  void addTrip() {
+    Provider.of<UserProvider>(context, listen: false).addTrip();
   }
 
   @override
@@ -111,7 +116,7 @@ class _TripListPageState extends State<TripListPage> {
           ),
         ],
       ),
-      floatingActionButton: _buildFloatingActionButton(),
+      floatingActionButton: buildFloatingActionButton(context, addTrip),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -124,7 +129,7 @@ class _TripListPageState extends State<TripListPage> {
         ),
       );
     } else if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
-      return NoTrips();
+      return noContentMessage(ContentType.Trips);
     } else {
       return RefreshIndicator(
         color: primaryColor,
@@ -147,38 +152,5 @@ class _TripListPageState extends State<TripListPage> {
         ),
       );
     }
-  }
-
-  Widget NoTrips() => Column(
-        children: [
-          SizedBox(height: 112.h),
-          Text("No trips here yet.", style: mainTextStyle),
-          SizedBox(height: 23.h),
-          Text("Tap the plus button below to create a\nnew trip.",
-              style: secondaryTextStyle, textAlign: TextAlign.center),
-          SizedBox(height: 70.h),
-          SvgPicture.asset(
-            "lib/assets/ArrowDown.svg",
-          ),
-        ],
-      );
-
-  Widget _buildFloatingActionButton() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 30.0.h),
-      child: FloatingActionButton(
-        onPressed: () {
-          Provider.of<UserProvider>(context, listen: false).addTrip();
-        },
-        backgroundColor: secondaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32.0.r),
-        ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
-    );
   }
 }
