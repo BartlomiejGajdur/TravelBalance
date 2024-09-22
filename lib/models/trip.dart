@@ -81,10 +81,20 @@ class Trip {
     }
   }
 
+  void calculateTripCost() {
+    _tripCost = expenses.fold(0, (sum, expense) => sum + expense.cost);
+  }
+
   void addExpense(Expense expense) {
     expenses.add(expense);
     _expensesByDate = _groupExpensesByDate(_expenses);
-    debugPrint("EXpense added");
+    calculateTripCost();
+  }
+
+  void deleteExpense(int index) {
+    expenses.removeAt(index);
+    _expensesByDate = _groupExpensesByDate(_expenses);
+    calculateTripCost();
   }
 
   void setName(String newName) {
