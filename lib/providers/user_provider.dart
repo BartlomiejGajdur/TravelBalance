@@ -30,7 +30,5 @@ class UserProvider with ChangeNotifier {
     await ApiService().logout();
   }
 
-  bool isExpenseListEmpty(Trip trip) {
-    return trip.expenses.isEmpty;
-  }
+
 }

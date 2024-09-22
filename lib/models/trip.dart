@@ -81,15 +81,13 @@ class Trip {
     }
   }
 
-  void addExpense() {
-    expenses.add(Expense(
-        id: id,
-        title: "chhc",
-        cost: 23,
-        category: Category.activities,
-        dateTime: DateTime(1999)));
+  void addExpense(Expense expense) {
+    expenses.add(expense);
+    _expensesByDate = _groupExpensesByDate(_expenses);
     debugPrint("EXpense added");
   }
 
-  //No setters - no editable.
+  void setName(String newName) {
+    _name = newName;
+  }
 }

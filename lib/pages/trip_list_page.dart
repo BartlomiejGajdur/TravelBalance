@@ -1,5 +1,6 @@
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
 import 'package:TravelBalance/Utils/floating_action_button.dart';
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -142,7 +143,17 @@ class _TripListPageState extends State<TripListPage> {
             final currentTrip = userProvider.user!.trips[index];
             return TripComponent(
               trip: currentTrip,
-              moveToDetails: () => moveToDetails(currentTrip),
+              moveToDetails: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangeNotifierProvider(
+                      create: (_) => TripProvider(currentTrip, userProvider),
+                      child: ExpenseListPage(trip: currentTrip),
+                    ),
+                  ),
+                ); // upewnij się, że zamykasz wywołanie push
+              },
               deleteFunction: (context) {
                 Provider.of<UserProvider>(context, listen: false)
                     .deleteTrip(index);
