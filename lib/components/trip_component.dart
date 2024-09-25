@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -122,6 +121,7 @@ class TripComponent extends StatelessWidget {
 void deleteFunction(BuildContext context, Trip trip, int indexInList) {
   Provider.of<UserProvider>(context, listen: false).deleteTrip(indexInList);
   ApiService().deleteTrip(trip.id);
+  Navigator.of(context).pop();
 }
 
 void showBlurDialog(BuildContext context, Trip trip, int indexInList) {
@@ -179,15 +179,16 @@ void showBlurDialog(BuildContext context, Trip trip, int indexInList) {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Logika usuwania tripu
-                    deleteFunction(context, trip, indexInList);
-                    Navigator.of(context).pop(); // Zamknij dialog po usunięciu
+                    deleteFunction(ctx, trip, indexInList);
                   },
                   child: Container(
                     height: 46.h,
                     width: 120.w,
-                    color: const Color(0xFFED5E68),
-                    alignment: Alignment.center, // Wyśrodkowanie tekstu
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.r),
+                      color: const Color(0xFFED5E68),
+                    ),
+                    alignment: Alignment.center,
                     child: Text(
                       "Delete",
                       style: buttonTextStyle,
@@ -195,12 +196,14 @@ void showBlurDialog(BuildContext context, Trip trip, int indexInList) {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.of(context).pop(), // Zamknij dialog
+                  onTap: () => Navigator.of(ctx).pop(),
                   child: Container(
                     height: 46.h,
                     width: 120.w,
-                    color: const Color(0xFFE8388A4),
-                    alignment: Alignment.center, // Wyśrodkowanie tekstu
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        color: const Color(0xFFE8388A4)),
                     child: Text("Cancel", style: buttonTextStyle),
                   ),
                 ),
