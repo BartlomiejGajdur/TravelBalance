@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
+  //Id provided in online databse != index in tripList
   int _id;
   String _name;
   String? _image;

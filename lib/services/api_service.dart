@@ -272,4 +272,57 @@ class ApiService {
       return false;
     }
   }
+
+  Future<int?> addTrip(String tripName) async {
+    try {
+      final body = {
+        'name': tripName,
+      };
+      const endPoint = 'trip/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 201) {
+        debugPrint('Add Trip successful');
+        final responseData = jsonDecode(response.body);
+        return responseData["id"];
+      } else {
+        debugPrint('Add Trip failed with status: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Error Add Trip in: $e");
+      return null;
+    }
+  }
+
+  Future<bool> deleteTrip(int id) async {
+    try {
+      final endPoint = 'trip/$id/';
+      final response = await http.delete(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Delete Trip successful');
+        return true;
+      } else {
+        debugPrint('Delete Trip failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Delete Add Trip in: $e");
+      return false;
+    }
+  }
 }

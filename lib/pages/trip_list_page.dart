@@ -49,7 +49,7 @@ class _TripListPageState extends State<TripListPage> {
     );
   }
 
-  void addTrip() {
+  void addTripPage() {
     Navigator.pushNamed(context, "CreateListPage");
   }
 
@@ -117,7 +117,7 @@ class _TripListPageState extends State<TripListPage> {
           ),
         ],
       ),
-      floatingActionButton: buildFloatingActionButton(context, addTrip),
+      floatingActionButton: buildFloatingActionButton(context, addTripPage),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -143,6 +143,7 @@ class _TripListPageState extends State<TripListPage> {
             final currentTrip = userProvider.user!.trips[index];
             return TripComponent(
               trip: currentTrip,
+              indexInList: index,
               moveToDetails: () {
                 Navigator.push(
                   context,
@@ -153,10 +154,6 @@ class _TripListPageState extends State<TripListPage> {
                     ),
                   ),
                 );
-              },
-              deleteFunction: (context) {
-                Provider.of<UserProvider>(context, listen: false)
-                    .deleteTrip(index);
               },
             );
           },

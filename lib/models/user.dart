@@ -14,9 +14,9 @@ class User {
     return User(trips: trips);
   }
 
-  void addTrip(String tripName) {
+  void addTrip(int id, String tripName) {
     Trip newTrip =
-        Trip(id: 2, name: tripName, image: null, tripCost: 0.0, expenses: []);
+        Trip(id: id, name: tripName, image: null, tripCost: 0.0, expenses: []);
     _trips.insert(0, newTrip);
   }
 

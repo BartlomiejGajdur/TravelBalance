@@ -13,8 +13,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTrip(String tripName) {
-    _user!.addTrip(tripName);
+  void addTrip(int id, String tripName) {
+    _user!.addTrip(id, tripName);
     notifyListeners();
   }
 
