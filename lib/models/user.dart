@@ -14,13 +14,9 @@ class User {
     return User(trips: trips);
   }
 
-  void addTrip() {
-    Trip newTrip = Trip(
-        id: 2,
-        name: "NOWY",
-        image: "hakis Path",
-        tripCost: 23.23,
-        expenses: []);
+  void addTrip(String tripName) {
+    Trip newTrip =
+        Trip(id: 2, name: tripName, image: null, tripCost: 0.0, expenses: []);
     _trips.insert(0, newTrip);
   }
 

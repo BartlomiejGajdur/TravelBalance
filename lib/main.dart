@@ -4,6 +4,7 @@ import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
 import 'package:TravelBalance/pages/introduction_screens.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
 import 'package:TravelBalance/pages/trip_list_page.dart';
+import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -84,6 +85,9 @@ class MyApp extends StatelessWidget {
                   builder: (context) => CreateNewPasswordPage(
                       email: email, verificationCode: verificationCode),
                 );
+              case 'CreateListPage':
+                return MaterialPageRoute(
+                    builder: (context) => CreateTripPage());
 
               default:
                 return null;

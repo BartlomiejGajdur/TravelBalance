@@ -42,8 +42,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: widget.textFieldHorizontalPadding ??
-              horizontalPadding), // default padding
+        horizontal: widget.textFieldHorizontalPadding ??
+            horizontalPadding, // default padding
+      ),
       child: TextFormField(
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -86,7 +87,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             borderSide: const BorderSide(color: Colors.red, width: 2.0),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
+          // Adds left padding when there's no prefixIcon
+          contentPadding: widget.prefixIcon == null
+              ? const EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0)
+              : const EdgeInsets.symmetric(vertical: 18.0),
         ),
         validator: widget.validator ?? defaultValidator,
         onChanged: (value) {

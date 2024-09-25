@@ -50,7 +50,7 @@ class _TripListPageState extends State<TripListPage> {
   }
 
   void addTrip() {
-    Provider.of<UserProvider>(context, listen: false).addTrip();
+    Navigator.pushNamed(context, "CreateListPage");
   }
 
   @override
@@ -152,7 +152,7 @@ class _TripListPageState extends State<TripListPage> {
                       child: ExpenseListPage(trip: currentTrip),
                     ),
                   ),
-                ); // upewnij się, że zamykasz wywołanie push
+                );
               },
               deleteFunction: (context) {
                 Provider.of<UserProvider>(context, listen: false)

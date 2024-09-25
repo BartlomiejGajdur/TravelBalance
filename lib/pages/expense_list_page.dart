@@ -3,7 +3,6 @@ import 'package:TravelBalance/Utils/custom_scaffold.dart';
 import 'package:TravelBalance/components/expense_sheet_component.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
-import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:provider/provider.dart';

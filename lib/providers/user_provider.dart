@@ -1,4 +1,3 @@
-import 'package:TravelBalance/models/trip.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -14,8 +13,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTrip() {
-    _user!.addTrip();
+  void addTrip(String tripName) {
+    _user!.addTrip(tripName);
     notifyListeners();
   }
 
@@ -29,6 +28,4 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     await ApiService().logout();
   }
-
-
 }
