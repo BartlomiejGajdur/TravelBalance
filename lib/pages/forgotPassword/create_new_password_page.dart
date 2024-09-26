@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/components/trip_component.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,14 +65,13 @@ class CreateNewPasswordPage extends StatelessWidget {
                 prefixIcon: Icons.lock,
                 toggleText: true),
             const Spacer(),
-
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),
               child: CustomButton(
                   buttonText: "ResetPassword",
                   onPressed: () => resetPassword(
                       passwordController.text, repeatPasswordController.text),
-                  onSuccess: () => showBlurDialog(context)),
+                  onSuccess: () => showPasswordUpdateDialog(context)),
             )
           ],
         ),
@@ -79,57 +80,44 @@ class CreateNewPasswordPage extends StatelessWidget {
   }
 }
 
-void showBlurDialog(BuildContext context) {
-  showGeneralDialog(
+void showPasswordUpdateDialog(BuildContext context) {
+  showBlurDialog(
+    context: context,
     barrierDismissible: false,
-    barrierLabel: '',
-    barrierColor: Colors.black38,
-    transitionDuration: const Duration(milliseconds: 200),
-    pageBuilder: (ctx, anim1, anim2) => Dialog(
-        insetPadding: const EdgeInsets.all(0),
-        child: SizedBox(
-          height: 400.h,
-          width: 335.w,
-          child: Column(
-            children: [
-              SizedBox(height: 25.h),
-              SvgPicture.asset(
-                "lib/assets/GreenTick.svg",
-                height: 120.h,
-                width: 120.w,
-              ),
-              SizedBox(height: 22.h),
-              Text(
-                "Password Update\nSuccessfully",
-                style: mainTextStyle,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                "Password changed succesfully,\nyou can login again with new password",
-                style: secondaryTextStyle,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 24.h),
-              CustomButton(
-                buttonText: "Back to Login",
-                onPressed: () async {
-                  return true;
-                },
-                onSuccess: () => Navigator.pushNamed(context, "LoginPage"),
-              ),
-              SizedBox(height: 25.h),
-            ],
+    childBuilder: (ctx) => SizedBox(
+      height: 400.h,
+      width: 335.w,
+      child: Column(
+        children: [
+          SizedBox(height: 25.h),
+          SvgPicture.asset(
+            "lib/assets/GreenTick.svg",
+            height: 120.h,
+            width: 120.w,
           ),
-        )),
-    transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-      filter:
-          ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-      child: FadeTransition(
-        opacity: anim1,
-        child: child,
+          SizedBox(height: 22.h),
+          Text(
+            "Password Update\nSuccessfully",
+            style: mainTextStyle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            "Password changed successfully,\nyou can login again with new password",
+            style: secondaryTextStyle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 24.h),
+          CustomButton(
+            buttonText: "Back to Login",
+            onPressed: () async {
+              return true;
+            },
+            onSuccess: () => Navigator.pushNamed(ctx, "LoginPage"),
+          ),
+          SizedBox(height: 25.h),
+        ],
       ),
     ),
-    context: context,
   );
 }

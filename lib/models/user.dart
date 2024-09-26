@@ -15,8 +15,13 @@ class User {
   }
 
   void addTrip(int id, String tripName) {
-    Trip newTrip =
-        Trip(id: id, name: tripName, image: null, tripCost: 0.0, expenses: []);
+    Trip newTrip = Trip(
+        id: id,
+        name: tripName,
+        image:
+            "https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png",
+        tripCost: 0.0,
+        expenses: []);
     _trips.insert(0, newTrip);
   }
 

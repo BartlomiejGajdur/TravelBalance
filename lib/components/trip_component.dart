@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class TripComponent extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) =>
-                    showBlurDialog(context, trip, indexInList),
+                    showDeleteTripDialog(context, trip, indexInList),
                 backgroundColor: const Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
                 icon: Icons.delete,
@@ -118,110 +119,96 @@ class TripComponent extends StatelessWidget {
   }
 }
 
-void deleteFunction(BuildContext context, Trip trip, int indexInList) {
+void deleteTrip(BuildContext context, Trip trip, int indexInList) {
   Provider.of<UserProvider>(context, listen: false).deleteTrip(indexInList);
   ApiService().deleteTrip(trip.id);
   Navigator.of(context).pop();
 }
 
-void showBlurDialog(BuildContext context, Trip trip, int indexInList) {
+void showDeleteTripDialog(BuildContext context, Trip trip, int indexInList) {
   final String tripName = trip.name;
 
-  showGeneralDialog(
+  showBlurDialog(
+    context: context,
     barrierDismissible: true,
-    barrierLabel: '',
-    barrierColor: Colors.black38,
-    transitionDuration: const Duration(milliseconds: 200),
-    pageBuilder: (ctx, anim1, anim2) => Dialog(
-      insetPadding: const EdgeInsets.all(0),
-      child: SizedBox(
-        height: 350.h,
-        width: 335.w,
-        child: Column(
-          children: [
-            SizedBox(height: 25.h),
-            SvgPicture.asset(
-              "lib/assets/RedBin.svg",
-              height: 120.h,
-              width: 120.w,
-            ),
-            SizedBox(height: 22.h),
-            Text(
-              "Tearing down the tent?",
-              style: mainTextStyle,
+    childBuilder: (ctx) => SizedBox(
+      height: 350.h,
+      width: 335.w,
+      child: Column(
+        children: [
+          SizedBox(height: 25.h),
+          SvgPicture.asset(
+            "lib/assets/RedBin.svg",
+            height: 120.h,
+            width: 120.w,
+          ),
+          SizedBox(height: 22.h),
+          Text(
+            "Tearing down the tent?",
+            style: mainTextStyle,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 35.0.w),
+            child: RichText(
               textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 8.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 35.0.w),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: GoogleFonts.outfit(
-                    fontSize: 16.sp,
-                    color: secondaryTextColor,
-                  ),
-                  children: [
-                    const TextSpan(text: "Once"),
-                    TextSpan(
-                      text: " $tripName",
-                      style: const TextStyle(
-                          color: primaryColor, fontWeight: FontWeight.bold),
-                    ),
-                    const TextSpan(text: " trip is gone, it's gone for good."),
-                  ],
+              text: TextSpan(
+                style: GoogleFonts.outfit(
+                  fontSize: 16.sp,
+                  color: secondaryTextColor,
                 ),
+                children: [
+                  const TextSpan(text: "Once"),
+                  TextSpan(
+                    text: " $tripName",
+                    style: const TextStyle(
+                        color: primaryColor, fontWeight: FontWeight.bold),
+                  ),
+                  const TextSpan(text: " trip is gone, it's gone for good."),
+                ],
               ),
             ),
-            SizedBox(height: 24.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    deleteFunction(ctx, trip, indexInList);
-                  },
-                  child: Container(
-                    height: 46.h,
-                    width: 120.w,
-                    decoration: BoxDecoration(
+          ),
+          SizedBox(height: 24.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  deleteTrip(ctx, trip, indexInList);
+                },
+                child: Container(
+                  height: 46.h,
+                  width: 120.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.r),
+                    color: const Color(0xFFED5E68),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Delete",
+                    style: buttonTextStyle,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.of(ctx).pop(),
+                child: Container(
+                  height: 46.h,
+                  width: 120.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16.r),
-                      color: const Color(0xFFED5E68),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Delete",
-                      style: buttonTextStyle,
-                    ),
-                  ),
+                      color: const Color(0xFFE8388A4)),
+                  child: Text("Cancel", style: buttonTextStyle),
                 ),
-                GestureDetector(
-                  onTap: () => Navigator.of(ctx).pop(),
-                  child: Container(
-                    height: 46.h,
-                    width: 120.w,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: const Color(0xFFE8388A4)),
-                    child: Text("Cancel", style: buttonTextStyle),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 25.h),
-          ],
-        ),
+              ),
+            ],
+          ),
+          SizedBox(height: 25.h),
+        ],
       ),
     ),
-    transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
-      filter:
-          ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
-      child: FadeTransition(
-        opacity: anim1,
-        child: child,
-      ),
-    ),
-    context: context,
   );
 }
