@@ -1,10 +1,8 @@
-import 'dart:ui';
 
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
-import 'package:TravelBalance/components/trip_component.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

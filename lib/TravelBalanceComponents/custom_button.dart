@@ -7,12 +7,14 @@ class CustomButton extends StatefulWidget {
   final Future<bool> Function() onPressed;
   final String buttonText;
   final Function() onSuccess;
+  final bool forceLoading;
 
   const CustomButton({
     super.key,
     required this.buttonText,
     this.onPressed = emptyCallback,
     this.onSuccess = _emptyCallback,
+    this.forceLoading = false,
   });
   static Future<bool> emptyCallback() async {
     return false;
@@ -59,7 +61,7 @@ class _CustomButtonState extends State<CustomButton> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: ElevatedButton(
-        onPressed: isLoading ? null : handleOnPressed,
+        onPressed: isLoading || widget.forceLoading ? null : handleOnPressed,
         style: ButtonStyle(
           minimumSize: WidgetStateProperty.all(Size(double.infinity, 56.h)),
           backgroundColor: WidgetStateProperty.all(primaryColor),
@@ -69,7 +71,7 @@ class _CustomButtonState extends State<CustomButton> {
             ),
           ),
         ),
-        child: isLoading
+        child: isLoading || widget.forceLoading
             ? const SizedBox(
                 width: 24,
                 height: 24,

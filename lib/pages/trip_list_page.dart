@@ -24,32 +24,36 @@ class _TripListPageState extends State<TripListPage> {
   @override
   void initState() {
     super.initState();
-    fetchUserData();
+    _fetchUserData();
   }
 
-  Future<void> fetchUserData() async {
-    toggleLoading();
+  Future<void> _fetchUserData() async {
+    _toggleLoading();
     await Provider.of<UserProvider>(context, listen: false)
         .fetchWholeUserData();
-    toggleLoading();
+    _toggleLoading();
   }
 
-  void toggleLoading() {
+  void _toggleLoading() {
     setState(() {
       isLoading = !isLoading;
     });
   }
 
-  void moveToDetails(Trip currentTrip) {
+  void _navigateToDetails(Trip currentTrip) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ExpenseListPage(trip: currentTrip),
+        builder: (context) => ChangeNotifierProvider(
+          create: (_) => TripProvider(
+              currentTrip, Provider.of<UserProvider>(context, listen: false)),
+          child: ExpenseListPage(trip: currentTrip),
+        ),
       ),
     );
   }
 
-  void addTripPage() {
+  void _navigateToAddTripPage() {
     Navigator.pushNamed(context, "CreateListPage");
   }
 
@@ -62,63 +66,79 @@ class _TripListPageState extends State<TripListPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(height: 53.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.0.w),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "My Trips",
-                    style: mainHeaderTextStyle,
-                  ),
-                ),
-              ),
-              Builder(builder: (context) {
-                return IconButton(
-                  iconSize: 26.sp,
-                  icon: const Icon(Icons.menu),
-                  color: Colors.white,
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                );
-              }),
-            ],
-          ),
+          _buildHeader(),
+          _buildSubHeader(),
+          SizedBox(height: 19.h),
+          _buildTripListContainer(),
+        ],
+      ),
+      floatingActionButton:
+          buildFloatingActionButton(context, _navigateToAddTripPage),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  Widget _buildHeader() {
+    return SizedBox(
+      height: 53.h,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 14.0.w),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Your journeys, just a tap away.",
-                style: secondaryHeaderTextStyle,
+                "My Trips",
+                style: mainHeaderTextStyle,
               ),
             ),
           ),
-          SizedBox(height: 19.h),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(21.r),
-                  topRight: Radius.circular(21.r),
-                ),
-              ),
-              child: Consumer<UserProvider>(
-                builder: (context, userProvider, child) {
-                  return _buildTripList(userProvider);
-                },
-              ),
-            ),
-          ),
+          Builder(builder: (context) {
+            return IconButton(
+              iconSize: 26.sp,
+              icon: const Icon(Icons.menu),
+              color: Colors.white,
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            );
+          }),
         ],
       ),
-      floatingActionButton: buildFloatingActionButton(context, addTripPage),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  Widget _buildSubHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 14.0.w),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Your journeys, just a tap away.",
+          style: secondaryHeaderTextStyle,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTripListContainer() {
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(21.r),
+            topRight: Radius.circular(21.r),
+          ),
+        ),
+        child: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            return _buildTripList(userProvider);
+          },
+        ),
+      ),
     );
   }
 
@@ -132,33 +152,27 @@ class _TripListPageState extends State<TripListPage> {
     } else if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
       return noContentMessage(ContentType.Trips);
     } else {
-      return RefreshIndicator(
-        color: primaryColor,
-        onRefresh: () async {
-          await userProvider.fetchWholeUserData();
-        },
-        child: ListView.builder(
-          itemCount: userProvider.user!.trips.length,
-          itemBuilder: (context, index) {
-            final currentTrip = userProvider.user!.trips[index];
-            return TripComponent(
-              trip: currentTrip,
-              indexInList: index,
-              moveToDetails: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChangeNotifierProvider(
-                      create: (_) => TripProvider(currentTrip, userProvider),
-                      child: ExpenseListPage(trip: currentTrip),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
+      return _buildRefreshableTripList(userProvider);
     }
+  }
+
+  Widget _buildRefreshableTripList(UserProvider userProvider) {
+    return RefreshIndicator(
+      color: primaryColor,
+      onRefresh: () async {
+        await userProvider.fetchWholeUserData();
+      },
+      child: ListView.builder(
+        itemCount: userProvider.user!.trips.length,
+        itemBuilder: (context, index) {
+          final currentTrip = userProvider.user!.trips[index];
+          return TripComponent(
+            trip: currentTrip,
+            indexInList: index,
+            moveToDetails: () => _navigateToDetails(currentTrip),
+          );
+        },
+      ),
+    );
   }
 }

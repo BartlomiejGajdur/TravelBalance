@@ -21,12 +21,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  bool forceLoading = false;
   @override
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void toggleLoading() {
+    setState(() {
+      forceLoading = !forceLoading;
+    });
   }
 
   Future<bool> loginAS() async {
@@ -41,6 +47,8 @@ class _LoginPageState extends State<LoginPage> {
   void moveToTrips() {
     Navigator.pushNamed(context, "TripListPage");
   }
+
+  void loginGoogle() {}
 
   //FOR DEBUG
   void fillLoginAndPassword(
@@ -99,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: loginAS,
                 buttonText: "Login",
                 onSuccess: moveToTrips,
+                forceLoading: forceLoading,
               ),
               SizedBox(height: 40.h),
               const CustomDivider(text: "Or"),
@@ -114,10 +123,12 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 24.h),
               GestureDetector(
                 onTap: () async {
+                  toggleLoading();
                   bool result = await ApiService().loginGoogle(context);
                   if (result) {
                     moveToTrips();
                   }
+                  toggleLoading();
                 },
                 child: const MockButton(
                     buttonType: ButtonType.google,

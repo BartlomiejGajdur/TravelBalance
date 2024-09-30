@@ -200,7 +200,7 @@ void showDeleteTripDialog(BuildContext context, Trip trip, int indexInList) {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16.r),
-                      color: const Color(0xFFE8388A4)),
+                      color: const Color(0xffe8388a4)),
                   child: Text("Cancel", style: buttonTextStyle),
                 ),
               ),
