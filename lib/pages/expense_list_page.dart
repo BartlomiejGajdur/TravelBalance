@@ -1,3 +1,4 @@
+import 'package:TravelBalance/TravelBalanceComponents/edit_trip.dart';
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
 import 'package:TravelBalance/components/expense_sheet_component.dart';
@@ -9,10 +10,6 @@ import 'package:provider/provider.dart';
 
 class ExpenseListPage extends StatelessWidget {
   final Trip trip;
-
-  void editTripName(TripProvider tripProvider) {
-    tripProvider.editTripName("newName");
-  }
 
   void addExpense(TripProvider tripProvider) {
     final newExpense = Expense(
@@ -35,7 +32,20 @@ class ExpenseListPage extends StatelessWidget {
         text1: trip.name,
         text2: "Discover your travel costs.",
         onActionButtonClick: () => addExpense(tripProvider),
-        onEditIconClick: () => editTripName(tripProvider),
+        onEditIconClick: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: EditTrip(tripProvider: tripProvider),
+              );
+            },
+          );
+        },
         childWidget: tripProvider.isExpenseListEmpty()
             ? noContentMessage(ContentType.Expenses)
             : ListView.builder(

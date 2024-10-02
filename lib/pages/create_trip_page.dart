@@ -1,12 +1,11 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
-import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CreateTripPage extends StatelessWidget {
@@ -36,32 +35,6 @@ class CreateTripPage extends StatelessWidget {
     return false;
   }
 
-  /// Image picker widget
-  Widget _buildImagePicker({VoidCallback func = _defaultFunc}) {
-    return GestureDetector(
-      onTap: func,
-      child: Container(
-        height: 91.h,
-        width: 107.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          color: const Color(0xFF92A332).withOpacity(0.2),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.image, size: 32.h, color: thirdColor),
-            const SizedBox(height: 8),
-            Text(
-              "Image",
-              style: GoogleFonts.outfit(fontSize: 16.sp, color: thirdColor),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   /// The main content widget that includes the form, image picker, and button.
   Widget _buildFormContent(BuildContext context) {
     return Form(
@@ -75,7 +48,7 @@ class CreateTripPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: _buildImagePicker(),
+                  child: imagePicker(),
                 ),
                 Flexible(
                   child: CustomTextFormField(
@@ -118,8 +91,4 @@ class CreateTripPage extends StatelessWidget {
       childWidget: _buildFormContent(context),
     );
   }
-}
-
-void _defaultFunc() {
-  debugPrint("Debug from Create Trip Page");
 }

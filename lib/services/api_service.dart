@@ -321,7 +321,36 @@ class ApiService {
         return false;
       }
     } catch (e) {
-      debugPrint("Delete Add Trip in: $e");
+      debugPrint("Delete Trip in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> editTrip(int id, String tripName) async {
+    try {
+      final body = {
+        'name': tripName,
+      };
+
+      final endPoint = 'trip/$id/';
+      final response = await http.put(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json'
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('Edit Trip successful');
+        return true;
+      } else {
+        debugPrint('Edit Trip failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Edit Trip in: $e");
       return false;
     }
   }
