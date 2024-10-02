@@ -1,17 +1,24 @@
+import 'package:TravelBalance/models/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 
 class User {
   List<Trip> _trips;
+  Statistics _statistics;
 
-  User({required List<Trip> trips}) : _trips = trips;
+  User({required List<Trip> trips, required Statistics statistics})
+      : _trips = trips,
+        _statistics = statistics;
 
   List<Trip> get trips => _trips;
+  Statistics get statistics => _statistics;
 
-  factory User.fromJson(List<dynamic> jsonList) {
-    List<Trip> trips =
-        jsonList.map((jsonData) => Trip.fromJson(jsonData)).toList();
-    return User(trips: trips);
+  factory User.fromJson(Map<String, dynamic> json) {
+    List<Trip> trips = (json['trips'] as List)
+        .map((jsonData) => Trip.fromJson(jsonData))
+        .toList();
+    Statistics statistics = Statistics.fromJson(json['statistics']);
+    return User(trips: trips, statistics: statistics);
   }
 
   void addTrip(int id, String tripName) {
