@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 class ExpenseListPage extends StatelessWidget {
   final Trip trip;
+  final int indexInList;
 
   void addExpense(TripProvider tripProvider) {
     final newExpense = Expense(
@@ -21,10 +22,8 @@ class ExpenseListPage extends StatelessWidget {
     tripProvider.addExpense(newExpense);
   }
 
-  const ExpenseListPage({
-    super.key,
-    required this.trip,
-  });
+  const ExpenseListPage(
+      {super.key, required this.trip, required this.indexInList});
   @override
   Widget build(BuildContext context) {
     final tripProvider = Provider.of<TripProvider>(context);
@@ -41,7 +40,8 @@ class ExpenseListPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: EditTrip(tripProvider: tripProvider),
+                child: EditTrip(
+                    tripProvider: tripProvider, indexInList: indexInList),
               );
             },
           );

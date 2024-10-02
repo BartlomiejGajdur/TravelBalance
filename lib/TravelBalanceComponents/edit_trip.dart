@@ -1,4 +1,5 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/Utils/delete_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditTrip extends StatelessWidget {
   TripProvider tripProvider;
+  final int indexInList;
   final TextEditingController tripNameController = TextEditingController();
   final TextEditingController placeholder = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -16,7 +18,7 @@ class EditTrip extends StatelessWidget {
     return null;
   }
 
-  EditTrip({super.key, required this.tripProvider});
+  EditTrip({super.key, required this.tripProvider, required this.indexInList});
 
   void _editTripName(
     BuildContext context, TripProvider tripProvider, String newName) {
@@ -25,12 +27,9 @@ class EditTrip extends StatelessWidget {
     Navigator.of(context).pop();
   }
 
-  /// Image picker widget
-
-
   /// The main content widget that includes the form, image picker, and button.
   Widget _buildFormContent(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 350.h,
       child: Form(
         key: formKey,
@@ -83,7 +82,10 @@ class EditTrip extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    showDeleteTripDialog(
+                        context, tripProvider.trip, indexInList); 
+                  },
                   child: Container(
                     height: 56.h,
                     width: 67.w,
@@ -125,5 +127,3 @@ class EditTrip extends StatelessWidget {
     return _buildFormContent(context);
   }
 }
-
-

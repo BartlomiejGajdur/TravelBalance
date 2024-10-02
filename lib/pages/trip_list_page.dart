@@ -40,14 +40,17 @@ class _TripListPageState extends State<TripListPage> {
     });
   }
 
-  void _navigateToDetails(Trip currentTrip) {
+  void _navigateToDetails(Trip currentTrip, int indexInList) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider(
           create: (_) => TripProvider(
               currentTrip, Provider.of<UserProvider>(context, listen: false)),
-          child: ExpenseListPage(trip: currentTrip),
+          child: ExpenseListPage(
+            trip: currentTrip,
+            indexInList: indexInList,
+          ),
         ),
       ),
     );
@@ -144,16 +147,22 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildTripList(UserProvider userProvider) {
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: secondaryColor,
-        ),
-      );
-    } else if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
+      return _circularProgressIndicator();
+    } else if (userProvider.user == null) {
+      return noContentMessage(ContentType.Trips);
+    } else if (userProvider.user!.trips.isEmpty) {
       return noContentMessage(ContentType.Trips);
     } else {
       return _buildRefreshableTripList(userProvider);
     }
+  }
+
+  Center _circularProgressIndicator() {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: secondaryColor,
+      ),
+    );
   }
 
   Widget _buildRefreshableTripList(UserProvider userProvider) {
@@ -169,7 +178,7 @@ class _TripListPageState extends State<TripListPage> {
           return TripComponent(
             trip: currentTrip,
             indexInList: index,
-            moveToDetails: () => _navigateToDetails(currentTrip),
+            moveToDetails: () => _navigateToDetails(currentTrip, index),
           );
         },
       ),

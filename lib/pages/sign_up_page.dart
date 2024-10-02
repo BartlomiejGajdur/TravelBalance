@@ -38,7 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<bool> signUp() async {
     if (formKey.currentState?.validate() ?? false) {
-      return await ApiService().signup(
+      return await ApiService().signUp(
           usernameController.text,
           emailController.text,
           passwordController.text,

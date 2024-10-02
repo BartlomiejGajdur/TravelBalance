@@ -53,7 +53,7 @@ class ApiService {
 
   Future<User?> fetchUserData() async {
     try {
-      const endPoint = 'trip/get_trips_with_expenses/';
+      const endPoint = 'trip/';
       final response = await http.get(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {'Authorization': _getAuthorizationHeader()},
@@ -162,7 +162,7 @@ class ApiService {
     }
   }
 
-  Future<bool> signup(String username, String email, String password,
+  Future<bool> signUp(String username, String email, String password,
       String repeatedPassword) async {
     try {
       final body = {
