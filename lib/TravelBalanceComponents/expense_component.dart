@@ -19,7 +19,6 @@ class ExpenseComponent extends StatelessWidget {
       title = title.substring(0, 18);
       title += "...";
     }
-    debugPrint(title);
     return title;
   }
 
@@ -36,92 +35,92 @@ class ExpenseComponent extends StatelessWidget {
   }
 
   Widget _expenseField() {
-    return Container(
-      width: 336.w,
-      height: 89.h,
-      child: Row(
-        children: [
-          SizedBox(width: 17.w),
-          categoryIcon(expense.category),
-          SizedBox(width: 9.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                expense.categoryToString(),
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                    color: Color(0xFF292B2D),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: SizedBox(
+        width: 336.w,
+        height: 89.h,
+        child: Row(
+          children: [
+            SizedBox(width: 17.w),
+            categoryIcon(expense.category),
+            SizedBox(width: 9.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  expense.categoryToString(),
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Color(0xFF292B2D),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 13.h),
-              Text(
-                getShorterTitle(),
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                    color: Color(0xFF91919F),
+                SizedBox(height: 13.h),
+                Text(
+                  getShorterTitle(),
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: Color(0xFF91919F),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '- \$${expense.cost.toStringAsFixed(2)}',
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Color(0xFFFD3C4A),
+                    ),
                   ),
                 ),
-              )
-            ],
-          ),
-          Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '- \$${expense.cost.toStringAsFixed(2)}',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: Color(0xFFFD3C4A),
+                SizedBox(height: 13.h),
+                Text(
+                  getDateTime(),
+                  style: GoogleFonts.inter(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      color: Color(0xFF91919F),
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(height: 13.h),
-              Text(
-                getDateTime(),
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                    color: Color(0xFF91919F),
-                  ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(width: 17.w),
-        ],
+                )
+              ],
+            ),
+            SizedBox(width: 17.w),
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10.0.h),
-      child: GestureDetector(
-        onTap: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return ModalBottomSheetExpense(
-                expense: expense,
-              );
-            },
-          );
-        },
-        child: _expenseField(),
-      ),
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return ModalBottomSheetExpense(
+              expense: expense,
+            );
+          },
+        );
+      },
+      child: _expenseField(),
     );
   }
 }
