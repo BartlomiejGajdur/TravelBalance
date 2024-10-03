@@ -1,4 +1,4 @@
-import 'package:TravelBalance/Utils/CustomScaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

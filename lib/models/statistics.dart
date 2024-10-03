@@ -11,9 +11,9 @@ class Statistics {
 
   factory Statistics.fromJson(Map<String, dynamic> json) {
     return Statistics(
-      totalTripsAmount: json['totalTripsAmount'],
-      visitedCountriesAmount: json['visitedCountriesAmount'],
-      spendings: json['spendings'],
+      totalTripsAmount: json['totalTripsAmount'] ?? 0,
+      visitedCountriesAmount: json['visitedCountriesAmount'] ?? 0,
+      spendings: (json['spendings'] ?? 0).toDouble(),
     );
   }
 }

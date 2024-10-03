@@ -3,7 +3,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
-import 'package:TravelBalance/Utils/CustomScaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

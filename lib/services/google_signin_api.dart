@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:TravelBalance/Utils/CustomScaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';

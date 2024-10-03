@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-enum Category { accommodation, food, health, transport, activities, others }
+enum Category {
+  activities,
+  accommodation,
+  food,
+  health,
+  shopping,
+  transport,
+  souvenirs,
+  others
+}
 
 class Expense {
   int _id;
@@ -48,16 +57,22 @@ class Expense {
 
   String categoryToString() {
     switch (_category) {
+      case Category.activities:
+        return 'Activities';
       case Category.accommodation:
         return 'Accommodation';
       case Category.food:
         return 'Food';
       case Category.health:
         return 'Health';
+      case Category.shopping:
+        return 'Shopping';
       case Category.transport:
         return 'Transport';
-      case Category.activities:
-        return 'Activities';
+      case Category.souvenirs:
+        return 'Souvenirs';
+      case Category.others:
+        return 'Others';
       default:
         return 'Unknown';
     }

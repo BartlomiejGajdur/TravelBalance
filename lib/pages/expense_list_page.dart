@@ -15,10 +15,10 @@ class ExpenseListPage extends StatelessWidget {
   void addExpense(TripProvider tripProvider) {
     final newExpense = Expense(
         id: 1,
-        title: "chhc",
+        title: "BARDZO DLUGA NAZWA O JAPIER ALE DLUGA KURWRWRWRW",
         cost: 23,
         category: Category.activities,
-        dateTime: DateTime(1999));
+        dateTime: DateTime.now());
     tripProvider.addExpense(newExpense);
   }
 

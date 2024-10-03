@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:TravelBalance/components/expense_component.dart';
+import 'package:TravelBalance/TravelBalanceComponents/expense_component.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class ExpenseSheetComponent extends StatelessWidget {

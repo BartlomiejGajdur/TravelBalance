@@ -1,4 +1,4 @@
-import 'package:TravelBalance/Utils/CustomScaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:flutter/material.dart';
