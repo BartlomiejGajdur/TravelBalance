@@ -95,7 +95,8 @@ class ExpenseListPage extends StatelessWidget {
       },
       childWidget: Column(
         children: [
-          _buildGraphWidget(tripProvider),
+          if (!tripProvider.isExpenseListEmpty())
+            _buildGraphWidget(tripProvider),
           tripProvider.isExpenseListEmpty()
               ? noContentMessage(ContentType.Expenses)
               : Expanded(

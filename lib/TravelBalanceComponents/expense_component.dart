@@ -37,9 +37,12 @@ class ExpenseComponent extends StatelessWidget {
   Widget _expenseField() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: SizedBox(
+      child: Container(
         width: 336.w,
         height: 89.h,
+        decoration: BoxDecoration(
+            color: Color(0xFFFCFCFC),
+            borderRadius: BorderRadius.circular(24.r)),
         child: Row(
           children: [
             SizedBox(width: 17.w),
