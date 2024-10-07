@@ -41,7 +41,7 @@ class ExpenseComponent extends StatelessWidget {
         width: 336.w,
         height: 89.h,
         decoration: BoxDecoration(
-            color: Color(0xFFFCFCFC),
+            color: const Color(0xFFFCFCFC),
             borderRadius: BorderRadius.circular(24.r)),
         child: Row(
           children: [
@@ -116,6 +116,7 @@ class ExpenseComponent extends StatelessWidget {
       onTap: () {
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           builder: (context) {
             return ModalBottomSheetExpense(
               expense: expense,
