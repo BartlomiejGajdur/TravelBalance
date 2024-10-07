@@ -21,7 +21,7 @@ class EditTrip extends StatelessWidget {
   EditTrip({super.key, required this.tripProvider, required this.indexInList});
 
   void _editTripName(
-    BuildContext context, TripProvider tripProvider, String newName) {
+      BuildContext context, TripProvider tripProvider, String newName) {
     ApiService().editTrip(tripProvider.trip.id, newName);
     tripProvider.editTripName(newName);
     Navigator.of(context).pop();
@@ -82,9 +82,9 @@ class EditTrip extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    showDeleteTripDialog(
-                        context, tripProvider.trip, indexInList); 
+                  onTap: ()  {
+                     showDeleteTripDialog(
+                        context, tripProvider.trip, indexInList);
                   },
                   child: Container(
                     height: 56.h,
