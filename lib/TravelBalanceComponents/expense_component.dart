@@ -17,9 +17,8 @@ class ExpenseComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Tworzenie lokalnego ExpenseProvider
     return ChangeNotifierProvider(
-      create: (context) => ExpenseProvider(expense), // Przekazanie wydatku do provider
+      create: (context) => ExpenseProvider(expense),
       child: Consumer<ExpenseProvider>(
         builder: (context, expenseProvider, child) {
           return GestureDetector(
@@ -34,7 +33,7 @@ class ExpenseComponent extends StatelessWidget {
                 },
               );
             },
-            child: _expenseField(expenseProvider), // Przekazanie expenseProvider do funkcji
+            child: _expenseField(expenseProvider),
           );
         },
       ),
