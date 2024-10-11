@@ -40,6 +40,18 @@ class Expense {
     _title = name;
   }
 
+  void setCost(double cost) {
+    _cost = cost;
+  }
+
+  void setCategory(Category category) {
+    _category = category;
+  }
+
+  void setDateTime(DateTime dateTime) {
+    _dateTime = dateTime;
+  }
+
   factory Expense.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];
     final String title = data['title'];
@@ -57,6 +69,29 @@ class Expense {
 
   String categoryToString() {
     switch (_category) {
+      case Category.activities:
+        return 'Activities';
+      case Category.accommodation:
+        return 'Accommodation';
+      case Category.food:
+        return 'Food';
+      case Category.health:
+        return 'Health';
+      case Category.shopping:
+        return 'Shopping';
+      case Category.transport:
+        return 'Transport';
+      case Category.souvenirs:
+        return 'Souvenirs';
+      case Category.others:
+        return 'Others';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  static String staticCategoryToString(Category category) {
+    switch (category) {
       case Category.activities:
         return 'Activities';
       case Category.accommodation:

@@ -1,0 +1,104 @@
+import 'package:TravelBalance/Utils/category_item.dart';
+import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/models/expense.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+void _emptyCallback() {}
+
+class ChooseCategory extends StatefulWidget {
+  Category choosenCategory;
+  void Function() onCategoryClick;
+  TextEditingController? textController;
+
+  ChooseCategory(
+      {super.key,
+      required this.choosenCategory,
+      this.onCategoryClick = _emptyCallback,
+      this.textController});
+
+  @override
+  State<ChooseCategory> createState() => _ChooseCategoryState();
+}
+
+class _ChooseCategoryState extends State<ChooseCategory> {
+  bool _isCategoryMatch(Category category) {
+    return widget.choosenCategory == category;
+  }
+
+  Widget _clickableCategoryIcon(Category category) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          widget.choosenCategory = category;
+        });
+        if (widget.textController != null) {
+          widget.textController!.text =
+              Expense.staticCategoryToString(category);
+        }
+        widget.onCategoryClick();
+      },
+      child: Container(
+        width: 85.w,
+        child: Column(
+          children: [
+            categoryIcon(category),
+            Text(
+              Expense.staticCategoryToString(category),
+              style: TextStyle(
+                  color:
+                      _isCategoryMatch(category) ? primaryColor : Colors.black,
+                  fontSize: 10.sp,
+                  fontWeight: _isCategoryMatch(category)
+                      ? FontWeight.w800
+                      : FontWeight.normal),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFFFAFAFA),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 20.h),
+          Text(
+            "CHOOSE CATEGORY",
+            style: GoogleFonts.inter(
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 1.5),
+          ),
+          SizedBox(height: 20.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _clickableCategoryIcon(Category.activities),
+              _clickableCategoryIcon(Category.accommodation),
+              _clickableCategoryIcon(Category.food),
+              _clickableCategoryIcon(Category.health),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _clickableCategoryIcon(Category.shopping),
+              _clickableCategoryIcon(Category.transport),
+              _clickableCategoryIcon(Category.souvenirs),
+              _clickableCategoryIcon(Category.others),
+            ],
+          ),
+          SizedBox(height: 20.h),
+        ],
+      ),
+    );
+  }
+}

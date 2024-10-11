@@ -1,4 +1,6 @@
+import 'package:TravelBalance/TravelBalanceComponents/choose_category.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,15 +14,19 @@ class CustomTextField extends StatelessWidget {
   final double? textFieldHorizontalPadding;
   final double? textFieldBottomPadding;
   final ClickAction clickAction;
+  final Category? expenseCategory;
 
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.text,
-      this.suffixIcon,
-      this.textFieldHorizontalPadding,
-      this.textFieldBottomPadding,
-      this.clickAction = ClickAction.None});
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.text,
+    this.suffixIcon,
+    this.textFieldHorizontalPadding,
+    this.textFieldBottomPadding,
+    this.clickAction = ClickAction.None,
+    this.expenseCategory,
+  }) : assert(clickAction != ClickAction.Category || expenseCategory != null,
+            'expenseCategory must be provided when clickAction is Category');
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class CustomTextField extends StatelessWidget {
           if (clickAction == ClickAction.Date) {
             _showDateMenu(context);
           } else if (clickAction == ClickAction.Category) {
-            _showAccomodationMenu(context);
+            _showCategoryMenu(context, expenseCategory!);
           }
         },
         controller: controller,
@@ -113,41 +119,12 @@ class CustomTextField extends StatelessWidget {
     );
   }
 
-  void _showAccomodationMenu(BuildContext context) {
+//Navigator.pop(context);
+  void _showCategoryMenu(BuildContext context, Category category) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext ctx) {
-        return SizedBox(
-          height: 200.h,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: const Text('Accomodation'),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.text = "Accomodation";
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: const Text('Health'),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.text = "Health";
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.cancel),
-                title: const Text('Anuluj'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
+        return SizedBox(child: ChooseCategory(choosenCategory: category, textController: controller,));
       },
     );
   }
