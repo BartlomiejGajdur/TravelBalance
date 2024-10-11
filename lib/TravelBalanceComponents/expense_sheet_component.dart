@@ -24,7 +24,7 @@ class ExpenseSheetComponent extends StatelessWidget {
     } else if (dateTime.isAtSameMomentAs(yesterday)) {
       return 'Yesterday';
     } else {
-      return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+      return '${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.year}';
     }
   }
 
@@ -39,7 +39,7 @@ class ExpenseSheetComponent extends StatelessWidget {
             child: Text(
               _getDisplayDate(),
               style: GoogleFonts.inter(
-                  fontSize: 20.sp, fontWeight: FontWeight.bold),
+                  fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
           ),
           for (var expense in expenses) ExpenseComponent(expense: expense),
