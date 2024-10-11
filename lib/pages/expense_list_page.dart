@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:TravelBalance/TravelBalanceComponents/choose_category.dart';
 import 'package:TravelBalance/TravelBalanceComponents/edit_trip.dart';
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';

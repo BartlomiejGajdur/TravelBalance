@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class ExpenseProvider with ChangeNotifier {
-  Expense _expense;
+  final Expense _expense;
 
   ExpenseProvider(this._expense);
 

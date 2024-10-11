@@ -8,13 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 void _emptyCallback() {}
 
 class ChooseCategory extends StatefulWidget {
-  Category choosenCategory;
+  String categoryName;
   void Function() onCategoryClick;
   TextEditingController? textController;
 
   ChooseCategory(
       {super.key,
-      required this.choosenCategory,
+      required this.categoryName,
       this.onCategoryClick = _emptyCallback,
       this.textController});
 
@@ -24,14 +24,14 @@ class ChooseCategory extends StatefulWidget {
 
 class _ChooseCategoryState extends State<ChooseCategory> {
   bool _isCategoryMatch(Category category) {
-    return widget.choosenCategory == category;
+    return widget.categoryName == Expense.staticCategoryToString(category);
   }
 
   Widget _clickableCategoryIcon(Category category) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          widget.choosenCategory = category;
+          widget.categoryName = Expense.staticCategoryToString(category);
         });
         if (widget.textController != null) {
           widget.textController!.text =
@@ -39,7 +39,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
         }
         widget.onCategoryClick();
       },
-      child: Container(
+      child: SizedBox(
         width: 85.w,
         child: Column(
           children: [
@@ -63,6 +63,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 245.h,
       width: double.infinity,
       color: const Color(0xFFFAFAFA),
       child: Column(
@@ -96,7 +97,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               _clickableCategoryIcon(Category.others),
             ],
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 20.h)
         ],
       ),
     );

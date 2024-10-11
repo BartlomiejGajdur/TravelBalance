@@ -1,20 +1,19 @@
 import 'package:TravelBalance/TravelBalanceComponents/choose_category.dart';
 import 'package:TravelBalance/Utils/globals.dart';
-import 'package:TravelBalance/models/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum ClickAction { Date, Category, None }
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String text;
   final IconData? suffixIcon;
   final double? textFieldHorizontalPadding;
   final double? textFieldBottomPadding;
   final ClickAction clickAction;
-  final Category? expenseCategory;
+  final bool numbersOnly;
 
   const CustomTextField({
     super.key,
@@ -24,34 +23,45 @@ class CustomTextField extends StatelessWidget {
     this.textFieldHorizontalPadding,
     this.textFieldBottomPadding,
     this.clickAction = ClickAction.None,
-    this.expenseCategory,
-  }) : assert(clickAction != ClickAction.Category || expenseCategory != null,
-            'expenseCategory must be provided when clickAction is Category');
+    this.numbersOnly = false,
+  });
+  @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.text = widget.text;
+  }
 
   @override
   Widget build(BuildContext context) {
-    controller.text = text;
     return Padding(
       padding: EdgeInsets.only(
-        left: textFieldHorizontalPadding ?? horizontalPadding,
-        right: textFieldHorizontalPadding ?? horizontalPadding,
-        bottom: textFieldBottomPadding ?? 0.0,
+        left: widget.textFieldHorizontalPadding ?? horizontalPadding,
+        right: widget.textFieldHorizontalPadding ?? horizontalPadding,
+        bottom: widget.textFieldBottomPadding ?? 0.0,
       ),
       child: TextField(
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        readOnly: clickAction != ClickAction.None,
+        readOnly: widget.clickAction != ClickAction.None,
         onTap: () {
-          if (clickAction == ClickAction.Date) {
+          if (widget.clickAction == ClickAction.Date) {
             _showDateMenu(context);
-          } else if (clickAction == ClickAction.Category) {
-            _showCategoryMenu(context, expenseCategory!);
+          } else if (widget.clickAction == ClickAction.Category) {
+            _showCategoryMenu(context);
           }
         },
-        controller: controller,
+        controller: widget.controller,
+        keyboardType: widget.numbersOnly
+            ? const TextInputType.numberWithOptions(decimal: true)
+            : TextInputType.text,
         decoration: InputDecoration(
-          suffixIcon: Icon(suffixIcon),
+          suffixIcon: Icon(widget.suffixIcon),
           suffixIconColor: const Color(0XFF9BA1A8),
           labelStyle: TextStyle(color: Colors.grey[600]),
           hintStyle: GoogleFonts.outfit(
@@ -94,7 +104,7 @@ class CustomTextField extends StatelessWidget {
                 title: const Text('Today'),
                 onTap: () {
                   Navigator.pop(context);
-                  controller.text = "07/10/2024";
+                  widget.controller.text = "07/10/2024";
                 },
               ),
               ListTile(
@@ -102,7 +112,7 @@ class CustomTextField extends StatelessWidget {
                 title: const Text('Yesterday'),
                 onTap: () {
                   Navigator.pop(context);
-                  controller.text = "06/10/2024";
+                  widget.controller.text = "06/10/2024";
                 },
               ),
               ListTile(
@@ -119,12 +129,16 @@ class CustomTextField extends StatelessWidget {
     );
   }
 
-//Navigator.pop(context);
-  void _showCategoryMenu(BuildContext context, Category category) {
+  void _showCategoryMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext ctx) {
-        return SizedBox(child: ChooseCategory(choosenCategory: category, textController: controller,));
+        return SizedBox(
+            child: ChooseCategory(
+          categoryName: widget.controller.text,
+          textController: widget.controller,
+          onCategoryClick: () => Navigator.of(ctx).pop(),
+        ));
       },
     );
   }

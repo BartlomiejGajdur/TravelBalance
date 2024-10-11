@@ -1,9 +1,11 @@
+import 'package:TravelBalance/providers/expense_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/Utils/category_item.dart';
 import 'package:TravelBalance/components/expense_modal.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ExpenseComponent extends StatelessWidget {
   final Expense expense;
@@ -13,47 +15,53 @@ class ExpenseComponent extends StatelessWidget {
     required this.expense,
   });
 
-  String getShorterTitle() {
-    String title = expense.title;
-    if (title.length > 18) {
-      title = title.substring(0, 18);
-      title += "...";
-    }
-    return title;
+  @override
+  Widget build(BuildContext context) {
+    // Tworzenie lokalnego ExpenseProvider
+    return ChangeNotifierProvider(
+      create: (context) => ExpenseProvider(expense), // Przekazanie wydatku do provider
+      child: Consumer<ExpenseProvider>(
+        builder: (context, expenseProvider, child) {
+          return GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) {
+                  return ModalBottomSheetExpense(
+                    expenseProvider: expenseProvider,
+                  );
+                },
+              );
+            },
+            child: _expenseField(expenseProvider), // Przekazanie expenseProvider do funkcji
+          );
+        },
+      ),
+    );
   }
 
-  String getDateTime() {
-    int hour = expense.dateTime.hour;
-    int minute = expense.dateTime.minute;
-    final String postFix = hour >= 12 ? "PM" : "AM";
-
-    final String hourDateInCorrectFormat =
-        (hour % 12 == 0 ? 12 : hour % 12).toString().padLeft(2, '0');
-    final String minuteFormatted = minute.toString().padLeft(2, '0');
-
-    return "$hourDateInCorrectFormat:$minuteFormatted $postFix";
-  }
-
-  Widget _expenseField() {
+  Widget _expenseField(ExpenseProvider expenseProvider) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Container(
         width: 336.w,
         height: 89.h,
         decoration: BoxDecoration(
-            color: const Color(0xFFFCFCFC),
-            borderRadius: BorderRadius.circular(24.r)),
+          color: const Color(0xFFFCFCFC),
+          borderRadius: BorderRadius.circular(24.r),
+        ),
         child: Row(
           children: [
             SizedBox(width: 17.w),
-            categoryIcon(expense.category),
+            categoryIcon(expenseProvider.expense.category),
             SizedBox(width: 9.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  expense.categoryToString(),
+                  expenseProvider.expense.categoryToString(),
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.w500,
@@ -64,7 +72,7 @@ class ExpenseComponent extends StatelessWidget {
                 ),
                 SizedBox(height: 13.h),
                 Text(
-                  getShorterTitle(),
+                  getShorterTitle(expenseProvider),
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.w500,
@@ -81,7 +89,7 @@ class ExpenseComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '- \$${expense.cost.toStringAsFixed(2)}',
+                  '- \$${expenseProvider.expense.cost.toStringAsFixed(2)}',
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
@@ -92,7 +100,7 @@ class ExpenseComponent extends StatelessWidget {
                 ),
                 SizedBox(height: 13.h),
                 Text(
-                  getDateTime(),
+                  getDateTime(expenseProvider),
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.w500,
@@ -110,21 +118,24 @@ class ExpenseComponent extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) {
-            return ModalBottomSheetExpense(
-              expense: expense,
-            );
-          },
-        );
-      },
-      child: _expenseField(),
-    );
+  String getShorterTitle(ExpenseProvider expenseProvider) {
+    String title = expenseProvider.expense.title;
+    if (title.length > 18) {
+      title = title.substring(0, 18);
+      title += "...";
+    }
+    return title;
+  }
+
+  String getDateTime(ExpenseProvider expenseProvider) {
+    int hour = expenseProvider.expense.dateTime.hour;
+    int minute = expenseProvider.expense.dateTime.minute;
+    final String postFix = hour >= 12 ? "PM" : "AM";
+
+    final String hourDateInCorrectFormat =
+        (hour % 12 == 0 ? 12 : hour % 12).toString().padLeft(2, '0');
+    final String minuteFormatted = minute.toString().padLeft(2, '0');
+
+    return "$hourDateInCorrectFormat:$minuteFormatted $postFix";
   }
 }

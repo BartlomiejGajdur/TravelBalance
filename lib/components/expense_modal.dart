@@ -1,13 +1,13 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/providers/expense_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:TravelBalance/models/expense.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ModalBottomSheetExpense extends StatefulWidget {
-  final Expense expense;
-  const ModalBottomSheetExpense({super.key, required this.expense});
+  final ExpenseProvider expenseProvider;
+  const ModalBottomSheetExpense({super.key, required this.expenseProvider});
 
   @override
   State<ModalBottomSheetExpense> createState() =>
@@ -67,18 +67,20 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
             ),
             formattedTitle("Description"),
             CustomTextField(
-                text: widget.expense.title,
+                text: widget.expenseProvider.expense.title,
                 controller: descriptionController,
                 textFieldBottomPadding: 16.0.h),
             formattedTitle("Cost"),
             CustomTextField(
-                text: widget.expense.cost.toString(),
-                controller: costController,
-                textFieldBottomPadding: 16.0.h,
-                suffixIcon: Icons.monetization_on_outlined),
+              text: widget.expenseProvider.expense.cost.toString(),
+              controller: costController,
+              textFieldBottomPadding: 16.0.h,
+              suffixIcon: Icons.monetization_on_outlined,
+              numbersOnly: true,
+            ),
             formattedTitle("Date"),
             CustomTextField(
-              text: formattedDateTime(widget.expense.dateTime),
+              text: formattedDateTime(widget.expenseProvider.expense.dateTime),
               controller: dateController,
               textFieldBottomPadding: 16.0.h,
               suffixIcon: Icons.calendar_month_outlined,
@@ -86,12 +88,11 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
             ),
             formattedTitle("Category"),
             CustomTextField(
-              text: widget.expense.categoryToString(),
+              text: widget.expenseProvider.expense.categoryToString(),
               controller: categoryController,
               textFieldBottomPadding: 16.0.h,
               suffixIcon: Icons.category,
               clickAction: ClickAction.Category,
-              expenseCategory: widget.expense.category,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
