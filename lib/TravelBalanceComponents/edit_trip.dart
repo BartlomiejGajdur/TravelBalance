@@ -28,12 +28,10 @@ class _EditTripState extends State<EditTrip> {
 
     tripNameController.text =
         widget.tripProvider.trip.name; 
-    // You may also want to set placeholderController.text based on your requirements
   }
 
   @override
   void dispose() {
-    // Dispose of the controllers to free up resources
     tripNameController.dispose();
     placeholderController.dispose();
     super.dispose();
@@ -50,7 +48,6 @@ class _EditTripState extends State<EditTrip> {
     Navigator.of(context).pop();
   }
 
-  /// The main content widget that includes the form, image picker, and button.
   Widget _buildFormContent(BuildContext context) {
     return SizedBox(
       height: 350.h,
