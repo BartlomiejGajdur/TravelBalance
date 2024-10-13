@@ -1,11 +1,13 @@
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
+import 'package:TravelBalance/TravelBalanceComponents/statistics_tile.dart';
 import 'package:TravelBalance/Utils/floating_action_button.dart';
+import 'package:TravelBalance/components/short_trip_component.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
-import 'package:TravelBalance/components/trip_component.dart';
+import 'package:TravelBalance/components/extended_trip_component.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/pages/expense_list_page.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
@@ -20,6 +22,7 @@ class TripListPage extends StatefulWidget {
 
 class _TripListPageState extends State<TripListPage> {
   bool isLoading = false;
+  bool isSwitched = false;
 
   @override
   void initState() {
@@ -167,15 +170,72 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildRefreshableTripList(UserProvider userProvider) {
     return RefreshIndicator(
-      color: primaryColor,
-      onRefresh: () async {
-        await userProvider.fetchWholeUserData();
-      },
+        color: primaryColor,
+        onRefresh: () async {
+          await userProvider.fetchWholeUserData();
+        },
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10.0.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  StatisticsTile(
+                      statisticsTileType: StatisticsTileType.totalTrips),
+                  StatisticsTile(
+                      statisticsTileType: StatisticsTileType.countriesVisited),
+                  StatisticsTile(
+                      statisticsTileType: StatisticsTileType.spendings),
+                ],
+              ),
+            ),
+            Text(
+                "Krzysztoferku Bomberku nie dziala te liczby ktore dostaje od CB"),
+            SizedBox(height: 5.h),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Switch(
+                  value: isSwitched,
+                  activeColor: primaryColor,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                    });
+                  }),
+            ),
+            isSwitched
+                ? _buildShortTripList(userProvider)
+                : _buildExtendedTripList(userProvider),
+          ],
+        ));
+  }
+
+  Widget _buildExtendedTripList(UserProvider userProvider) {
+    return Expanded(
       child: ListView.builder(
+        padding: EdgeInsets.all(0.0),
         itemCount: userProvider.user!.trips.length,
         itemBuilder: (context, index) {
           final currentTrip = userProvider.user!.trips[index];
-          return TripComponent(
+          return ExtendedTripComponent(
+            trip: currentTrip,
+            indexInList: index,
+            moveToDetails: () => _navigateToDetails(currentTrip, index),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildShortTripList(UserProvider userProvider) {
+    return Expanded(
+      child: ListView.builder(
+        padding: EdgeInsets.all(0.0),
+        itemCount: userProvider.user!.trips.length,
+        itemBuilder: (context, index) {
+          final currentTrip = userProvider.user!.trips[index];
+          return ShortTripComponent(
             trip: currentTrip,
             indexInList: index,
             moveToDetails: () => _navigateToDetails(currentTrip, index),

@@ -5,12 +5,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/trip.dart';
 
-class TripComponent extends StatelessWidget {
+class ExtendedTripComponent extends StatelessWidget {
   final Trip trip;
   final int indexInList;
   final void Function() moveToDetails;
 
-  const TripComponent({
+  const ExtendedTripComponent({
     super.key,
     required this.trip,
     required this.indexInList,

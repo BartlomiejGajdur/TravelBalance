@@ -21,6 +21,14 @@ class User {
     return User(trips: trips, statistics: statistics);
   }
 
+  double getWholeExpenses() {
+    double totalCost = 0.0;
+    for (var trip in _trips) {
+      totalCost += trip.tripCost;
+    }
+    return totalCost;
+  }
+
   void addTrip(int id, String tripName) {
     Trip newTrip = Trip(
         id: id,
