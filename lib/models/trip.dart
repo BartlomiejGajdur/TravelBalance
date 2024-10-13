@@ -9,7 +9,7 @@ class Trip {
   double _tripCost;
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
-
+  Map<Category, double> _categoriesWithMoney = {};
   Trip(
       {required int id,
       required String name,
@@ -21,7 +21,8 @@ class Trip {
         _image = image,
         _tripCost = tripCost,
         _expenses = expenses,
-        _expensesByDate = _groupExpensesByDate(expenses);
+        _expensesByDate = _groupExpensesByDate(expenses),
+        _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
 
   int get id => _id;
   String get name => _name;
@@ -29,6 +30,7 @@ class Trip {
   double get tripCost => _tripCost;
   List<Expense> get expenses => _expenses;
   Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
+  Map<Category, double> get categoriesWithMoney => _categoriesWithMoney;
 
   factory Trip.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];
@@ -44,6 +46,40 @@ class Trip {
         image: image,
         tripCost: tripCost,
         expenses: expenses);
+  }
+
+  void printDetails() {
+    debugPrint('  Trip Details:');
+    debugPrint('  ID: $_id');
+    debugPrint('  Name: $_name');
+    debugPrint(_image != null ? '  Image: $_image' : '  Image: Not Specified');
+    debugPrint('  Trip Cost: $_tripCost');
+    debugPrint('  Expenses:');
+    for (var expense in _expenses) {
+      expense.printDetails();
+    }
+  }
+
+  double calculateTripCost() {
+    return expenses.fold(0, (sum, expense) => sum + expense.cost);
+  }
+
+  void addExpense(Expense expense) {
+    expenses.add(expense);
+    _expensesByDate = _groupExpensesByDate(_expenses);
+    _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
+    _tripCost = calculateTripCost();
+  }
+
+  void deleteExpense(int index) {
+    expenses.removeAt(index);
+    _expensesByDate = _groupExpensesByDate(_expenses);
+    _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
+    _tripCost = calculateTripCost();
+  }
+
+  void setName(String newName) {
+    _name = newName;
   }
 
   static Map<DateTime, List<Expense>> _groupExpensesByDate(
@@ -70,35 +106,18 @@ class Trip {
     return sortedExpensesByDate;
   }
 
-  void printDetails() {
-    debugPrint('  Trip Details:');
-    debugPrint('  ID: $_id');
-    debugPrint('  Name: $_name');
-    debugPrint(_image != null ? '  Image: $_image' : '  Image: Not Specified');
-    debugPrint('  Trip Cost: $_tripCost');
-    debugPrint('  Expenses:');
-    for (var expense in _expenses) {
-      expense.printDetails();
+  static Map<Category, double> _groupCategoriesWithMoney(
+      List<Expense> expenses) {
+    Map<Category, double> categoriesWithMoney = {};
+    for (var expense in expenses) {
+      if (categoriesWithMoney.containsKey(expense.category)) {
+        categoriesWithMoney[expense.category] =
+            categoriesWithMoney[expense.category]! + expense.cost;
+      } else {
+        categoriesWithMoney[expense.category] = expense.cost;
+      }
     }
-  }
 
-  void calculateTripCost() {
-    _tripCost = expenses.fold(0, (sum, expense) => sum + expense.cost);
-  }
-
-  void addExpense(Expense expense) {
-    expenses.add(expense);
-    _expensesByDate = _groupExpensesByDate(_expenses);
-    calculateTripCost();
-  }
-
-  void deleteExpense(int index) {
-    expenses.removeAt(index);
-    _expensesByDate = _groupExpensesByDate(_expenses);
-    calculateTripCost();
-  }
-
-  void setName(String newName) {
-    _name = newName;
+    return categoriesWithMoney;
   }
 }
