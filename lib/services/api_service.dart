@@ -339,7 +339,7 @@ class ApiService {
           'Authorization': _getAuthorizationHeader(),
           'Content-Type': 'application/json'
         },
-        body: body,
+        body: jsonEncode(body),
       );
 
       if (response.statusCode == 200) {

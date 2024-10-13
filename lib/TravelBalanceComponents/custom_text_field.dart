@@ -135,7 +135,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       builder: (BuildContext ctx) {
         return SizedBox(
             child: ChooseCategory(
-          categoryName: widget.controller.text,
+          initialCategoryName: widget.controller.text,
           textController: widget.controller,
           onCategoryClick: () => Navigator.of(ctx).pop(),
         ));

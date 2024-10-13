@@ -9,7 +9,6 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ExpenseListPage extends StatelessWidget {
@@ -24,6 +23,7 @@ class ExpenseListPage extends StatelessWidget {
             totalTripCost: tripProvider.trip.tripCost),
         Expanded(
           child: ListView.builder(
+            padding: const EdgeInsets.all(0),
             itemCount: tripProvider.trip.expensesByDate.length,
             itemBuilder: (context, index) {
               DateTime date =

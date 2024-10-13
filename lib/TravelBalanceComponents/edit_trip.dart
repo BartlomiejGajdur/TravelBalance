@@ -7,18 +7,41 @@ import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class EditTrip extends StatelessWidget {
-  TripProvider tripProvider;
+class EditTrip extends StatefulWidget {
+  final TripProvider tripProvider;
   final int indexInList;
+
+  const EditTrip({super.key, required this.tripProvider, required this.indexInList});
+
+  @override
+  _EditTripState createState() => _EditTripState();
+}
+
+class _EditTripState extends State<EditTrip> {
   final TextEditingController tripNameController = TextEditingController();
-  final TextEditingController placeholder = TextEditingController();
+  final TextEditingController placeholderController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    tripNameController.text =
+        widget.tripProvider.trip.name; 
+    // You may also want to set placeholderController.text based on your requirements
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the controllers to free up resources
+    tripNameController.dispose();
+    placeholderController.dispose();
+    super.dispose();
+  }
 
   String? placeholderValidator(String? string) {
     return null;
   }
-
-  EditTrip({super.key, required this.tripProvider, required this.indexInList});
 
   void _editTripName(
       BuildContext context, TripProvider tripProvider, String newName) {
@@ -60,11 +83,9 @@ class EditTrip extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 30.h,
-            ),
+            SizedBox(height: 30.h),
             CustomTextFormField(
-              controller: placeholder,
+              controller: placeholderController,
               labelText: "Country",
               hintText: "Enter country",
               validator: placeholderValidator,
@@ -82,17 +103,18 @@ class EditTrip extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: ()  {
-                     showDeleteTripDialog(
-                        context, tripProvider.trip, indexInList);
+                  onTap: () {
+                    showDeleteTripDialog(
+                        context, widget.tripProvider.trip, widget.indexInList);
                   },
                   child: Container(
                     height: 56.h,
                     width: 67.w,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: redWarningColor.withOpacity(0.2)),
+                      borderRadius: BorderRadius.circular(16.r),
+                      color: redWarningColor.withOpacity(0.2),
+                    ),
                     child: Icon(
                       Icons.delete_forever_sharp,
                       size: 40.h,
@@ -103,14 +125,15 @@ class EditTrip extends StatelessWidget {
                 SizedBox(width: 11.w),
                 GestureDetector(
                   onTap: () => _editTripName(
-                      context, tripProvider, tripNameController.text),
+                      context, widget.tripProvider, tripNameController.text),
                   child: Container(
                     height: 56.h,
                     width: 273.w,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: primaryColor),
+                      borderRadius: BorderRadius.circular(16.r),
+                      color: primaryColor,
+                    ),
                     child: Text("Save Trip", style: buttonTextStyle),
                   ),
                 ),

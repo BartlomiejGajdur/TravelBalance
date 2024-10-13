@@ -10,40 +10,90 @@ class ExpenseChart extends StatelessWidget {
   final Map<Category, double> categoriesWithMoney;
   final double totalTripCost;
 
-  ExpenseChart(
+  const ExpenseChart(
       {super.key,
       required this.categoriesWithMoney,
       required this.totalTripCost});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Stack(alignment: Alignment.center, children: [
-        PieChart(
-          PieChartData(
-            sections: _buildPieChartSections(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          SizedBox(
+            height: 200.h,
+            width: 200.w,
+            child: Stack(alignment: Alignment.center, children: [
+              PieChart(
+                PieChartData(
+                  sectionsSpace: 3,
+                  centerSpaceColor: Colors.white,
+                  sections: _buildPieChartSections(),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "\$$totalTripCost",
+                    style: GoogleFonts.outfit(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.bold,
+                        color: mainTextColor),
+                  ),
+                  Text("Current\nSpending",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w200,
+                          color: secondaryTextColor))
+                ],
+              ),
+            ]),
           ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "\$$totalTripCost",
-              style: GoogleFonts.outfit(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: mainTextColor),
-            ),
-            Text("Current\nSpending",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w200,
-                    color: secondaryTextColor))
-          ],
-        ),
-      ]),
+          _PieChartLegend()
+        ],
+      ),
+    );
+  }
+
+  Widget _IconCategoryWithLabel(Category category) {
+    String categoryName = Expense.staticCategoryToString(category);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        categoryIcon(category, 0.4),
+        SizedBox(width: 4.w),
+        Text(categoryName)
+      ],
+    );
+  }
+
+  Widget _PieChartLegend() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _IconCategoryWithLabel(Category.activities),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.accommodation),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.food),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.health),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.shopping),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.transport),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.souvenirs),
+        SizedBox(height: 3.h),
+        _IconCategoryWithLabel(Category.others),
+      ],
     );
   }
 
@@ -53,15 +103,15 @@ class ExpenseChart extends StatelessWidget {
       final double amount = entry.value;
 
       final sectionData = PieChartSectionData(
-        value: amount,
-        color: getCategoryColor(category),
-        title: '${amount.toStringAsFixed(2)}',
-        titleStyle: GoogleFonts.outfit(
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w500,
-          color: Colors.white,
-        ),
-      );
+          value: amount,
+          color: getCategoryColor(category).withOpacity(0.5),
+          title: amount.toStringAsFixed(2),
+          titleStyle: GoogleFonts.outfit(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+          radius: 43.r);
       return sectionData;
     }).toList();
   }

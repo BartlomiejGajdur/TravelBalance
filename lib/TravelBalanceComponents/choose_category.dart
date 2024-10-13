@@ -8,34 +8,42 @@ import 'package:google_fonts/google_fonts.dart';
 void _emptyCallback() {}
 
 class ChooseCategory extends StatefulWidget {
-  String categoryName;
-  void Function() onCategoryClick;
-  TextEditingController? textController;
+  final Function() onCategoryClick; 
+  final TextEditingController? textController; 
+  final String initialCategoryName; 
 
-  ChooseCategory(
-      {super.key,
-      required this.categoryName,
-      this.onCategoryClick = _emptyCallback,
-      this.textController});
+  const ChooseCategory({
+    super.key,
+    required this.initialCategoryName,
+    this.onCategoryClick = _emptyCallback,
+    this.textController,
+  });
 
   @override
   State<ChooseCategory> createState() => _ChooseCategoryState();
 }
 
 class _ChooseCategoryState extends State<ChooseCategory> {
+  late String _selectedCategory; 
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.initialCategoryName; 
+  }
+
   bool _isCategoryMatch(Category category) {
-    return widget.categoryName == Expense.staticCategoryToString(category);
+    return _selectedCategory == Expense.staticCategoryToString(category);
   }
 
   Widget _clickableCategoryIcon(Category category) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          widget.categoryName = Expense.staticCategoryToString(category);
+          _selectedCategory = Expense.staticCategoryToString(category);
         });
         if (widget.textController != null) {
-          widget.textController!.text =
-              Expense.staticCategoryToString(category);
+          widget.textController!.text = _selectedCategory;
         }
         widget.onCategoryClick();
       },
@@ -47,12 +55,10 @@ class _ChooseCategoryState extends State<ChooseCategory> {
             Text(
               Expense.staticCategoryToString(category),
               style: TextStyle(
-                  color:
-                      _isCategoryMatch(category) ? primaryColor : Colors.black,
-                  fontSize: 10.sp,
-                  fontWeight: _isCategoryMatch(category)
-                      ? FontWeight.w800
-                      : FontWeight.normal),
+                color: _isCategoryMatch(category) ? primaryColor : Colors.black,
+                fontSize: 10.sp,
+                fontWeight: _isCategoryMatch(category) ? FontWeight.w800 : FontWeight.normal,
+              ),
             )
           ],
         ),
@@ -73,9 +79,10 @@ class _ChooseCategoryState extends State<ChooseCategory> {
           Text(
             "CHOOSE CATEGORY",
             style: GoogleFonts.inter(
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1.5),
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 1.5,
+            ),
           ),
           SizedBox(height: 20.h),
           Row(
@@ -97,7 +104,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               _clickableCategoryIcon(Category.others),
             ],
           ),
-          SizedBox(height: 20.h)
+          SizedBox(height: 20.h),
         ],
       ),
     );
