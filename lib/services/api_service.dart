@@ -1,4 +1,5 @@
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:flutter/material.dart';
@@ -350,6 +351,44 @@ class ApiService {
       }
     } catch (e) {
       debugPrint("Edit Trip in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> editExpense(
+      final int tripId,
+      final int expenseId,
+      String newTitle,
+      double newCost,
+      Category newCategory,
+      DateTime newDate) async {
+    try {
+      final body = {
+        'title': newTitle,
+        'cost': newCost,
+        'category': newCategory.index,
+        'date': newDate.toIso8601String(),
+      };
+
+      final endPoint = 'trip/$tripId/expense/$expenseId/';
+      final response = await http.put(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('Edit Expense successful');
+        return true;
+      } else {
+        debugPrint('Edit Expense failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Edit Expense in: $e");
       return false;
     }
   }

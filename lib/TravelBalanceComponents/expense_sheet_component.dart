@@ -1,3 +1,4 @@
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/TravelBalanceComponents/expense_component.dart';
@@ -7,12 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 class ExpenseSheetComponent extends StatelessWidget {
   final List<Expense> expenses;
   final DateTime dateTime;
-
-  const ExpenseSheetComponent({
-    super.key,
-    required this.expenses,
-    required this.dateTime,
-  });
+  final TripProvider tripProvider;
+  const ExpenseSheetComponent(
+      {super.key,
+      required this.expenses,
+      required this.dateTime,
+      required this.tripProvider});
 
   String _getDisplayDate() {
     DateTime now = DateTime.now();
@@ -42,7 +43,11 @@ class ExpenseSheetComponent extends StatelessWidget {
                   fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
           ),
-          for (var expense in expenses) ExpenseComponent(expense: expense),
+          for (var expense in expenses)
+            ExpenseComponent(
+              expense: expense,
+              tripProvider: tripProvider,
+            ),
         ],
       ),
     );

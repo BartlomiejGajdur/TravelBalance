@@ -72,7 +72,9 @@ class StatisticsTile extends StatelessWidget {
         statistic = statistics.visitedCountriesAmount.toString();
         break;
       case StatisticsTileType.spendings:
-        statistic = '${userProvider.user!.getWholeExpenses().toString()}\$';
+        statistic =
+            '${userProvider.user!.getWholeExpenses().toStringAsFixed(2)}\$';
+
         break;
     }
 

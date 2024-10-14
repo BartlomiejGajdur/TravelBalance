@@ -2,7 +2,9 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
 import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/expense_provider.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +36,24 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
     super.dispose();
   }
 
-  Future<bool> saveExpense() async {
+  Future<bool> saveExpense(
+      BuildContext context, ExpenseProvider expenseProvider) async {
+    String title = descriptionController.text;
+    double cost = double.parse(costController.text);
+    Category category = Expense.stringToCategory(categoryController.text);
+    DateTime dateTime = formattedStringInDateTime(dateController.text);
+
+    ApiService().editExpense(
+      expenseProvider.expense.tripId,
+      expenseProvider.expense.id,
+      title,
+      cost,
+      category,
+      dateTime,
+    );
+
+    expenseProvider.editExpense(title, cost, category, dateTime);
+
     return true;
   }
 
@@ -123,7 +142,8 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
                       buttonText: "Save Expense",
                       useDefaultPadding: false,
                       skipWaitingForSucces: true,
-                      // onPressed: ,
+                      onPressed: () =>
+                          saveExpense(context, widget.expenseProvider),
                       onSkippedSuccess: () => Navigator.of(context).pop(),
                     ))
               ],

@@ -1,4 +1,5 @@
 import 'package:TravelBalance/providers/expense_provider.dart';
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/Utils/category_item.dart';
@@ -9,16 +10,14 @@ import 'package:provider/provider.dart';
 
 class ExpenseComponent extends StatelessWidget {
   final Expense expense;
-
-  const ExpenseComponent({
-    super.key,
-    required this.expense,
-  });
+  final TripProvider tripProvider;
+  const ExpenseComponent(
+      {super.key, required this.expense, required this.tripProvider});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ExpenseProvider(expense),
+      create: (context) => ExpenseProvider(expense, tripProvider),
       child: Consumer<ExpenseProvider>(
         builder: (context, expenseProvider, child) {
           return GestureDetector(

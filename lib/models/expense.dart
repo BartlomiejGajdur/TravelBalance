@@ -119,6 +119,30 @@ class Expense {
     }
   }
 
+  static Category stringToCategory(String categoryString) {
+  switch (categoryString) {
+    case 'Activities':
+      return Category.activities;
+    case 'Accommodation':
+      return Category.accommodation;
+    case 'Food':
+      return Category.food;
+    case 'Health':
+      return Category.health;
+    case 'Shopping':
+      return Category.shopping;
+    case 'Transport':
+      return Category.transport;
+    case 'Souvenirs':
+      return Category.souvenirs;
+    case 'Others':
+      return Category.others;
+    default:
+      throw Exception('Unknown category: $categoryString');
+  }
+}
+
+
   void printDetails() {
     debugPrint('      Expense Details:');
     debugPrint('      ID: $_id');

@@ -1,6 +1,7 @@
 import 'package:TravelBalance/Utils/category_item.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,11 +10,13 @@ import 'package:google_fonts/google_fonts.dart';
 class ExpenseChart extends StatelessWidget {
   final Map<Category, double> categoriesWithMoney;
   final double totalTripCost;
+  final TripProvider tripProvider;
 
   const ExpenseChart(
       {super.key,
       required this.categoriesWithMoney,
-      required this.totalTripCost});
+      required this.totalTripCost,
+      required this.tripProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class ExpenseChart extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "\$$totalTripCost",
+                    "\$${tripProvider.trip.tripCost.toStringAsFixed(2)}",
                     style: GoogleFonts.outfit(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
@@ -98,7 +101,7 @@ class ExpenseChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _buildPieChartSections() {
-    return categoriesWithMoney.entries.map((entry) {
+    return tripProvider.trip.categoriesWithMoney.entries.map((entry) {
       final Category category = entry.key;
       final double amount = entry.value;
 

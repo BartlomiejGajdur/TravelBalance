@@ -70,6 +70,12 @@ class Trip {
     _tripCost = calculateTripCost();
   }
 
+  void reCalculate() {
+    _expensesByDate = _groupExpensesByDate(_expenses);
+    _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
+    _tripCost = calculateTripCost();
+  }
+
   void deleteExpense(int index) {
     expenses.removeAt(index);
     _expensesByDate = _groupExpensesByDate(_expenses);

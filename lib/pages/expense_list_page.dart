@@ -19,8 +19,10 @@ class ExpenseListPage extends StatelessWidget {
     return Column(
       children: [
         ExpenseChart(
-            categoriesWithMoney: tripProvider.trip.categoriesWithMoney,
-            totalTripCost: tripProvider.trip.tripCost),
+          categoriesWithMoney: tripProvider.trip.categoriesWithMoney,
+          totalTripCost: tripProvider.trip.tripCost,
+          tripProvider: tripProvider,
+        ),
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.all(0),
@@ -30,9 +32,9 @@ class ExpenseListPage extends StatelessWidget {
                   tripProvider.trip.expensesByDate.keys.toList()[index];
               List<Expense> expenses = tripProvider.trip.expensesByDate[date]!;
               return ExpenseSheetComponent(
-                expenses: expenses,
-                dateTime: date,
-              );
+                  expenses: expenses,
+                  dateTime: date,
+                  tripProvider: tripProvider);
             },
           ),
         ),

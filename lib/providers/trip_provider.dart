@@ -29,6 +29,12 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
+  void reCalculate() {
+    trip.reCalculate();
+    debugPrint("Categories with Money: ${trip.categoriesWithMoney}");
+    notifyUi();
+  }
+
   bool isExpenseListEmpty() {
     return trip.expenses.isEmpty;
   }
