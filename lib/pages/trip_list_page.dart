@@ -178,7 +178,7 @@ class _TripListPageState extends State<TripListPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(top: 10.0.h),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   StatisticsTile(
@@ -190,8 +190,6 @@ class _TripListPageState extends State<TripListPage> {
                 ],
               ),
             ),
-            Text(
-                "Krzysztoferku Bomberku nie dziala te liczby ktore dostaje od CB"),
             SizedBox(height: 5.h),
             Align(
               alignment: Alignment.centerRight,
@@ -214,7 +212,7 @@ class _TripListPageState extends State<TripListPage> {
   Widget _buildExtendedTripList(UserProvider userProvider) {
     return Expanded(
       child: ListView.builder(
-        padding: EdgeInsets.all(0.0),
+        padding: const EdgeInsets.all(0.0),
         itemCount: userProvider.user!.trips.length,
         itemBuilder: (context, index) {
           final currentTrip = userProvider.user!.trips[index];
@@ -231,7 +229,7 @@ class _TripListPageState extends State<TripListPage> {
   Widget _buildShortTripList(UserProvider userProvider) {
     return Expanded(
       child: ListView.builder(
-        padding: EdgeInsets.all(0.0),
+        padding: const EdgeInsets.all(0.0),
         itemCount: userProvider.user!.trips.length,
         itemBuilder: (context, index) {
           final currentTrip = userProvider.user!.trips[index];

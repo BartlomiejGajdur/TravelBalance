@@ -59,6 +59,7 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
+        debugPrint(jsonDecode(response.body));
         return User.fromJson(jsonDecode(response.body));
       } else {
         debugPrint(

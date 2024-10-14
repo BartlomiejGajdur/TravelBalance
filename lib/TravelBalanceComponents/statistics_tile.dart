@@ -64,27 +64,15 @@ class StatisticsTile extends StatelessWidget {
     String statistic;
     final statistics = userProvider.user!.statistics;
 
-    // switch (statisticsTileType) {
-    //   case StatisticsTileType.totalTrips:
-    //     statistic = userProvider.user!.trips.length.toString();
-    //     break;
-    //   case StatisticsTileType.countriesVisited:
-    //     statistic = statistics.visitedCountriesAmount.toString();
-    //     break;
-    //   case StatisticsTileType.spendings:
-    //     statistic = '${userProvider.user!.getWholeExpenses().toString()}\$';
-    //     break;
-    // }
-
     switch (statisticsTileType) {
       case StatisticsTileType.totalTrips:
-        statistic = statistics.totalTripsAmount.toString();
+        statistic = userProvider.user!.trips.length.toString();
         break;
       case StatisticsTileType.countriesVisited:
         statistic = statistics.visitedCountriesAmount.toString();
         break;
       case StatisticsTileType.spendings:
-        statistic = '${statistics.spendings.toString()}\$';
+        statistic = '${userProvider.user!.getWholeExpenses().toString()}\$';
         break;
     }
 
@@ -98,7 +86,6 @@ class StatisticsTile extends StatelessWidget {
     );
   }
 
-  // Method to build the container with icon and statistic value
   Widget _buildStatisticContainer(UserProvider userProvider) {
     return Container(
       height: 85.h,

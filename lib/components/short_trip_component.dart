@@ -63,7 +63,7 @@ class ShortTripComponent extends StatelessWidget {
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 15.sp,
-                            color: Color(0xFF292B2D)),
+                            color: const Color(0xFF292B2D)),
                       ),
                       Text(
                         '${trip.tripCost.toString()}\$',
