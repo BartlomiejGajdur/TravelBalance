@@ -1,4 +1,5 @@
 import 'package:TravelBalance/TravelBalanceComponents/choose_category.dart';
+import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +52,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.clickAction != ClickAction.None,
         onTap: () {
           if (widget.clickAction == ClickAction.Date) {
-            _showDateMenu(context);
+            showCustomDatePicker(context,formattedStringInDateTime(widget.controller.text), widget.controller);
           } else if (widget.clickAction == ClickAction.Category) {
             _showCategoryMenu(context);
           }
@@ -90,44 +91,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  void _showDateMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext ctx) {
-        return SizedBox(
-          height: 200.h,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: const Text('Today'),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.controller.text = "07/10/2024";
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: const Text('Yesterday'),
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.controller.text = "06/10/2024";
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.cancel),
-                title: const Text('Anuluj'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  void _showDateMenu(BuildContext context) {}
 
   void _showCategoryMenu(BuildContext context) {
     showModalBottomSheet(

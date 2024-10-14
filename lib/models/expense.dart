@@ -12,25 +12,29 @@ enum Category {
 }
 
 class Expense {
-  int _id;
+  final int _id;
+  final int _tripId;
   String _title;
   double _cost;
   Category _category;
   DateTime _dateTime;
 
   Expense({
-    required int id,
+    required final int id,
+    required final int tripId,
     required String title,
     required double cost,
     required Category category,
     required DateTime dateTime,
   })  : _id = id,
+        _tripId = tripId,
         _title = title,
         _cost = cost,
         _category = category,
         _dateTime = dateTime;
 
   int get id => _id;
+  int get tripId => _tripId;
   String get title => _title;
   double get cost => _cost;
   Category get category => _category;
@@ -52,7 +56,7 @@ class Expense {
     _dateTime = dateTime;
   }
 
-  factory Expense.fromJson(Map<String, dynamic> data) {
+  factory Expense.fromJson(Map<String, dynamic> data, final int tripId) {
     final int id = data['id'];
     final String title = data['title'];
     final double cost = data['cost'].toDouble();
@@ -60,11 +64,13 @@ class Expense {
     //Might cause problems.
     DateTime dateTime = DateTime.parse(data['date']);
     return Expense(
-        id: id,
-        title: title,
-        cost: cost,
-        category: category,
-        dateTime: dateTime);
+      id: id,
+      tripId: tripId,
+      title: title,
+      cost: cost,
+      category: category,
+      dateTime: dateTime,
+    );
   }
 
   String categoryToString() {

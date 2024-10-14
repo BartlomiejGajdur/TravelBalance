@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
-  //Id provided in online databse != index in tripList
-  int _id;
+  final int _id;
   String _name;
   String? _image;
   double _tripCost;
@@ -11,7 +10,7 @@ class Trip {
   Map<DateTime, List<Expense>> _expensesByDate = {};
   Map<Category, double> _categoriesWithMoney = {};
   Trip(
-      {required int id,
+      {required final int id,
       required String name,
       required String? image,
       required double tripCost,
@@ -38,7 +37,7 @@ class Trip {
     final String? image = data['image'];
     final double tripCost = data['trip_cost'].toDouble();
     final List<Expense> expenses = (data['expenses'] as List)
-        .map((expenseData) => Expense.fromJson(expenseData))
+        .map((expenseData) => Expense.fromJson(expenseData, id))
         .toList();
     return Trip(
         id: id,

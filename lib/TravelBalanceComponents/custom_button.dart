@@ -7,7 +7,10 @@ class CustomButton extends StatefulWidget {
   final Future<bool> Function() onPressed;
   final String buttonText;
   final Function() onSuccess;
+  final Function() onSkippedSuccess;
   final bool forceLoading;
+  final bool skipWaitingForSucces;
+  final bool useDefaultPadding;
 
   const CustomButton({
     super.key,
@@ -15,7 +18,11 @@ class CustomButton extends StatefulWidget {
     this.onPressed = emptyCallback,
     this.onSuccess = _emptyCallback,
     this.forceLoading = false,
+    this.useDefaultPadding = true,
+    this.skipWaitingForSucces = false,
+    this.onSkippedSuccess = _emptyCallback,
   });
+
   static Future<bool> emptyCallback() async {
     return false;
   }
@@ -36,8 +43,12 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Future<void> handleOnPressed() async {
+    if (widget.skipWaitingForSucces) {
+      widget.onPressed();
+      widget.onSkippedSuccess();
+      return;
+    }
     toggleLoading();
-
     try {
       bool success = await widget.onPressed();
       if (success) {
@@ -59,7 +70,8 @@ class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+      padding: EdgeInsets.symmetric(
+          horizontal: widget.useDefaultPadding ? horizontalPadding : 0.0),
       child: ElevatedButton(
         onPressed: isLoading || widget.forceLoading ? null : handleOnPressed,
         style: ButtonStyle(

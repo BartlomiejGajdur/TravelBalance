@@ -1,4 +1,6 @@
+import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
+import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/expense_provider.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +34,8 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
     super.dispose();
   }
 
-  String formattedDateTime(DateTime datetime) {
-    return "${datetime.day}/${datetime.month}/${datetime.year}";
+  Future<bool> saveExpense() async {
+    return true;
   }
 
   Widget formattedTitle(String title) {
@@ -80,7 +82,8 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
             ),
             formattedTitle("Date"),
             CustomTextField(
-              text: formattedDateTime(widget.expenseProvider.expense.dateTime),
+              text: formattedDateTimeInString(
+                  widget.expenseProvider.expense.dateTime),
               controller: dateController,
               textFieldBottomPadding: 16.0.h,
               suffixIcon: Icons.calendar_month_outlined,
@@ -114,18 +117,15 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
                   ),
                 ),
                 SizedBox(width: 11.w),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 56.h,
-                    width: 273.w,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: primaryColor),
-                    child: Text("Save Expense", style: buttonTextStyle),
-                  ),
-                ),
+                SizedBox(
+                    width: 250.w,
+                    child: CustomButton(
+                      buttonText: "Save Expense",
+                      useDefaultPadding: false,
+                      skipWaitingForSucces: true,
+                      // onPressed: ,
+                      onSkippedSuccess: () => Navigator.of(context).pop(),
+                    ))
               ],
             ),
           ],

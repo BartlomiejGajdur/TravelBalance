@@ -52,6 +52,7 @@ class ExpenseListPage extends StatelessWidget {
 
     final newExpense = Expense(
       id: 1,
+      tripId: 1,
       title: "BARDZO DLUGA NAZWA O JAPIER ALE DLUGA KURWRWRWRW",
       cost: 23.0,
       category: randomCategory,

@@ -178,7 +178,7 @@ class _TripListPageState extends State<TripListPage> {
           children: [
             Padding(
               padding: EdgeInsets.only(top: 10.0.h),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   StatisticsTile(
