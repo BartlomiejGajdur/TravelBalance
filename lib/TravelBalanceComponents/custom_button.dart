@@ -43,13 +43,14 @@ class _CustomButtonState extends State<CustomButton> {
   }
 
   Future<void> handleOnPressed() async {
-    if (widget.skipWaitingForSucces) {
-      widget.onPressed();
-      widget.onSkippedSuccess();
-      return;
-    }
-    toggleLoading();
     try {
+      if (widget.skipWaitingForSucces) {
+        widget.onPressed();
+        widget.onSkippedSuccess();
+        return;
+      }
+      toggleLoading();
+
       bool success = await widget.onPressed();
       if (success) {
         widget.onSuccess();

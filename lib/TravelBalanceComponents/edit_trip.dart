@@ -43,7 +43,7 @@ class _EditTripState extends State<EditTrip> {
 
   void _editTripName(
       BuildContext context, TripProvider tripProvider, String newName) {
-    ApiService().editTrip(tripProvider.trip.id, newName);
+    ApiService().editTrip(tripProvider.trip.getId(), newName);
     tripProvider.editTripName(newName);
     Navigator.of(context).pop();
   }

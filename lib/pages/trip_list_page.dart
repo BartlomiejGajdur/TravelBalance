@@ -60,7 +60,11 @@ class _TripListPageState extends State<TripListPage> {
   }
 
   void _navigateToAddTripPage() {
-    Navigator.pushNamed(context, "CreateListPage");
+    Navigator.pushNamed(
+      context,
+      'CreateListPage',
+      arguments: context, // Pass the mainPageContext as an argument
+    );
   }
 
   @override
@@ -68,19 +72,25 @@ class _TripListPageState extends State<TripListPage> {
     return Scaffold(
       endDrawer: const AppDrawer(),
       backgroundColor: secondaryColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: Stack(
         children: [
-          SizedBox(height: 53.h),
-          _buildHeader(),
-          _buildSubHeader(),
-          SizedBox(height: 19.h),
-          _buildTripListContainer(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 53.h),
+              _buildHeader(),
+              _buildSubHeader(),
+              SizedBox(height: 19.h),
+              _buildTripListContainer(),
+            ],
+          ),
+          Positioned(
+            bottom: 16.h, // Adjust this to position your FAB
+            left: MediaQuery.of(context).size.width / 2 - 28, // Center it horizontally
+            child: buildFloatingActionButton(context, _navigateToAddTripPage),
+          ),
         ],
       ),
-      floatingActionButton:
-          buildFloatingActionButton(context, _navigateToAddTripPage),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -170,43 +180,41 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildRefreshableTripList(UserProvider userProvider) {
     return RefreshIndicator(
-        color: primaryColor,
-        onRefresh: () async {
-          await userProvider.fetchWholeUserData();
-        },
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 10.0.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  StatisticsTile(
-                      statisticsTileType: StatisticsTileType.totalTrips),
-                  StatisticsTile(
-                      statisticsTileType: StatisticsTileType.countriesVisited),
-                  StatisticsTile(
-                      statisticsTileType: StatisticsTileType.spendings),
-                ],
-              ),
+      color: primaryColor,
+      onRefresh: () async {
+        await userProvider.fetchWholeUserData();
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 10.0.h),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                StatisticsTile(statisticsTileType: StatisticsTileType.totalTrips),
+                StatisticsTile(statisticsTileType: StatisticsTileType.countriesVisited),
+                StatisticsTile(statisticsTileType: StatisticsTileType.spendings),
+              ],
             ),
-            SizedBox(height: 5.h),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Switch(
-                  value: isSwitched,
-                  activeColor: primaryColor,
-                  onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
-                  }),
-            ),
-            isSwitched
-                ? _buildShortTripList(userProvider)
-                : _buildExtendedTripList(userProvider),
-          ],
-        ));
+          ),
+          SizedBox(height: 5.h),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Switch(
+                value: isSwitched,
+                activeColor: primaryColor,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitched = value;
+                  });
+                }),
+          ),
+          isSwitched
+              ? _buildShortTripList(userProvider)
+              : _buildExtendedTripList(userProvider),
+        ],
+      ),
+    );
   }
 
   Widget _buildExtendedTripList(UserProvider userProvider) {

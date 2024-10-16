@@ -5,7 +5,7 @@ Future<void> showCustomDatePicker(BuildContext context, DateTime time,
   DateTime? pickedDate = await showDatePicker(
     context: context,
     initialDate: time,
-    firstDate: DateTime.now().subtract(Duration(days: 365)),
+    firstDate: DateTime.now().subtract(const Duration(days: 365)),
     lastDate: DateTime.now(),
   );
 
@@ -22,7 +22,7 @@ DateTime formattedStringInDateTime(String dateTime) {
   List<String> parts = dateTime.split('-');
 
   if (parts.length != 3) {
-    throw FormatException("Niepoprawny format daty");
+    throw const FormatException("Niepoprawny format daty");
   }
 
   int year = int.parse(parts[0]);

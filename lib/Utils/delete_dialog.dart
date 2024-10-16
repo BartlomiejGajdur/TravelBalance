@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 void deleteTrip(BuildContext context, Trip trip, int indexInList) {
   Navigator.of(context).pop();
   Provider.of<UserProvider>(context, listen: false).deleteTrip(indexInList);
-  ApiService().deleteTrip(trip.id);
+  ApiService().deleteTrip(trip.getId());
 }
 
 void showDeleteTripDialog(BuildContext context, Trip trip, int indexInList) {

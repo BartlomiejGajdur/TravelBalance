@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
-  final int _id;
+  int? _id;
   String _name;
   String? _image;
   double _tripCost;
@@ -10,7 +10,7 @@ class Trip {
   Map<DateTime, List<Expense>> _expensesByDate = {};
   Map<Category, double> _categoriesWithMoney = {};
   Trip(
-      {required final int id,
+      {int? id,
       required String name,
       required String? image,
       required double tripCost,
@@ -23,13 +23,28 @@ class Trip {
         _expensesByDate = _groupExpensesByDate(expenses),
         _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
 
-  int get id => _id;
   String get name => _name;
   String? get image => _image;
   double get tripCost => _tripCost;
   List<Expense> get expenses => _expenses;
   Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
   Map<Category, double> get categoriesWithMoney => _categoriesWithMoney;
+
+  void setId(int tripId) {
+    if (_id == null) {
+      _id = tripId;
+    } else {
+      throw ("Id is already set!");
+    }
+  }
+
+  int getId() {
+    if (_id == null) {
+      throw ("Id is not set yet!");
+    } else {
+      return _id!;
+    }
+  }
 
   factory Trip.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];

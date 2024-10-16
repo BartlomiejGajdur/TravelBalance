@@ -29,9 +29,8 @@ class User {
     return totalCost;
   }
 
-  void addTrip(int id, String tripName) {
+  void addTrip(String tripName) {
     Trip newTrip = Trip(
-        id: id,
         name: tripName,
         image:
             "https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png",

@@ -1,6 +1,7 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -13,29 +14,44 @@ class CreateTripPage extends StatelessWidget {
   final TextEditingController placeholder = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  CreateTripPage({super.key});
+  final BuildContext mainPageContext;
+  CreateTripPage({super.key, required this.mainPageContext});
 
   String? placeholderValidator(String? string) {
     return null;
   }
 
-  /// Handles trip creation, validates form and triggers trip creation action.
   Future<bool> _onCreateTripPressed(BuildContext context) async {
-    String tripName = tripNameController.text;
-    if (formKey.currentState?.validate() ?? false) {
-      int? result = await ApiService().addTrip(tripName);
+    final String tripName = tripNameController.text;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-      if (result != null) {
-        Provider.of<UserProvider>(context, listen: false)
-            .addTrip(result, tripName);
-        return true;
-      }
+    // Form validation
+    if (!(formKey.currentState?.validate() ?? false)) return false;
+
+    // Optimistic update - adding the trip locally
+    userProvider.addTrip(tripName);
+    Navigator.of(context)
+        .pop(); // Immediately close the trip creation screen for better UX
+
+    // Sending the request to the API
+    int? tripId = await ApiService().addTrip(tripName);
+
+    if (tripId != null) {
+      // If the API returned a valid result, set the trip ID
+      userProvider.setTripIdOfLastAddedTrip(tripId);
+      return true;
+    } else {
+      // If the API did not return a valid result, roll back the trip addition
+      userProvider.deleteTrip(0); // Remove the last added trip
+      showCustomSnackBar(
+          context: mainPageContext,
+          message:
+              "Failed to create $tripName. Please check your Internet connection.",
+          type: SnackBarType.error);
+      return false;
     }
-    return false;
   }
 
-  /// The main content widget that includes the form, image picker, and button.
   Widget _buildFormContent(BuildContext context) {
     return Form(
       key: formKey,
@@ -74,8 +90,8 @@ class CreateTripPage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 35.0.h),
             child: CustomButton(
               buttonText: "Create Trip",
+              skipWaitingForSucces: true,
               onPressed: () => _onCreateTripPressed(context),
-              onSuccess: () => Navigator.of(context).pop(),
             ),
           ),
         ],

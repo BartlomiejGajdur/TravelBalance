@@ -86,8 +86,10 @@ class MyApp extends StatelessWidget {
                       email: email, verificationCode: verificationCode),
                 );
               case 'CreateListPage':
+                final mainPageContext = settings.arguments as BuildContext;
                 return MaterialPageRoute(
-                    builder: (context) => CreateTripPage());
+                    builder: (context) =>
+                        CreateTripPage(mainPageContext: mainPageContext));
 
               default:
                 return null;
