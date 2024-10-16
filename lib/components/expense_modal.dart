@@ -4,6 +4,7 @@ import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/expense_provider.dart';
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,21 +120,9 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 56.h,
-                    width: 67.w,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: redWarningColor.withOpacity(0.2)),
-                    child: Icon(
-                      Icons.delete_forever_sharp,
-                      size: 40.h,
-                      color: redWarningColor,
-                    ),
-                  ),
+                DeleteExpenseIcon(
+                  tripProvider: widget.expenseProvider.tripProvider,
+                  expenseId: widget.expenseProvider.expense.id,
                 ),
                 SizedBox(width: 11.w),
                 SizedBox(
@@ -150,5 +139,111 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
             ),
           ],
         ));
+  }
+}
+
+class DeleteExpenseIcon extends StatelessWidget {
+  final TripProvider tripProvider;
+  final int expenseId;
+
+  const DeleteExpenseIcon({
+    super.key,
+    required this.tripProvider,
+    required this.expenseId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 205.h,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.close_sharp))),
+                  Text(
+                    'Are you sure you want to delete this expense ?',
+                    style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15.sp,
+                        color: const Color(0xFF292B2D)),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.h),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          tripProvider.deleteExpense(expenseId);
+                          ApiService().deleteExpense(
+                              tripProvider.trip.getId(), expenseId);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 327.w,
+                          height: 48.h,
+                          decoration: BoxDecoration(
+                              color: redWarningColor,
+                              borderRadius: BorderRadius.circular(999.r)),
+                          child: Center(
+                              child: Text('Delete expense',
+                                  style: GoogleFonts.outfit(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      color: const Color(0xFFFFFFFF)))),
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 327.w,
+                          height: 48.h,
+                          decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 231, 235, 243),
+                              borderRadius: BorderRadius.circular(999.r)),
+                          child: Center(
+                              child: Text('Cancel',
+                                  style: GoogleFonts.outfit(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.sp,
+                                      color: Colors.black))),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Container(
+        height: 56.h,
+        width: 67.w,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+          color: redWarningColor.withOpacity(0.2),
+        ),
+        child: Icon(
+          Icons.delete_forever_sharp,
+          size: 40.h,
+          color: redWarningColor,
+        ),
+      ),
+    );
   }
 }

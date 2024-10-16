@@ -397,4 +397,28 @@ class ApiService {
       return false;
     }
   }
+
+  Future<bool> deleteExpense(int tripId, int expenseId) async {
+    try {
+      final endPoint = 'trip/$tripId/expense/$expenseId/';
+      final response = await http.delete(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Delete Expense successful');
+        return true;
+      } else {
+        debugPrint('Delete Expense failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Delete Expense in: $e");
+      return false;
+    }
+  }
 }

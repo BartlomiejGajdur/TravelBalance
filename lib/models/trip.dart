@@ -91,11 +91,18 @@ class Trip {
     _tripCost = calculateTripCost();
   }
 
-  void deleteExpense(int index) {
-    expenses.removeAt(index);
-    _expensesByDate = _groupExpensesByDate(_expenses);
-    _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
-    _tripCost = calculateTripCost();
+  void deleteExpense(int expenseId) {
+    // Znajdź indeks wydatku z podanym ID
+    int index = expenses.indexWhere((expense) => expense.id == expenseId);
+
+    if (index != -1) {
+      expenses.removeAt(index);
+      _expensesByDate = _groupExpensesByDate(expenses);
+      _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
+      _tripCost = calculateTripCost();
+    } else {
+      throw ("Something went wrong with Expense delete, cannot find expense of given id!");
+    }
   }
 
   void setName(String newName) {

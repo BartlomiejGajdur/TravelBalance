@@ -24,8 +24,8 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
-  void deleteExpense(int index) {
-    trip.deleteExpense(index);
+  void deleteExpense(int expenseId) {
+    trip.deleteExpense(expenseId);
     notifyUi();
   }
 
