@@ -226,7 +226,6 @@ class _TripListPageState extends State<TripListPage> {
           final currentTrip = userProvider.user!.trips[index];
           return ExtendedTripComponent(
             trip: currentTrip,
-            indexInList: index,
             moveToDetails: () => _navigateToDetails(currentTrip, index),
           );
         },
@@ -243,7 +242,6 @@ class _TripListPageState extends State<TripListPage> {
           final currentTrip = userProvider.user!.trips[index];
           return ShortTripComponent(
             trip: currentTrip,
-            indexInList: index,
             moveToDetails: () => _navigateToDetails(currentTrip, index),
           );
         },

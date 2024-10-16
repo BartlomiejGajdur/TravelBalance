@@ -7,13 +7,11 @@ import 'package:TravelBalance/models/trip.dart';
 
 class ExtendedTripComponent extends StatelessWidget {
   final Trip trip;
-  final int indexInList;
   final void Function() moveToDetails;
 
   const ExtendedTripComponent({
     super.key,
     required this.trip,
-    required this.indexInList,
     required this.moveToDetails,
   });
 
@@ -29,7 +27,7 @@ class ExtendedTripComponent extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) =>
-                    showDeleteTripDialog(context, trip, indexInList),
+                    showDeleteTripDialog(context, trip),
                 backgroundColor: const Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
                 icon: Icons.delete,

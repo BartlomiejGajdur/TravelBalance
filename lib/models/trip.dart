@@ -38,9 +38,9 @@ class Trip {
     }
   }
 
-  int getId() {
+  int? getId() {
     if (_id == null) {
-      throw ("Id is not set yet!");
+      return null;
     } else {
       return _id!;
     }

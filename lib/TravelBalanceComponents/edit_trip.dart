@@ -11,7 +11,8 @@ class EditTrip extends StatefulWidget {
   final TripProvider tripProvider;
   final int indexInList;
 
-  const EditTrip({super.key, required this.tripProvider, required this.indexInList});
+  const EditTrip(
+      {super.key, required this.tripProvider, required this.indexInList});
 
   @override
   _EditTripState createState() => _EditTripState();
@@ -26,8 +27,7 @@ class _EditTripState extends State<EditTrip> {
   void initState() {
     super.initState();
 
-    tripNameController.text =
-        widget.tripProvider.trip.name; 
+    tripNameController.text = widget.tripProvider.trip.name;
   }
 
   @override
@@ -43,8 +43,11 @@ class _EditTripState extends State<EditTrip> {
 
   void _editTripName(
       BuildContext context, TripProvider tripProvider, String newName) {
-    ApiService().editTrip(tripProvider.trip.getId(), newName);
-    tripProvider.editTripName(newName);
+    int? tripId = tripProvider.trip.getId();
+    if (tripId != null) {
+      ApiService().editTrip(tripId, newName);
+      tripProvider.editTripName(newName);
+    }
     Navigator.of(context).pop();
   }
 
@@ -101,8 +104,7 @@ class _EditTripState extends State<EditTrip> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDeleteTripDialog(
-                        context, widget.tripProvider.trip, widget.indexInList);
+                    showDeleteTripDialog(context, widget.tripProvider.trip);
                   },
                   child: Container(
                     height: 56.h,

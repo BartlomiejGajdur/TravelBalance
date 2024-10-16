@@ -184,8 +184,11 @@ class DeleteExpenseIcon extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           tripProvider.deleteExpense(expenseId);
-                          ApiService().deleteExpense(
-                              tripProvider.trip.getId(), expenseId);
+                          int? tripIndex = tripProvider.trip.getId();
+                          if (tripIndex != null) {
+                            ApiService().deleteExpense(tripIndex, expenseId);
+                          }
+
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },

@@ -39,8 +39,13 @@ class User {
     _trips.insert(0, newTrip);
   }
 
-  void deleteTrip(int index) {
-    _trips.removeAt(index);
+  void deleteTrip(int tripId) {
+    final int index = trips.indexWhere((trip) => trip.getId() == tripId);
+    if (index != -1) {
+      _trips.removeAt(index);
+    } else {
+      throw ("Something went wrong with Trip delete, cannot find trip of given id!");
+    }
   }
 
   printDetails() {

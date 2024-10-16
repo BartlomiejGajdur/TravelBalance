@@ -42,7 +42,7 @@ class CreateTripPage extends StatelessWidget {
       return true;
     } else {
       // If the API did not return a valid result, roll back the trip addition
-      userProvider.deleteTrip(0); // Remove the last added trip
+      userProvider.deleteLastAddedTrip();
       showCustomSnackBar(
           context: mainPageContext,
           message:

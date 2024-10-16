@@ -19,11 +19,17 @@ class UserProvider with ChangeNotifier {
 
   void setTripIdOfLastAddedTrip(int tripId) {
     assert(_user!.trips.isNotEmpty, "Trips can't be empty");
-    return _user!.trips[0].setId(tripId);
+    _user!.trips[0].setId(tripId);
   }
 
-  void deleteTrip(int index) {
-    _user!.deleteTrip(index);
+  void deleteLastAddedTrip() {
+    assert(_user!.trips.isNotEmpty, "Trips can't be empty");
+    _user!.trips.removeAt(0);
+    notifyListeners();
+  }
+
+  void deleteTrip(int tripId) {
+    _user!.deleteTrip(tripId);
     notifyListeners();
   }
 

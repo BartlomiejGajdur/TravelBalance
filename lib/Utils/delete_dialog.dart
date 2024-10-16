@@ -9,13 +9,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-void deleteTrip(BuildContext context, Trip trip, int indexInList) {
+void deleteTrip(BuildContext context, Trip trip) {
   Navigator.of(context).pop();
-  Provider.of<UserProvider>(context, listen: false).deleteTrip(indexInList);
-  ApiService().deleteTrip(trip.getId());
+  int? tripId = trip.getId();
+  if (tripId != null) {
+    Provider.of<UserProvider>(context, listen: false).deleteTrip(tripId);
+    ApiService().deleteTrip(tripId);
+  }
 }
 
-void showDeleteTripDialog(BuildContext context, Trip trip, int indexInList) {
+void showDeleteTripDialog(BuildContext context, Trip trip) {
   final String tripName = trip.name;
 
   showBlurDialog(
@@ -66,7 +69,7 @@ void showDeleteTripDialog(BuildContext context, Trip trip, int indexInList) {
             children: [
               GestureDetector(
                 onTap: () {
-                  deleteTrip(ctx, trip, indexInList);
+                  deleteTrip(ctx, trip);
                   Navigator.pushNamed(context, "TripListPage");
                 },
                 child: Container(

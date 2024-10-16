@@ -8,13 +8,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ShortTripComponent extends StatelessWidget {
   final Trip trip;
-  final int indexInList;
   final void Function() moveToDetails;
 
   const ShortTripComponent({
     super.key,
     required this.trip,
-    required this.indexInList,
     required this.moveToDetails,
   });
 
@@ -32,7 +30,7 @@ class ShortTripComponent extends StatelessWidget {
               children: [
                 SlidableAction(
                   onPressed: (context) =>
-                      showDeleteTripDialog(context, trip, indexInList),
+                      showDeleteTripDialog(context, trip),
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: Icons.delete,
