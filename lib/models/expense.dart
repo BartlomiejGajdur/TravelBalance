@@ -12,7 +12,7 @@ enum Category {
 }
 
 class Expense {
-  final int _id;
+  int? _id;
   final int _tripId;
   String _title;
   double _cost;
@@ -20,7 +20,7 @@ class Expense {
   DateTime _dateTime;
 
   Expense({
-    required final int id,
+    int? id,
     required final int tripId,
     required String title,
     required double cost,
@@ -33,12 +33,27 @@ class Expense {
         _category = category,
         _dateTime = dateTime;
 
-  int get id => _id;
   int get tripId => _tripId;
   String get title => _title;
   double get cost => _cost;
   Category get category => _category;
   DateTime get dateTime => _dateTime;
+
+  void setId(int expenseId) {
+    if (_id == null) {
+      _id = expenseId;
+    } else {
+      throw ("Id is already set!");
+    }
+  }
+
+  int? getId() {
+    if (_id == null) {
+      return null;
+    } else {
+      return _id!;
+    }
+  }
 
   void setTitle(String name) {
     _title = name;
@@ -119,32 +134,32 @@ class Expense {
   }
 
   static Category stringToCategory(String categoryString) {
-  switch (categoryString) {
-    case 'Activities':
-      return Category.activities;
-    case 'Accommodation':
-      return Category.accommodation;
-    case 'Food':
-      return Category.food;
-    case 'Health':
-      return Category.health;
-    case 'Shopping':
-      return Category.shopping;
-    case 'Transport':
-      return Category.transport;
-    case 'Souvenirs':
-      return Category.souvenirs;
-    case 'Others':
-      return Category.others;
-    default:
-      throw Exception('Unknown category: $categoryString');
+    switch (categoryString) {
+      case 'Activities':
+        return Category.activities;
+      case 'Accommodation':
+        return Category.accommodation;
+      case 'Food':
+        return Category.food;
+      case 'Health':
+        return Category.health;
+      case 'Shopping':
+        return Category.shopping;
+      case 'Transport':
+        return Category.transport;
+      case 'Souvenirs':
+        return Category.souvenirs;
+      case 'Others':
+        return Category.others;
+      default:
+        throw Exception('Unknown category: $categoryString');
+    }
   }
-}
-
 
   void printDetails() {
     debugPrint('      Expense Details:');
-    debugPrint('      ID: $_id');
+    debugPrint('      ID: ${_id ?? -1}');
+    debugPrint('      TRIP ID: $_tripId');
     debugPrint('      Title: $_title');
     debugPrint('      Cost: $_cost');
     debugPrint('      Category: $_category');

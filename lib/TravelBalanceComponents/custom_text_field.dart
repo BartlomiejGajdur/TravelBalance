@@ -2,6 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/choose_category.dart';
 import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,7 +10,7 @@ enum ClickAction { Date, Category, None }
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
-  final String text;
+  final String? text;
   final IconData? suffixIcon;
   final double? textFieldHorizontalPadding;
   final double? textFieldBottomPadding;
@@ -19,7 +20,7 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.text,
+    this.text,
     this.suffixIcon,
     this.textFieldHorizontalPadding,
     this.textFieldBottomPadding,
@@ -34,7 +35,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
-    widget.controller.text = widget.text;
+    if (widget.text != null) {
+      widget.controller.text = widget.text!;
+    }
   }
 
   @override
@@ -52,7 +55,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         readOnly: widget.clickAction != ClickAction.None,
         onTap: () {
           if (widget.clickAction == ClickAction.Date) {
-            showCustomDatePicker(context,formattedStringInDateTime(widget.controller.text), widget.controller);
+            DateTime? datetime =
+                formattedStringInDateTime(widget.controller.text);
+            showCustomDatePicker(context, datetime, widget.controller);
           } else if (widget.clickAction == ClickAction.Category) {
             _showCategoryMenu(context);
           }
@@ -61,6 +66,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         keyboardType: widget.numbersOnly
             ? const TextInputType.numberWithOptions(decimal: true)
             : TextInputType.text,
+        inputFormatters: widget.numbersOnly
+            ? [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ]
+            : [],
         decoration: InputDecoration(
           suffixIcon: Icon(widget.suffixIcon),
           suffixIconColor: const Color(0XFF9BA1A8),
@@ -90,8 +100,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
     );
   }
-
-  void _showDateMenu(BuildContext context) {}
 
   void _showCategoryMenu(BuildContext context) {
     showModalBottomSheet(

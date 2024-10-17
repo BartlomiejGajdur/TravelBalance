@@ -85,9 +85,9 @@ class Trip {
   }
 
   void addExpense(Expense expense) {
-    expenses.add(expense);
+    _expenses.insert(0, expense);
     _expensesByDate = _groupExpensesByDate(_expenses);
-    _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
+    _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
     _tripCost = calculateTripCost();
   }
 
@@ -99,7 +99,7 @@ class Trip {
 
   void deleteExpense(int expenseId) {
     // Znajdź indeks wydatku z podanym ID
-    int index = expenses.indexWhere((expense) => expense.id == expenseId);
+    int index = expenses.indexWhere((expense) => expense.getId() == expenseId);
 
     if (index != -1) {
       expenses.removeAt(index);
@@ -122,12 +122,15 @@ class Trip {
     for (var expense in expenses) {
       DateTime date = DateTime(
           expense.dateTime.year, expense.dateTime.month, expense.dateTime.day);
+
       if (expensesByDate.containsKey(date)) {
         expensesByDate[date]!.add(expense);
+        expensesByDate[date]!.sort((a, b) => a.dateTime.compareTo(b.dateTime));
       } else {
         expensesByDate[date] = [expense];
       }
     }
+
     var sortedKeys = expensesByDate.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 

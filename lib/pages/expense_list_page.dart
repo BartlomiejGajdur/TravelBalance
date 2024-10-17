@@ -42,28 +42,6 @@ class ExpenseListPage extends StatelessWidget {
     );
   }
 
-  void addExpense(TripProvider tripProvider) {
-    // For tests. Should take values from add Page and add corresponding expense
-    final random = Random();
-
-    int categoryIndex = random.nextInt(Category.values.length);
-    Category randomCategory = Category.values[categoryIndex];
-
-    int dateOffset = random.nextInt(3);
-    DateTime selectedDate = DateTime.now().subtract(Duration(days: dateOffset));
-
-    final newExpense = Expense(
-      id: 1,
-      tripId: 1,
-      title: "BARDZO DLUGA NAZWA O JAPIER ALE DLUGA KURWRWRWRW",
-      cost: 23.0,
-      category: randomCategory,
-      dateTime: selectedDate,
-    );
-
-    tripProvider.addExpense(newExpense);
-  }
-
   void _navigateToCreatTripPage(
       BuildContext expenseListPageContext, TripProvider tripProvider) {
     Navigator.pushNamed(

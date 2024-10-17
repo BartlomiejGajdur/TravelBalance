@@ -42,15 +42,15 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
     String title = descriptionController.text;
     double cost = double.parse(costController.text);
     Category category = Expense.stringToCategory(categoryController.text);
-    DateTime dateTime = formattedStringInDateTime(dateController.text);
+    DateTime? dateTime = formattedStringInDateTime(dateController.text);
 
     ApiService().editExpense(
       expenseProvider.expense.tripId,
-      expenseProvider.expense.id,
+      expenseProvider.expense.getId()!,
       title,
       cost,
       category,
-      dateTime,
+      dateTime!,
     );
 
     expenseProvider.editExpense(title, cost, category, dateTime);
@@ -122,7 +122,7 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
               children: [
                 DeleteExpenseIcon(
                   tripProvider: widget.expenseProvider.tripProvider,
-                  expenseId: widget.expenseProvider.expense.id,
+                  expenseId: widget.expenseProvider.expense.getId()!,
                 ),
                 SizedBox(width: 11.w),
                 SizedBox(

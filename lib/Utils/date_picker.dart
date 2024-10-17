@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<void> showCustomDatePicker(BuildContext context, DateTime time,
+Future<void> showCustomDatePicker(BuildContext context, DateTime? time,
     TextEditingController textController) async {
   DateTime? pickedDate = await showDatePicker(
     context: context,
@@ -21,8 +21,8 @@ String formattedDateTimeInString(DateTime dateTime) {
 DateTime formattedStringInDateTime(String dateTime) {
   List<String> parts = dateTime.split('-');
 
-  if (parts.length != 3) {
-    throw const FormatException("Niepoprawny format daty");
+  if (parts.length < 3) {
+    throw "Wrong date format";
   }
 
   int year = int.parse(parts[0]);

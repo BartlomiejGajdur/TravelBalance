@@ -421,4 +421,40 @@ class ApiService {
       return false;
     }
   }
+
+  Future<int?> addExpense(Expense expense) async {
+    try {
+      final body = {
+        'title': expense.title,
+        'cost': expense.cost,
+        'category': expense.category.index,
+        'date': expense.dateTime.toIso8601String(),
+      };
+
+      final endPoint = 'trip/${expense.tripId}/expense/';
+
+      debugPrint(body.toString());
+      debugPrint(endPoint);
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 201) {
+        debugPrint('Add Expense successful');
+        final responseData = jsonDecode(response.body);
+        return responseData["id"];
+      } else {
+        debugPrint('Add Expense failed with status: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint("Error Expense Trip in: $e");
+      return null;
+    }
+  }
 }
