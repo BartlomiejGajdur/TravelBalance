@@ -84,31 +84,35 @@ class Trip {
     return expenses.fold(0, (sum, expense) => sum + expense.cost);
   }
 
-  void addExpense(Expense expense) {
-    _expenses.insert(0, expense);
-    _expensesByDate = _groupExpensesByDate(_expenses);
-    _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
-    _tripCost = calculateTripCost();
+  void addExpense(int tripId, String title, double cost, Category category,
+      DateTime dateTime) {
+    Expense newExpense = Expense(
+      tripId: tripId,
+      title: title,
+      cost: cost,
+      category: category,
+      dateTime: DateTime.now(),
+    );
+
+    _expenses.insert(0, newExpense);
+    reCalculate();
+  }
+
+  void deleteExpense(int expenseId) {
+    int index = expenses.indexWhere((expense) => expense.getId() == expenseId);
+
+    if (index != -1) {
+      expenses.removeAt(index);
+      reCalculate();
+    } else {
+      throw ("Something went wrong with Expense delete, cannot find expense of given id!");
+    }
   }
 
   void reCalculate() {
     _expensesByDate = _groupExpensesByDate(_expenses);
     _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
     _tripCost = calculateTripCost();
-  }
-
-  void deleteExpense(int expenseId) {
-    // Znajdź indeks wydatku z podanym ID
-    int index = expenses.indexWhere((expense) => expense.getId() == expenseId);
-
-    if (index != -1) {
-      expenses.removeAt(index);
-      _expensesByDate = _groupExpensesByDate(expenses);
-      _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
-      _tripCost = calculateTripCost();
-    } else {
-      throw ("Something went wrong with Expense delete, cannot find expense of given id!");
-    }
   }
 
   void setName(String newName) {

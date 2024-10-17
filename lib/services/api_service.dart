@@ -422,16 +422,17 @@ class ApiService {
     }
   }
 
-  Future<int?> addExpense(Expense expense) async {
+  Future<int?> addExpense(int tripId, String title, double cost,
+      Category category, DateTime dateTime) async {
     try {
       final body = {
-        'title': expense.title,
-        'cost': expense.cost,
-        'category': expense.category.index,
-        'date': expense.dateTime.toIso8601String(),
+        'title': title,
+        'cost': cost,
+        'category': category.index,
+        'date': dateTime.toIso8601String(),
       };
 
-      final endPoint = 'trip/${expense.tripId}/expense/';
+      final endPoint = 'trip/$tripId/expense/';
 
       debugPrint(body.toString());
       debugPrint(endPoint);

@@ -8,9 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 void _emptyCallback() {}
 
 class ChooseCategory extends StatefulWidget {
-  final Function() onCategoryClick; 
-  final TextEditingController? textController; 
-  final String initialCategoryName; 
+  final Function() onCategoryClick;
+  final TextEditingController? textController;
+  final String initialCategoryName;
 
   const ChooseCategory({
     super.key,
@@ -24,12 +24,15 @@ class ChooseCategory extends StatefulWidget {
 }
 
 class _ChooseCategoryState extends State<ChooseCategory> {
-  late String _selectedCategory; 
+  late String _selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    _selectedCategory = widget.initialCategoryName; 
+    _selectedCategory = widget.initialCategoryName;
+    if (widget.textController != null) {
+      widget.textController!.text = widget.initialCategoryName;
+    }
   }
 
   bool _isCategoryMatch(Category category) {
@@ -57,7 +60,9 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               style: TextStyle(
                 color: _isCategoryMatch(category) ? primaryColor : Colors.black,
                 fontSize: 10.sp,
-                fontWeight: _isCategoryMatch(category) ? FontWeight.w800 : FontWeight.normal,
+                fontWeight: _isCategoryMatch(category)
+                    ? FontWeight.w800
+                    : FontWeight.normal,
               ),
             )
           ],

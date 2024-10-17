@@ -19,8 +19,9 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
-  void addExpense(Expense expense) {
-    trip.addExpense(expense);
+  void addExpense(int tripId, String title, double cost, Category category,
+      DateTime dateTime) {
+    trip.addExpense(tripId, title, cost, category, dateTime);
     notifyUi();
   }
 

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:TravelBalance/TravelBalanceComponents/edit_trip.dart';
 import 'package:TravelBalance/TravelBalanceComponents/expense_chart.dart';
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
@@ -31,6 +29,9 @@ class ExpenseListPage extends StatelessWidget {
               DateTime date =
                   tripProvider.trip.expensesByDate.keys.toList()[index];
               List<Expense> expenses = tripProvider.trip.expensesByDate[date]!;
+              for (var expense in expenses) {
+                expense.printDetails();
+              }
               return ExpenseSheetComponent(
                   expenses: expenses,
                   dateTime: date,

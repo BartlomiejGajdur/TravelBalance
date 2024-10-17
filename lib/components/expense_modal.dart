@@ -50,7 +50,7 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
       title,
       cost,
       category,
-      dateTime!,
+      dateTime,
     );
 
     expenseProvider.editExpense(title, cost, category, dateTime);

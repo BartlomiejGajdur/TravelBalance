@@ -33,26 +33,18 @@ class CreateExpensePage extends StatelessWidget {
   }
 
   Future<bool> _onCreateExpense(BuildContext context) async {
-    String title = expenseDescController.text;
-    double cost = double.tryParse(costController.text) ?? 0.0;
-    DateTime dateTime = formattedStringInDateTime(dateController.text);
-    Category category = Expense.stringToCategory(categoryController.text);
+    final String title = expenseDescController.text;
+    final double cost = double.tryParse(costController.text) ?? 0.0;
+    final DateTime dateTime = formattedStringInDateTime(dateController.text);
+    final Category category = Expense.stringToCategory(categoryController.text);
+    final int tripId = tripProvider.trip.getId()!;
 
-    Expense newExpense = Expense(
-      tripId: tripProvider.trip.getId()!,
-      title: title,
-      cost: cost,
-      category: category,
-      dateTime: dateTime,
-    );
-
-    newExpense.printDetails();
-
-    tripProvider.addExpense(newExpense);
+    tripProvider.addExpense(tripId, title, cost, category, dateTime);
     Navigator.of(context).pop();
 
     // Sending the request to the API
-    int? expenseId = await ApiService().addExpense(newExpense);
+    int? expenseId =
+        await ApiService().addExpense(tripId, title, cost, category, dateTime);
 
     if (expenseId != null) {
       // If the API returned a valid result, set the trip ID
