@@ -64,6 +64,18 @@ class ExpenseListPage extends StatelessWidget {
     tripProvider.addExpense(newExpense);
   }
 
+  void _navigateToCreatTripPage(
+      BuildContext expenseListPageContext, TripProvider tripProvider) {
+    Navigator.pushNamed(
+      expenseListPageContext,
+      'CreateExpensePage',
+      arguments: {
+        'expenseListPageContext': expenseListPageContext,
+        'tripProvider': tripProvider,
+      },
+    );
+  }
+
   const ExpenseListPage(
       {super.key, required this.trip, required this.indexInList});
 
@@ -73,7 +85,8 @@ class ExpenseListPage extends StatelessWidget {
     return CustomScaffold(
         text1: trip.name,
         text2: "Discover your travel costs.",
-        onActionButtonClick: () => addExpense(tripProvider),
+        onActionButtonClick: () =>
+            _navigateToCreatTripPage(context, tripProvider),
         onEditIconClick: () {
           showModalBottomSheet(
             isScrollControlled: true,

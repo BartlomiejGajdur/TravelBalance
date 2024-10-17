@@ -1,3 +1,4 @@
+import 'package:TravelBalance/pages/create_expense_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
@@ -5,6 +6,7 @@ import 'package:TravelBalance/pages/introduction_screens.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
 import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
+import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +92,17 @@ class MyApp extends StatelessWidget {
                 return MaterialPageRoute(
                     builder: (context) =>
                         CreateTripPage(mainPageContext: mainPageContext));
+              case 'CreateExpensePage':
+                final arguments = settings.arguments as Map<String, dynamic>;
+                final expenseListPageContext =
+                    arguments['expenseListPageContext'] as BuildContext;
+                final tripProvider = arguments['tripProvider'] as TripProvider;
+                return MaterialPageRoute(
+                  builder: (context) => CreateExpensePage(
+                    expenseListPageContext: expenseListPageContext,
+                    tripProvider: tripProvider,
+                  ),
+                );
 
               default:
                 return null;
