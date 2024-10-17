@@ -61,7 +61,6 @@ class Expense {
     final String title = data['title'];
     final double cost = data['cost'].toDouble();
     final Category category = Category.values[data['category']];
-    //Might cause problems.
     DateTime dateTime = DateTime.parse(data['date']);
     return Expense(
       id: id,

@@ -70,7 +70,7 @@ void showDeleteTripDialog(BuildContext context, Trip trip) {
               GestureDetector(
                 onTap: () {
                   deleteTrip(ctx, trip);
-                  Navigator.pushNamed(context, "TripListPage");
+                  Navigator.pushNamed(ctx, "TripListPage");
                 },
                 child: Container(
                   height: 46.h,

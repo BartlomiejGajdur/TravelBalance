@@ -27,7 +27,9 @@ class _TripListPageState extends State<TripListPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
+    if (Provider.of<UserProvider>(context, listen: false).user == null) {
+      _fetchUserData();
+    }
   }
 
   Future<void> _fetchUserData() async {
@@ -86,7 +88,8 @@ class _TripListPageState extends State<TripListPage> {
           ),
           Positioned(
             bottom: 16.h, // Adjust this to position your FAB
-            left: MediaQuery.of(context).size.width / 2 - 28, // Center it horizontally
+            left: MediaQuery.of(context).size.width / 2 -
+                28, // Center it horizontally
             child: buildFloatingActionButton(context, _navigateToAddTripPage),
           ),
         ],
@@ -160,17 +163,13 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildTripList(UserProvider userProvider) {
     if (isLoading) {
-      return _circularProgressIndicator();
-    } else if (userProvider.user == null) {
-      return noContentMessage(ContentType.Trips);
-    } else if (userProvider.user!.trips.isEmpty) {
-      return noContentMessage(ContentType.Trips);
+      return _buildCircularProgressIndicator();
     } else {
-      return _buildRefreshableTripList(userProvider);
+      return _buildRefreshableContent(userProvider);
     }
   }
 
-  Center _circularProgressIndicator() {
+  Widget _buildCircularProgressIndicator() {
     return const Center(
       child: CircularProgressIndicator(
         color: secondaryColor,
@@ -178,42 +177,67 @@ class _TripListPageState extends State<TripListPage> {
     );
   }
 
-  Widget _buildRefreshableTripList(UserProvider userProvider) {
+  Widget _buildRefreshableContent(UserProvider userProvider) {
     return RefreshIndicator(
       color: primaryColor,
       onRefresh: () async {
         await userProvider.fetchWholeUserData();
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 10.0.h),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StatisticsTile(statisticsTileType: StatisticsTileType.totalTrips),
-                StatisticsTile(statisticsTileType: StatisticsTileType.countriesVisited),
-                StatisticsTile(statisticsTileType: StatisticsTileType.spendings),
-              ],
-            ),
+      child: _buildContent(userProvider),
+    );
+  }
+
+  Widget _buildContent(UserProvider userProvider) {
+    if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
+      return _buildNoContentMessage();
+    } else {
+      return _buildTripContent(userProvider);
+    }
+  }
+
+  Widget _buildNoContentMessage() {
+    return ListView(
+      padding: const EdgeInsets.all(0),
+      children: [
+        Center(
+          child: noContentMessage(ContentType.Trips),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTripContent(UserProvider userProvider) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 10.0.h),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              StatisticsTile(statisticsTileType: StatisticsTileType.totalTrips),
+              StatisticsTile(
+                  statisticsTileType: StatisticsTileType.countriesVisited),
+              StatisticsTile(statisticsTileType: StatisticsTileType.spendings),
+            ],
           ),
-          SizedBox(height: 5.h),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Switch(
-                value: isSwitched,
-                activeColor: primaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
-                }),
+        ),
+        SizedBox(height: 5.h),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Switch(
+            value: isSwitched,
+            activeColor: primaryColor,
+            onChanged: (value) {
+              setState(() {
+                isSwitched = value;
+              });
+            },
           ),
-          isSwitched
-              ? _buildShortTripList(userProvider)
-              : _buildExtendedTripList(userProvider),
-        ],
-      ),
+        ),
+        isSwitched
+            ? _buildShortTripList(userProvider)
+            : _buildExtendedTripList(userProvider),
+      ],
     );
   }
 

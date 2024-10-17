@@ -2,13 +2,17 @@ import 'package:TravelBalance/models/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 
+enum SortOrder { ascending, descending }
+
 class User {
   List<Trip> _trips;
   Statistics _statistics;
 
   User({required List<Trip> trips, required Statistics statistics})
       : _trips = trips,
-        _statistics = statistics;
+        _statistics = statistics {
+    sortTrips(SortOrder.ascending);
+  }
 
   List<Trip> get trips => _trips;
   Statistics get statistics => _statistics;
@@ -19,6 +23,17 @@ class User {
         .toList();
     Statistics statistics = Statistics.fromJson(json['statistics']);
     return User(trips: trips, statistics: statistics);
+  }
+
+  void sortTrips(SortOrder sortOrder) {
+    DateTime now = DateTime.now();
+
+    _trips.sort((lhs, rhs) {
+      int result = (lhs.dateTime.difference(now))
+          .abs()
+          .compareTo((rhs.dateTime.difference(now)).abs());
+      return sortOrder == SortOrder.ascending ? result : -result;
+    });
   }
 
   double getWholeExpenses() {
@@ -32,6 +47,7 @@ class User {
   void addTrip(String tripName) {
     Trip newTrip = Trip(
         name: tripName,
+        dateTime: DateTime.now(),
         image:
             "https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png",
         tripCost: 0.0,

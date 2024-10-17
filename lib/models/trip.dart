@@ -6,6 +6,7 @@ class Trip {
   String _name;
   String? _image;
   double _tripCost;
+  DateTime _dateTime;
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
   Map<Category, double> _categoriesWithMoney = {};
@@ -14,10 +15,12 @@ class Trip {
       required String name,
       required String? image,
       required double tripCost,
+      required DateTime dateTime,
       required List<Expense> expenses})
       : _id = id,
         _name = name,
         _image = image,
+        _dateTime = dateTime,
         _tripCost = tripCost,
         _expenses = expenses,
         _expensesByDate = _groupExpensesByDate(expenses),
@@ -26,6 +29,7 @@ class Trip {
   String get name => _name;
   String? get image => _image;
   double get tripCost => _tripCost;
+  DateTime get dateTime => _dateTime;
   List<Expense> get expenses => _expenses;
   Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
   Map<Category, double> get categoriesWithMoney => _categoriesWithMoney;
@@ -51,6 +55,7 @@ class Trip {
     final String name = data['name'];
     final String? image = data['image'];
     final double tripCost = data['trip_cost'].toDouble();
+    DateTime dateTime = DateTime.parse(data['date']);
     final List<Expense> expenses = (data['expenses'] as List)
         .map((expenseData) => Expense.fromJson(expenseData, id))
         .toList();
@@ -58,6 +63,7 @@ class Trip {
         id: id,
         name: name,
         image: image,
+        dateTime: dateTime,
         tripCost: tripCost,
         expenses: expenses);
   }
