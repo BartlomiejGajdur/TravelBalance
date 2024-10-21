@@ -37,23 +37,31 @@ class ExpenseChart extends StatelessWidget {
                   sections: _buildPieChartSections(),
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "\$${tripProvider.trip.tripCost.toStringAsFixed(2)}",
-                    style: GoogleFonts.outfit(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                        color: mainTextColor),
-                  ),
-                  Text("Current\nSpending",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.outfit(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w200,
-                          color: secondaryTextColor))
-                ],
+              Container(
+                width: 100.w,
+                height: 80.h,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      child: Text(
+                        "\$${tripProvider.trip.tripCost.toStringAsFixed(2)}",
+                        style: GoogleFonts.outfit(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                            color: mainTextColor),
+                      ),
+                    ),
+                    FittedBox(
+                      child: Text("Current\nSpending",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.outfit(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w200,
+                              color: secondaryTextColor)),
+                    )
+                  ],
+                ),
               ),
             ]),
           ),

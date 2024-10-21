@@ -29,8 +29,7 @@ class ShortTripComponent extends StatelessWidget {
               motion: const StretchMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) =>
-                      showDeleteTripDialog(context, trip),
+                  onPressed: (context) => showDeleteTripDialog(context, trip),
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: Icons.delete,
@@ -55,21 +54,31 @@ class ShortTripComponent extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        trip.name,
-                        style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.sp,
-                            color: const Color(0xFF292B2D)),
+                      Container(
+                        width: 200.w,
+                        child: Text(
+                          trip.name,
+                          style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.sp,
+                              color: const Color(0xFF292B2D)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       Text(
-                        '${trip.tripCost.toString()}\$',
+                        '${trip.tripCost.toStringAsFixed(2)}\$',
                         style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12.sp,
-                            color: primaryColor),
-                      )
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
+                          color: primaryColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center, // Wyśrodkowanie tekstu
+                      ),
                     ],
                   ),
                 )),

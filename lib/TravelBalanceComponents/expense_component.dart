@@ -82,32 +82,38 @@ class ExpenseComponent extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '- \$${expenseProvider.expense.cost.toStringAsFixed(2)}',
-                  style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: Color(0xFFFD3C4A),
+            Container(
+              height: 89.h,
+              width: 105.w,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '- \$${expenseProvider.expense.cost.toStringAsFixed(2)}',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Color(0xFFFD3C4A),
+                      ),
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                SizedBox(height: 13.h),
-                Text(
-                  getDateTime(expenseProvider),
-                  style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
-                      color: Color(0xFF91919F),
+                  SizedBox(height: 13.h),
+                  Text(
+                    getDateTime(expenseProvider),
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        color: Color(0xFF91919F),
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             SizedBox(width: 17.w),
           ],
@@ -118,8 +124,8 @@ class ExpenseComponent extends StatelessWidget {
 
   String getShorterTitle(ExpenseProvider expenseProvider) {
     String title = expenseProvider.expense.title;
-    if (title.length > 18) {
-      title = title.substring(0, 18);
+    if (title.length > 15) {
+      title = title.substring(0, 15);
       title += "...";
     }
     return title;

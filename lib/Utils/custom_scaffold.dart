@@ -39,7 +39,11 @@ class CustomScaffold extends StatelessWidget {
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text(text1, style: mainHeaderTextStyle),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: FittedBox(
+                        child: Text(text1, style: mainHeaderTextStyle)),
+                  ),
                 ),
               ),
               onEditIconClick != null

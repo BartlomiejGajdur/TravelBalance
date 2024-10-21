@@ -59,7 +59,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
               Expense.staticCategoryToString(category),
               style: TextStyle(
                 color: _isCategoryMatch(category) ? primaryColor : Colors.black,
-                fontSize: 10.sp,
+                fontSize: 9.sp,
                 fontWeight: _isCategoryMatch(category)
                     ? FontWeight.w800
                     : FontWeight.normal,

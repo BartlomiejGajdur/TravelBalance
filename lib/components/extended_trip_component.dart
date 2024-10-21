@@ -68,38 +68,42 @@ class ExtendedTripComponent extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.0.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            trip.name,
-                            style: GoogleFonts.inter(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF292B2D)),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          trip.name,
+                          style: GoogleFonts.inter(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF292B2D),
                           ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            formatDate(trip.dateTime),
-                            style: GoogleFonts.inter(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF000000).withOpacity(0.5)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          formatDate(trip.dateTime),
+                          style: GoogleFonts.inter(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF000000).withOpacity(0.5),
                           ),
-                          SizedBox(height: 6.h),
-                          Text(
-                            "${trip.tripCost.toString()}\$",
-                            style: GoogleFonts.inter(
-                                fontSize: 12.sp,
-                                color: primaryColor,
-                                fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(height: 6.h),
+                        Text(
+                          "${trip.tripCost.toStringAsFixed(2)}\$",
+                          style: GoogleFonts.inter(
+                            fontSize: 12.sp,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w400,
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

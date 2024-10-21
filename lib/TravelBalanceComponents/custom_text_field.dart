@@ -18,16 +18,18 @@ class CustomTextField extends StatefulWidget {
   final ClickAction clickAction;
   final bool numbersOnly;
 
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      this.text,
-      this.suffixIcon,
-      this.textFieldHorizontalPadding,
-      this.textFieldBottomPadding,
-      this.clickAction = ClickAction.None,
-      this.numbersOnly = false,
-      this.hintText});
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    this.text,
+    this.suffixIcon,
+    this.textFieldHorizontalPadding,
+    this.textFieldBottomPadding,
+    this.clickAction = ClickAction.None,
+    this.numbersOnly = false,
+    this.hintText,
+  });
+
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
@@ -69,7 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : TextInputType.text,
         inputFormatters: widget.numbersOnly
             ? [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.]?\d{0,2}')),
+                LimitedTextInputFormatter(),
               ]
             : [],
         decoration: InputDecoration(
@@ -108,12 +110,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
       context: context,
       builder: (BuildContext ctx) {
         return SizedBox(
-            child: ChooseCategory(
-          initialCategoryName: widget.controller.text,
-          textController: widget.controller,
-          onCategoryClick: () => Navigator.of(ctx).pop(),
-        ));
+          child: ChooseCategory(
+            initialCategoryName: widget.controller.text,
+            textController: widget.controller,
+            onCategoryClick: () => Navigator.of(ctx).pop(),
+          ),
+        );
       },
     );
+  }
+}
+
+class LimitedTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Wyrażenie regularne do dopasowania: maks. 6 cyfr przed kropką i maks. 2 po
+    final RegExp regex = RegExp(r'^\d{0,6}(\.\d{0,2})?$');
+
+    // Sprawdzenie, czy nowa wartość pasuje do wyrażenia regularnego
+    if (regex.hasMatch(newValue.text)) {
+      return newValue; // Wartość jest dozwolona
+    } else {
+      return oldValue; // Zwróć starą wartość, jeśli nowa nie pasuje
+    }
   }
 }
