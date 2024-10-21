@@ -38,12 +38,11 @@ class TripProvider with ChangeNotifier {
   void deleteLastAddedExpense() {
     assert(trip.expenses.isNotEmpty, "Expenses can't be empty");
     trip.expenses.removeAt(0);
-    notifyListeners();
+    reCalculate();
   }
 
   void reCalculate() {
     trip.reCalculate();
-    debugPrint("Categories with Money: ${trip.categoriesWithMoney}");
     notifyUi();
   }
 
