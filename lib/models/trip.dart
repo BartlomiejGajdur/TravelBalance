@@ -91,7 +91,7 @@ class Trip {
       title: title,
       cost: cost,
       category: category,
-      dateTime: DateTime.now(),
+      dateTime: dateTime,
     );
 
     _expenses.insert(0, newExpense);
@@ -129,17 +129,20 @@ class Trip {
 
       if (expensesByDate.containsKey(date)) {
         expensesByDate[date]!.add(expense);
-        expensesByDate[date]!.sort((a, b) => a.dateTime.compareTo(b.dateTime));
       } else {
         expensesByDate[date] = [expense];
       }
     }
-
+    
     var sortedKeys = expensesByDate.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 
     Map<DateTime, List<Expense>> sortedExpensesByDate = {};
     for (var key in sortedKeys) {
+      expensesByDate[key]!.sort((a, b) {
+        return b.dateTime.compareTo(a.dateTime);
+      });
+
       sortedExpensesByDate[key] = expensesByDate[key]!;
     }
 

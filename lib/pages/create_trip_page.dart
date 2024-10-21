@@ -25,23 +25,17 @@ class CreateTripPage extends StatelessWidget {
     final String tripName = tripNameController.text;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    // Form validation
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
-    // Optimistic update - adding the trip locally
     userProvider.addTrip(tripName);
-    Navigator.of(context)
-        .pop(); // Immediately close the trip creation screen for better UX
+    Navigator.of(context).pop();
 
-    // Sending the request to the API
     int? tripId = await ApiService().addTrip(tripName);
 
     if (tripId != null) {
-      // If the API returned a valid result, set the trip ID
       userProvider.setTripIdOfLastAddedTrip(tripId);
       return true;
     } else {
-      // If the API did not return a valid result, roll back the trip addition
       userProvider.deleteLastAddedTrip();
       showCustomSnackBar(
           context: mainPageContext,

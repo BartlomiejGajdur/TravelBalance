@@ -42,7 +42,15 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
     String title = descriptionController.text;
     double cost = double.parse(costController.text);
     Category category = Expense.stringToCategory(categoryController.text);
-    DateTime? dateTime = formattedStringInDateTime(dateController.text);
+    DateTime dateTime = formattedStringInDateTime(dateController.text);
+    DateTime newDateTime = DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      expenseProvider.expense.dateTime.hour,
+      expenseProvider.expense.dateTime.minute,
+      expenseProvider.expense.dateTime.second,
+    );
 
     ApiService().editExpense(
       expenseProvider.expense.tripId,
@@ -50,10 +58,10 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
       title,
       cost,
       category,
-      dateTime,
+      newDateTime,
     );
 
-    expenseProvider.editExpense(title, cost, category, dateTime);
+    expenseProvider.editExpense(title, cost, category, newDateTime);
 
     return true;
   }

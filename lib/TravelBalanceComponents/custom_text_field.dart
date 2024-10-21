@@ -14,19 +14,20 @@ class CustomTextField extends StatefulWidget {
   final IconData? suffixIcon;
   final double? textFieldHorizontalPadding;
   final double? textFieldBottomPadding;
+  final String? hintText;
   final ClickAction clickAction;
   final bool numbersOnly;
 
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    this.text,
-    this.suffixIcon,
-    this.textFieldHorizontalPadding,
-    this.textFieldBottomPadding,
-    this.clickAction = ClickAction.None,
-    this.numbersOnly = false,
-  });
+  const CustomTextField(
+      {super.key,
+      required this.controller,
+      this.text,
+      this.suffixIcon,
+      this.textFieldHorizontalPadding,
+      this.textFieldBottomPadding,
+      this.clickAction = ClickAction.None,
+      this.numbersOnly = false,
+      this.hintText});
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
@@ -68,10 +69,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
             : TextInputType.text,
         inputFormatters: widget.numbersOnly
             ? [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*[\.]?\d{0,2}')),
               ]
             : [],
         decoration: InputDecoration(
+          hintText: widget.hintText,
           suffixIcon: Icon(widget.suffixIcon),
           suffixIconColor: const Color(0XFF9BA1A8),
           labelStyle: TextStyle(color: Colors.grey[600]),

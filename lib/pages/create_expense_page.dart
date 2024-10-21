@@ -35,23 +35,20 @@ class CreateExpensePage extends StatelessWidget {
   Future<bool> _onCreateExpense(BuildContext context) async {
     final String title = expenseDescController.text;
     final double cost = double.tryParse(costController.text) ?? 0.0;
-    final DateTime dateTime = formattedStringInDateTime(dateController.text);
+    final DateTime dateTime = getDateTimeWithCurrentTime(dateController.text);
     final Category category = Expense.stringToCategory(categoryController.text);
     final int tripId = tripProvider.trip.getId()!;
 
     tripProvider.addExpense(tripId, title, cost, category, dateTime);
     Navigator.of(context).pop();
 
-    // Sending the request to the API
     int? expenseId =
         await ApiService().addExpense(tripId, title, cost, category, dateTime);
 
     if (expenseId != null) {
-      // If the API returned a valid result, set the trip ID
       tripProvider.setExpenseIdOfLastAddedExpense(expenseId);
       return true;
     } else {
-      // If the API did not return a valid result, roll back the trip addition
       tripProvider.deleteLastAddedExpense();
       showCustomSnackBar(
           context: expenseListPageContext,
@@ -66,13 +63,18 @@ class CreateExpensePage extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: 47.h),
-        CustomTextField(controller: expenseDescController, text: ""),
+        CustomTextField(
+          controller: expenseDescController,
+          text: "",
+          hintText: "Description",
+        ),
         SizedBox(height: 24.h),
         CustomTextField(
           controller: costController,
           text: "",
           numbersOnly: true,
           suffixIcon: Icons.monetization_on_outlined,
+          hintText: "Cost",
         ),
         SizedBox(height: 24.h),
         CustomTextField(

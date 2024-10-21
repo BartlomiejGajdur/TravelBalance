@@ -31,3 +31,17 @@ DateTime formattedStringInDateTime(String dateTime) {
 
   return DateTime(year, month, day);
 }
+
+DateTime getDateTimeWithCurrentTime(String dateTime) {
+  DateTime date = formattedStringInDateTime(dateTime);
+  DateTime now = DateTime.now();
+
+  return DateTime(
+    date.year,
+    date.month,
+    date.day,
+    now.hour,
+    now.minute,
+    now.second,
+  );
+}

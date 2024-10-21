@@ -36,20 +36,21 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   bool isLoading = false;
 
-  void toggleLoading() {
+  void toggleLoading(bool setLoading) {
     setState(() {
-      isLoading = !isLoading;
+      isLoading = setLoading;
     });
   }
 
   Future<void> handleOnPressed() async {
     try {
       if (widget.skipWaitingForSucces) {
+        toggleLoading(false);
         widget.onPressed();
         widget.onSkippedSuccess();
         return;
       }
-      toggleLoading();
+      toggleLoading(true);
 
       bool success = await widget.onPressed();
       if (success) {
@@ -64,7 +65,7 @@ class _CustomButtonState extends State<CustomButton> {
       showCustomSnackBar(
           context: context, message: e.toString(), type: SnackBarType.error);
     } finally {
-      toggleLoading();
+      toggleLoading(false);
     }
   }
 
