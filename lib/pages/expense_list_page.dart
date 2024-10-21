@@ -23,15 +23,13 @@ class ExpenseListPage extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
+            key: ValueKey(tripProvider.trip.expensesByDate),
             padding: const EdgeInsets.all(0),
             itemCount: tripProvider.trip.expensesByDate.length,
             itemBuilder: (context, index) {
               DateTime date =
                   tripProvider.trip.expensesByDate.keys.toList()[index];
               List<Expense> expenses = tripProvider.trip.expensesByDate[date]!;
-              for (var expense in expenses) {
-                expense.printDetails();
-              }
               return ExpenseSheetComponent(
                   expenses: expenses,
                   dateTime: date,
