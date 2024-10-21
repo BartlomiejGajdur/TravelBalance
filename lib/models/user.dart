@@ -1,3 +1,4 @@
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
@@ -44,12 +45,11 @@ class User {
     return totalCost;
   }
 
-  void addTrip(String tripName) {
+  void addTrip(String tripName, CustomImage customImage) {
     Trip newTrip = Trip(
         name: tripName,
+        customImage: customImage,
         dateTime: DateTime.now(),
-        image:
-            "https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png",
         tripCost: 0.0,
         expenses: []);
     _trips.insert(0, newTrip);

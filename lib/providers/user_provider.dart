@@ -1,3 +1,4 @@
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -12,8 +13,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTrip(String tripName) {
-    _user!.addTrip(tripName);
+  void addTrip(String tripName, CustomImage customImage) {
+    _user!.addTrip(tripName, customImage);
     notifyListeners();
   }
 

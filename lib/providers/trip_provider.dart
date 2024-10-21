@@ -1,3 +1,4 @@
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
@@ -16,6 +17,11 @@ class TripProvider with ChangeNotifier {
 
   void editTripName(String newName) {
     trip.setName(newName);
+    notifyUi();
+  }
+
+  void editTrip(String newName, CustomImage newImage) {
+    trip.editTrip(newName, newImage);
     notifyUi();
   }
 

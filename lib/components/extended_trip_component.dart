@@ -1,9 +1,12 @@
+import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/delete_dialog.dart';
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/trip.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ExtendedTripComponent extends StatelessWidget {
   final Trip trip;
@@ -26,8 +29,7 @@ class ExtendedTripComponent extends StatelessWidget {
             motion: const StretchMotion(),
             children: [
               SlidableAction(
-                onPressed: (context) =>
-                    showDeleteTripDialog(context, trip),
+                onPressed: (context) => showDeleteTripDialog(context, trip),
                 backgroundColor: const Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
                 icon: Icons.delete,
@@ -57,8 +59,8 @@ class ExtendedTripComponent extends StatelessWidget {
                       topLeft: Radius.circular(12.r),
                       topRight: Radius.circular(12.r),
                     ),
-                    child: Image.network(
-                      'https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png',
+                    child: Image.asset(
+                      getPathToImage(trip.customImage),
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
@@ -74,30 +76,28 @@ class ExtendedTripComponent extends StatelessWidget {
                         children: [
                           Text(
                             trip.name,
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: GoogleFonts.inter(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF292B2D)),
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            "\$${trip.tripCost.toString()}",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                            ),
+                            formatDate(trip.dateTime),
+                            style: GoogleFonts.inter(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF000000).withOpacity(0.5)),
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            "${trip.tripCost.toString()}\$",
+                            style: GoogleFonts.inter(
+                                fontSize: 12.sp,
+                                color: primaryColor,
+                                fontWeight: FontWeight.w400),
                           ),
                         ],
-                      ),
-                      ElevatedButton(
-                        onPressed: moveToDetails,
-                        style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(primaryColor),
-                        ),
-                        child: const Text(
-                          "Details",
-                          style: TextStyle(color: Colors.white),
-                        ),
                       ),
                     ],
                   ),

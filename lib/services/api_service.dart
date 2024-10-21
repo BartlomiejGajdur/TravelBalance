@@ -1,4 +1,5 @@
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
@@ -275,11 +276,10 @@ class ApiService {
     }
   }
 
-  Future<int?> addTrip(String tripName) async {
+  Future<int?> addTrip(String tripName, CustomImage customImage) async {
     try {
-      final body = {
-        'name': tripName,
-      };
+      final body = {'name': tripName, 'image_id': customImage.index};
+
       const endPoint = 'trip/';
       final response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
@@ -328,11 +328,10 @@ class ApiService {
     }
   }
 
-  Future<bool> editTrip(int id, String tripName) async {
+  Future<bool> editTrip(
+      int id, String tripName, CustomImage customImage) async {
     try {
-      final body = {
-        'name': tripName,
-      };
+      final body = {'name': tripName, 'image_id': customImage.index};
 
       final endPoint = 'trip/$id/';
       final response = await http.put(

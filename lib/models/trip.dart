@@ -1,10 +1,11 @@
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
   int? _id;
   String _name;
-  String? _image;
+  CustomImage _customImage;
   double _tripCost;
   DateTime _dateTime;
   List<Expense> _expenses;
@@ -13,13 +14,13 @@ class Trip {
   Trip(
       {int? id,
       required String name,
-      required String? image,
+      CustomImage customImage = CustomImage.defaultLandscape,
       required double tripCost,
       required DateTime dateTime,
       required List<Expense> expenses})
       : _id = id,
         _name = name,
-        _image = image,
+        _customImage = customImage,
         _dateTime = dateTime,
         _tripCost = tripCost,
         _expenses = expenses,
@@ -27,7 +28,7 @@ class Trip {
         _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
 
   String get name => _name;
-  String? get image => _image;
+  CustomImage get customImage => _customImage;
   double get tripCost => _tripCost;
   DateTime get dateTime => _dateTime;
   List<Expense> get expenses => _expenses;
@@ -53,7 +54,7 @@ class Trip {
   factory Trip.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];
     final String name = data['name'];
-    final String? image = data['image'];
+    final int image = data['image_id'] ?? 0;
     final double tripCost = data['trip_cost'].toDouble();
     DateTime dateTime = DateTime.parse(data['date']);
     final List<Expense> expenses = (data['expenses'] as List)
@@ -62,7 +63,7 @@ class Trip {
     return Trip(
         id: id,
         name: name,
-        image: image,
+        customImage: getImageById(image),
         dateTime: dateTime,
         tripCost: tripCost,
         expenses: expenses);
@@ -72,7 +73,7 @@ class Trip {
     debugPrint('  Trip Details:');
     debugPrint('  ID: $_id');
     debugPrint('  Name: $_name');
-    debugPrint(_image != null ? '  Image: $_image' : '  Image: Not Specified');
+    debugPrint('  Image ${customImage.index}');
     debugPrint('  Trip Cost: $_tripCost');
     debugPrint('  Expenses:');
     for (var expense in _expenses) {
@@ -119,6 +120,11 @@ class Trip {
     _name = newName;
   }
 
+  void editTrip(String newName, CustomImage newImage) {
+    _name = newName;
+    _customImage = newImage;
+  }
+
   static Map<DateTime, List<Expense>> _groupExpensesByDate(
       List<Expense> expenses) {
     Map<DateTime, List<Expense>> expensesByDate = {};
@@ -133,7 +139,7 @@ class Trip {
         expensesByDate[date] = [expense];
       }
     }
-    
+
     var sortedKeys = expensesByDate.keys.toList()
       ..sort((a, b) => b.compareTo(a));
 

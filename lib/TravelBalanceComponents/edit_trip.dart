@@ -2,6 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dar
 import 'package:TravelBalance/Utils/delete_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +23,11 @@ class _EditTripState extends State<EditTrip> {
   final TextEditingController tripNameController = TextEditingController();
   final TextEditingController placeholderController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  late CustomImage imagePicked;
   @override
   void initState() {
     super.initState();
-
+    imagePicked = widget.tripProvider.trip.customImage;
     tripNameController.text = widget.tripProvider.trip.name;
   }
 
@@ -41,14 +42,20 @@ class _EditTripState extends State<EditTrip> {
     return null;
   }
 
-  void _editTripName(
+  void _editTrip(
       BuildContext context, TripProvider tripProvider, String newName) {
     int? tripId = tripProvider.trip.getId();
     if (tripId != null) {
-      ApiService().editTrip(tripId, newName);
-      tripProvider.editTripName(newName);
+      ApiService().editTrip(tripId, newName, imagePicked);
+      tripProvider.editTrip(newName, imagePicked);
     }
     Navigator.of(context).pop();
+  }
+
+  void _updatePickedImage(CustomImage newImage) {
+    setState(() {
+      imagePicked = newImage;
+    });
   }
 
   Widget _buildFormContent(BuildContext context) {
@@ -72,7 +79,7 @@ class _EditTripState extends State<EditTrip> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: imagePicker(),
+                  child: imagePicker(context, imagePicked, _updatePickedImage),
                 ),
                 Flexible(
                   child: CustomTextFormField(
@@ -123,7 +130,7 @@ class _EditTripState extends State<EditTrip> {
                 ),
                 SizedBox(width: 11.w),
                 GestureDetector(
-                  onTap: () => _editTripName(
+                  onTap: () => _editTrip(
                       context, widget.tripProvider, tripNameController.text),
                   child: Container(
                     height: 56.h,

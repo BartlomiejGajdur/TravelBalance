@@ -3,19 +3,35 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dar
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
+import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class CreateTripPage extends StatelessWidget {
+class CreateTripPage extends StatefulWidget {
+  final BuildContext mainPageContext;
+
+  const CreateTripPage({super.key, required this.mainPageContext});
+
+  @override
+  _CreateTripPageState createState() => _CreateTripPageState();
+}
+
+class _CreateTripPageState extends State<CreateTripPage> {
   final TextEditingController tripNameController = TextEditingController();
   final TextEditingController placeholder = TextEditingController();
-
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final BuildContext mainPageContext;
-  CreateTripPage({super.key, required this.mainPageContext});
+
+  CustomImage imagePicked = CustomImage.defaultLandscape;
+
+  @override
+  void dispose() {
+    tripNameController.dispose();
+    placeholder.dispose();
+    super.dispose();
+  }
 
   String? placeholderValidator(String? string) {
     return null;
@@ -27,10 +43,10 @@ class CreateTripPage extends StatelessWidget {
 
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
-    userProvider.addTrip(tripName);
+    userProvider.addTrip(tripName, imagePicked);
     Navigator.of(context).pop();
 
-    int? tripId = await ApiService().addTrip(tripName);
+    int? tripId = await ApiService().addTrip(tripName, imagePicked);
 
     if (tripId != null) {
       userProvider.setTripIdOfLastAddedTrip(tripId);
@@ -38,12 +54,18 @@ class CreateTripPage extends StatelessWidget {
     } else {
       userProvider.deleteLastAddedTrip();
       showCustomSnackBar(
-          context: mainPageContext,
+          context: widget.mainPageContext,
           message:
               "Failed to create $tripName. Please check your Internet connection.",
           type: SnackBarType.error);
       return false;
     }
+  }
+
+  void _updatePickedImage(CustomImage newImage) {
+    setState(() {
+      imagePicked = newImage;
+    });
   }
 
   Widget _buildFormContent(BuildContext context) {
@@ -58,7 +80,7 @@ class CreateTripPage extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 20.w),
-                  child: imagePicker(),
+                  child: imagePicker(context, imagePicked, _updatePickedImage),
                 ),
                 Flexible(
                   child: CustomTextFormField(
