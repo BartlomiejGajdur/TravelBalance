@@ -87,7 +87,7 @@ class CreateExpensePage extends StatelessWidget {
             initialCategoryName:
                 Expense.staticCategoryToString(Category.others),
             textController: categoryController),
-        Spacer(),
+        const Spacer(),
         CustomButton(
             buttonText: "Add expense",
             skipWaitingForSucces: true,

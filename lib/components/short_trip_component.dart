@@ -56,7 +56,7 @@ class ShortTripComponent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 200.w,
                         child: Text(
                           trip.name,

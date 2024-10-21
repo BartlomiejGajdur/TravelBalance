@@ -17,7 +17,7 @@ Widget chosenImage(CustomImage imagePicked) {
               height: 91.h,
               width: 107.w,
             )
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -55,7 +55,7 @@ void pickImage(BuildContext context, CustomImage imagePicked,
   debugPrint("clicked");
   showBlurDialog(
     context: context,
-    childBuilder: (ctx) => Container(
+    childBuilder: (ctx) => SizedBox(
       width: 350.w,
       height: 600.h,
       child: ListView.builder(

@@ -37,7 +37,7 @@ class ExpenseChart extends StatelessWidget {
                   sections: _buildPieChartSections(),
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 100.w,
                 height: 80.h,
                 child: Column(

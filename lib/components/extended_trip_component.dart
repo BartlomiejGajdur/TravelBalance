@@ -79,7 +79,7 @@ class ExtendedTripComponent extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF292B2D),
+                            color: const Color(0xFF292B2D),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -90,7 +90,7 @@ class ExtendedTripComponent extends StatelessWidget {
                           style: GoogleFonts.inter(
                             fontSize: 10.sp,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xFF000000).withOpacity(0.5),
+                            color: const Color(0xFF000000).withOpacity(0.5),
                           ),
                         ),
                         SizedBox(height: 6.h),

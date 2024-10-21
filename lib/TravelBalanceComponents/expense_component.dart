@@ -82,7 +82,7 @@ class ExpenseComponent extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Container(
+            SizedBox(
               height: 89.h,
               width: 105.w,
               child: Column(
