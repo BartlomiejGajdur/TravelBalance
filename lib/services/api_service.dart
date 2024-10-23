@@ -365,11 +365,14 @@ class ApiService {
       DateTime newDate) async {
     try {
       final body = {
-        'title': newTitle,
         'cost': newCost,
         'category': newCategory.index,
         'date': newDate.toIso8601String(),
       };
+
+      if (newTitle.isNotEmpty) {
+        body['title'] = newTitle;
+      }
 
       final endPoint = 'trip/$tripId/expense/$expenseId/';
 
@@ -424,13 +427,17 @@ class ApiService {
   Future<int?> addExpense(int tripId, String title, double cost,
       Category category, DateTime dateTime) async {
     try {
-      final body = {
-        'title': title,
+      var body = {
         'cost': cost,
         'category': category.index,
         'date': dateTime.toIso8601String(),
       };
 
+      if (title.isNotEmpty) {
+        body['title'] = title;
+      }
+
+      debugPrint(body.toString());
       final endPoint = 'trip/$tripId/expense/';
 
       debugPrint(body.toString());
