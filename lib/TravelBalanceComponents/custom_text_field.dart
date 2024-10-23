@@ -125,14 +125,14 @@ class LimitedTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
-    // Wyrażenie regularne do dopasowania: maks. 6 cyfr przed kropką i maks. 2 po
+    String newText = newValue.text.replaceAll(',', '.');
+
     final RegExp regex = RegExp(r'^\d{0,6}(\.\d{0,2})?$');
 
-    // Sprawdzenie, czy nowa wartość pasuje do wyrażenia regularnego
-    if (regex.hasMatch(newValue.text)) {
-      return newValue; // Wartość jest dozwolona
+    if (regex.hasMatch(newText)) {
+      return newValue.copyWith(text: newText); 
     } else {
-      return oldValue; // Zwróć starą wartość, jeśli nowa nie pasuje
+      return oldValue; 
     }
   }
 }
