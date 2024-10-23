@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum CustomImage {
   defaultLandscape,
   rainbowRoad,
@@ -21,4 +23,10 @@ CustomImage getImageById(int id) {
 
 String getPathToImage(CustomImage customImage) {
   return imageToName[customImage] ?? imageToName[CustomImage.defaultLandscape]!;
+}
+
+void precacheAllImages(BuildContext context) {
+  imageToName.forEach((customImage, imagePath) {
+    precacheImage(AssetImage(imagePath), context);
+  });
 }

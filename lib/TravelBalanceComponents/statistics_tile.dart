@@ -42,13 +42,13 @@ class StatisticsTile extends StatelessWidget {
     IconData icon;
     switch (statisticsTileType) {
       case StatisticsTileType.totalTrips:
-        icon = Icons.twenty_mp_outlined;
+        icon = Icons.airplanemode_active;
         break;
       case StatisticsTileType.countriesVisited:
-        icon = Icons.wallet;
+        icon = Icons.public;
         break;
       case StatisticsTileType.spendings:
-        icon = Icons.wallet;
+        icon = Icons.attach_money;
         break;
     }
 
@@ -85,6 +85,8 @@ class StatisticsTile extends StatelessWidget {
         color: secondaryTextColor,
         fontWeight: FontWeight.w600,
       ),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -114,6 +116,7 @@ class StatisticsTile extends StatelessWidget {
     return Column(
       children: [
         _buildTitle(),
+        SizedBox(height: 4.h),
         _buildStatisticContainer(userProvider),
       ],
     );
