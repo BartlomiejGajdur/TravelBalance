@@ -48,7 +48,7 @@ class StatisticsTile extends StatelessWidget {
         icon = Icons.public;
         break;
       case StatisticsTileType.spendings:
-        icon = Icons.attach_money;
+        icon = Icons.wallet;
         break;
     }
 

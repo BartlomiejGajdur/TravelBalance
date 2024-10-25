@@ -81,6 +81,17 @@ class Trip {
     }
   }
 
+  void printExpensesByDate() {
+    print("----------------Start--------------");
+    _expensesByDate.forEach((date, expenses) {
+      print("--------Date: $date");
+      for (var expense in expenses) {
+        expense.printDetails();
+      }
+    });
+    print("----------------END------------------");
+  }
+
   double calculateTripCost() {
     return expenses.fold(0, (sum, expense) => sum + expense.cost);
   }
@@ -141,16 +152,18 @@ class Trip {
     }
 
     var sortedKeys = expensesByDate.keys.toList()
-      ..sort((a, b) => b.compareTo(a));
+      ..sort((a, b) => b.compareTo(a)); 
 
-    Map<DateTime, List<Expense>> sortedExpensesByDate = {};
-    for (var key in sortedKeys) {
-      expensesByDate[key]!.sort((a, b) {
-        return b.dateTime.compareTo(a.dateTime);
-      });
 
-      sortedExpensesByDate[key] = expensesByDate[key]!;
-    }
+    Map<DateTime, List<Expense>> sortedExpensesByDate = {
+      for (var key in sortedKeys) key: expensesByDate[key]!
+    };
+
+
+    sortedExpensesByDate.forEach((date, expenses) {
+      expenses.sort((a, b) => b.dateTime.toString().compareTo(
+          a.dateTime.toString())); 
+    });
 
     return sortedExpensesByDate;
   }

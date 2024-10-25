@@ -4,16 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/TravelBalanceComponents/expense_component.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ExpenseSheetComponent extends StatelessWidget {
-  final List<Expense> expenses;
   final DateTime dateTime;
-  final TripProvider tripProvider;
-  const ExpenseSheetComponent(
-      {super.key,
-      required this.expenses,
-      required this.dateTime,
-      required this.tripProvider});
+
+  const ExpenseSheetComponent({
+    super.key,
+    required this.dateTime,
+  });
 
   String _getDisplayDate() {
     DateTime now = DateTime.now();
@@ -31,25 +30,32 @@ class ExpenseSheetComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-            child: Text(
-              _getDisplayDate(),
-              style: GoogleFonts.inter(
-                  fontSize: 16.sp, fontWeight: FontWeight.bold),
-            ),
+    return Consumer<TripProvider>(
+      builder: (context, tripProvider, child) {
+        List<Expense> expenses = tripProvider.trip.expensesByDate[dateTime] ?? [];
+
+        return Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                child: Text(
+                  _getDisplayDate(),
+                  style: GoogleFonts.inter(
+                      fontSize: 16.sp, fontWeight: FontWeight.bold),
+                ),
+              ),
+              for (var expense in expenses)
+                ExpenseComponent(
+                  key: ValueKey(expense.getId()),
+                  expense: expense,
+                  tripProvider: tripProvider,
+                ),
+            ],
           ),
-          for (var expense in expenses)
-            ExpenseComponent(
-              expense: expense,
-              tripProvider: tripProvider,
-            ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

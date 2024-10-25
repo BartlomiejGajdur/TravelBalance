@@ -25,17 +25,21 @@ class ExpenseProvider with ChangeNotifier {
 
   void editExpenseTitle(String newTitle) {
     _expense.setTitle(newTitle);
+    notifyUi();
   }
 
   void editExpenseCost(double newCost) {
     _expense.setCost(newCost);
+    notifyUi();
   }
 
   void editExpenseCategory(Category newCategory) {
     _expense.setCategory(newCategory);
+    notifyUi();
   }
 
   void editExpenseDateTime(DateTime newDateTime) {
     _expense.setDateTime(newDateTime);
+    notifyUi();
   }
 }

@@ -19,7 +19,7 @@ class ApiService {
 
   BaseTokenType _tokenType = BaseTokenType.Token;
   String _token = "";
-  final String _baseUrl = "http://travelbalance.pl/api/v1/";
+  final String _baseUrl = "https://travelbalance.pl/api/v1/";
   //final String _baseUrl =
   //    "http://wanderer-test-fe529f1fdf47.herokuapp.com/api/v1/";
 
