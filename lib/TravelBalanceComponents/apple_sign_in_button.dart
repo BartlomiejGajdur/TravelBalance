@@ -7,11 +7,6 @@ class AppleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInWithAppleButton(
       onPressed: () async {
-        showCustomSnackBar(
-            context: context,
-            message: "PRESSED",
-            type: SnackBarType.information);
-
         try {
           final result = await SignInWithApple.getAppleIDCredential(
             scopes: [
