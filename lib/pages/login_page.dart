@@ -67,28 +67,32 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signInWithApple() async {
     try {
+      showCustomSnackBar(
+          context: context,
+          message: "Clicked Apple",
+          type: SnackBarType.information);
+
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
           AppleIDAuthorizationScopes.fullName,
         ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId:
-              'com.domainname.travelbalance', // Wstaw identyfikator klienta z Apple Developer Console
-          redirectUri: Uri.parse('https://travelbalance.pl/callback'),
-        ),
       );
 
-      // Przykład: Możesz tutaj przekazać dane logowania do backendu
-      print("User email: ${appleCredential.email}");
-      print(
-          "User full name: ${appleCredential.givenName} ${appleCredential.familyName}");
-      print("User identifier: ${appleCredential.userIdentifier}");
-      usernameController.text = appleCredential.email.toString();
-      // Jeśli posiadasz backend do uwierzytelniania, przekaż tutaj token `identityToken`
+      showCustomSnackBar(
+          context: context,
+          message:
+              "User full name: ${appleCredential.givenName} ${appleCredential.familyName}",
+          type: SnackBarType.information);
+
       // final idToken = appleCredential.identityToken;
     } catch (error) {
-      print("Error during Apple Sign In: $error");
+      showCustomSnackBar(
+          context: context,
+          message: "Error during Apple Sign In: ${error}",
+          type: SnackBarType.warning);
+
+      usernameController.text = error.toString();
     }
   }
   //FOR DEBUG
