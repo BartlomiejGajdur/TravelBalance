@@ -151,7 +151,13 @@ class _LoginPageState extends State<LoginPage> {
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
               GestureDetector(
-                onTap: signInWithApple,
+                onTap: () async {
+                  showCustomSnackBar(
+                      context: context,
+                      message: "Clicked BEFORE",
+                      type: SnackBarType.information);
+                  signInWithApple();
+                },
                 child: const MockButton(
                     buttonType: ButtonType.apple, actionType: ActionType.login),
               ),
@@ -169,6 +175,21 @@ class _LoginPageState extends State<LoginPage> {
                     buttonType: ButtonType.google,
                     actionType: ActionType.login),
               ),
+              GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      passwordController.text = "BEFORE RED CLICK";
+                    });
+                    await signInWithApple();
+                    setState(() {
+                      passwordController.text = "AFTER RED CLICK";
+                    });
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.h,
+                    color: Colors.red,
+                  )),
               SizedBox(height: 88.h),
               const DoubleLineText(
                   first: "Don’t have an account?",
