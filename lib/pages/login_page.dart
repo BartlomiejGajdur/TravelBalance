@@ -8,6 +8,7 @@ import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../Utils/globals.dart';
 
 class LoginPage extends StatefulWidget {
@@ -63,6 +64,33 @@ class _LoginPageState extends State<LoginPage> {
     showCustomSnackBar(
         context: context, message: textMsg, type: SnackBarType.information);
   }
+
+  Future<void> signInWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId:
+              'com.domainname.travelbalance', // Wstaw identyfikator klienta z Apple Developer Console
+          redirectUri: Uri.parse('https://travelbalance.pl/callback'),
+        ),
+      );
+
+      // Przykład: Możesz tutaj przekazać dane logowania do backendu
+      print("User email: ${appleCredential.email}");
+      print(
+          "User full name: ${appleCredential.givenName} ${appleCredential.familyName}");
+      print("User identifier: ${appleCredential.userIdentifier}");
+      usernameController.text = appleCredential.email.toString();
+      // Jeśli posiadasz backend do uwierzytelniania, przekaż tutaj token `identityToken`
+      // final idToken = appleCredential.identityToken;
+    } catch (error) {
+      print("Error during Apple Sign In: $error");
+    }
+  }
   //FOR DEBUG
 
   @override
@@ -75,9 +103,15 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 108.h),
-              Padding(
-                padding: EdgeInsets.only(left: horizontalPadding),
-                child: Text("Welcome back wanderer!", style: mainTextStyle),
+              GestureDetector(
+                onTap: () => fillLoginAndPassword(
+                    context, "testowy_user", "testowehaslo123!", true),
+                onDoubleTap: () => fillLoginAndPassword(
+                    context, "noTrips", "testowehaslo123!", false),
+                child: Padding(
+                  padding: EdgeInsets.only(left: horizontalPadding),
+                  child: Text("Welcome back wanderer!", style: mainTextStyle),
+                ),
               ),
               SizedBox(height: 8.h),
               Padding(
@@ -113,10 +147,7 @@ class _LoginPageState extends State<LoginPage> {
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
               GestureDetector(
-                onTap: () => fillLoginAndPassword(
-                    context, "testowy_user", "testowehaslo123!", true),
-                onDoubleTap: () => fillLoginAndPassword(
-                    context, "noTrips", "testowehaslo123!", false),
+                onTap: signInWithApple,
                 child: const MockButton(
                     buttonType: ButtonType.apple, actionType: ActionType.login),
               ),
