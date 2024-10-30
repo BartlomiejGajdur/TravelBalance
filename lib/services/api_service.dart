@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
@@ -76,12 +78,12 @@ class ApiService {
   }
 
   Future<bool> login(String username, String password) async {
+    final body = {
+      'username': username,
+      'password': password,
+    };
+    const endPoint = 'login/';
     try {
-      final body = {
-        'username': username,
-        'password': password,
-      };
-      const endPoint = 'login/';
       final response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {'Content-Type': 'application/json'},
@@ -94,12 +96,16 @@ class ApiService {
         debugPrint('Login successful: $responseBody');
         return true;
       } else {
+        final responseBody = jsonDecode(response.body);
         debugPrint('Login failed with status: ${response.statusCode}');
-        return false;
+        throw (responseBody['non_field_errors'].toString());
       }
+    } on SocketException catch (e) {
+      debugPrint('No internet connection: $e');
+      throw ("No internet connection!");
     } catch (e) {
-      debugPrint("Error logging in: $e");
-      return false;
+      debugPrint('Unexpected error: $e');
+      rethrow;
     }
   }
 
@@ -186,12 +192,27 @@ class ApiService {
         debugPrint('Signup successful: $responseBody');
         return true;
       } else {
-        debugPrint('Signup failed with status: ${response.statusCode}');
-        return false;
+        final responseBody = jsonDecode(response.body);
+        String errorString = [
+          responseBody['non_field_errors'],
+          responseBody['username'],
+          responseBody['email'],
+          responseBody['password']
+        ].where((error) => error != null).map((error) {
+          if (error is List) {
+            return error.join(" "); 
+          }
+          return error.toString();
+        }).join(" ");
+
+        throw errorString;
       }
+    } on SocketException catch (e) {
+      debugPrint('No internet connection: $e');
+      throw ("No internet connection!");
     } catch (e) {
-      debugPrint("Error signing up: $e");
-      return false;
+      debugPrint('Unexpected error: $e');
+      rethrow;
     }
   }
 
