@@ -43,6 +43,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
   }
 
+  String? defaultValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+
+    final num? parsedValue = num.tryParse(value);
+    if (parsedValue == null || parsedValue == 0) {
+      return 'Input must not be zero';
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,7 +64,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
         right: widget.textFieldHorizontalPadding ?? horizontalPadding,
         bottom: widget.textFieldBottomPadding ?? 0.0,
       ),
-      child: TextField(
+      child: TextFormField(
+        validator: widget.numbersOnly ? defaultValidator : null,
+        onChanged: (value) {
+          final FormState form = Form.of(context);
+          form.validate();
+        },
         onTapOutside: (event) {
           FocusManager.instance.primaryFocus?.unfocus();
         },
@@ -130,9 +148,9 @@ class LimitedTextInputFormatter extends TextInputFormatter {
     final RegExp regex = RegExp(r'^\d{0,6}(\.\d{0,2})?$');
 
     if (regex.hasMatch(newText)) {
-      return newValue.copyWith(text: newText); 
+      return newValue.copyWith(text: newText);
     } else {
-      return oldValue; 
+      return oldValue;
     }
   }
 }

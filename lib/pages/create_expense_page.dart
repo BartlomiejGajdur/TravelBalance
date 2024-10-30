@@ -13,26 +13,35 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CreateExpensePage extends StatelessWidget {
   final TextEditingController expenseDescController = TextEditingController();
   final TextEditingController costController = TextEditingController();
-  final TextEditingController dateController =
-      TextEditingController(text: formattedDateTimeInString(DateTime.now()));
+  final TextEditingController dateController = TextEditingController(
+    text: formattedDateTimeInString(DateTime.now()),
+  );
   final TextEditingController categoryController = TextEditingController();
 
   final BuildContext expenseListPageContext;
   final TripProvider tripProvider;
-  CreateExpensePage(
-      {super.key,
-      required this.expenseListPageContext,
-      required this.tripProvider});
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  CreateExpensePage({
+    super.key,
+    required this.expenseListPageContext,
+    required this.tripProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        text1: "Add expense",
-        text2: "Where'd that money go?",
-        childWidget: _buildContent(context));
+      text1: "Add expense",
+      text2: "Where'd that money go?",
+      childWidget: _buildContent(context),
+    );
   }
 
   Future<bool> _onCreateExpense(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) {
+      return false; 
+    }
+
     final String title = expenseDescController.text;
     final double cost = double.tryParse(costController.text) ?? 0.0;
     final DateTime dateTime = getDateTimeWithCurrentTime(dateController.text);
@@ -62,39 +71,45 @@ class CreateExpensePage extends StatelessWidget {
   Column _buildContent(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 47.h),
-        CustomTextField(
-          controller: expenseDescController,
-          text: "",
-          hintText: "Description",
-        ),
-        SizedBox(height: 24.h),
-        CustomTextField(
-          controller: costController,
-          text: "",
-          numbersOnly: true,
-          suffixIcon: Icons.monetization_on_outlined,
-          hintText: "Cost",
-        ),
-        SizedBox(height: 24.h),
-        CustomTextField(
-          controller: dateController,
-          clickAction: ClickAction.Date,
-          suffixIcon: Icons.calendar_month,
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              SizedBox(height: 47.h),
+              CustomTextField(
+                controller: expenseDescController,
+                text: "",
+                hintText: "Description",
+              ),
+              SizedBox(height: 24.h),
+              CustomTextField(
+                controller: costController,
+                text: "",
+                numbersOnly: true,
+                suffixIcon: Icons.monetization_on_outlined,
+                hintText: "Cost",
+              ),
+              SizedBox(height: 24.h),
+              CustomTextField(
+                controller: dateController,
+                clickAction: ClickAction.Date,
+                suffixIcon: Icons.calendar_month,
+              ),
+            ],
+          ),
         ),
         SizedBox(height: 47.h),
         ChooseCategory(
-            initialCategoryName:
-                Expense.staticCategoryToString(Category.others),
-            textController: categoryController),
+          initialCategoryName: Expense.staticCategoryToString(Category.others),
+          textController: categoryController,
+        ),
         const Spacer(),
         CustomButton(
-            buttonText: "Add expense",
-            skipWaitingForSucces: true,
-            onPressed: () => _onCreateExpense(context)),
-        SizedBox(
-          height: 35.h,
-        )
+          buttonText: "Add expense",
+          skipWaitingForSucces: true,
+          onPressed: () => _onCreateExpense(context),
+        ),
+        SizedBox(height: 35.h),
       ],
     );
   }

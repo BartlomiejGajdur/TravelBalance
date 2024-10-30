@@ -27,7 +27,7 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
   final TextEditingController dateController = TextEditingController();
 
   final TextEditingController categoryController = TextEditingController();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     descriptionController.dispose();
@@ -39,6 +39,10 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
 
   Future<bool> saveExpense(
       BuildContext context, ExpenseProvider expenseProvider) async {
+    if (!_formKey.currentState!.validate()) {
+      return false;
+    }
+
     String title = descriptionController.text;
     double cost = double.parse(costController.text);
     Category category = Expense.stringToCategory(categoryController.text);
@@ -81,72 +85,75 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 493.h,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 10.h, 10.w, 0.0),
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )),
-            ),
-            formattedTitle("Description"),
-            CustomTextField(
-                text: widget.expenseProvider.expense.title,
-                controller: descriptionController,
-                textFieldBottomPadding: 16.0.h),
-            formattedTitle("Cost"),
-            CustomTextField(
-              text: widget.expenseProvider.expense.cost.toString(),
-              controller: costController,
-              textFieldBottomPadding: 16.0.h,
-              suffixIcon: Icons.monetization_on_outlined,
-              numbersOnly: true,
-            ),
-            formattedTitle("Date"),
-            CustomTextField(
-              text: formattedDateTimeInString(
-                  widget.expenseProvider.expense.dateTime),
-              controller: dateController,
-              textFieldBottomPadding: 16.0.h,
-              suffixIcon: Icons.calendar_month_outlined,
-              clickAction: ClickAction.Date,
-            ),
-            formattedTitle("Category"),
-            CustomTextField(
-              text: widget.expenseProvider.expense.categoryToString(),
-              controller: categoryController,
-              textFieldBottomPadding: 16.0.h,
-              suffixIcon: Icons.category,
-              clickAction: ClickAction.Category,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DeleteExpenseIcon(
-                  tripProvider: widget.expenseProvider.tripProvider,
-                  expenseId: widget.expenseProvider.expense.getId()!,
-                ),
-                SizedBox(width: 11.w),
-                SizedBox(
-                    width: 250.w,
-                    child: CustomButton(
-                      buttonText: "Save Expense",
-                      useDefaultPadding: false,
-                      skipWaitingForSucces: true,
-                      onPressed: () =>
-                          saveExpense(context, widget.expenseProvider),
-                      onSkippedSuccess: () => Navigator.of(context).pop(),
-                    ))
-              ],
-            ),
-          ],
-        ));
+    return Form(
+      key: _formKey,
+      child: SizedBox(
+          height: 497.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 10.h, 10.w, 0.0),
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )),
+              ),
+              formattedTitle("Description"),
+              CustomTextField(
+                  text: widget.expenseProvider.expense.title,
+                  controller: descriptionController,
+                  textFieldBottomPadding: 16.0.h),
+              formattedTitle("Cost"),
+              CustomTextField(
+                text: widget.expenseProvider.expense.cost.toString(),
+                controller: costController,
+                textFieldBottomPadding: 16.0.h,
+                suffixIcon: Icons.monetization_on_outlined,
+                numbersOnly: true,
+              ),
+              formattedTitle("Date"),
+              CustomTextField(
+                text: formattedDateTimeInString(
+                    widget.expenseProvider.expense.dateTime),
+                controller: dateController,
+                textFieldBottomPadding: 16.0.h,
+                suffixIcon: Icons.calendar_month_outlined,
+                clickAction: ClickAction.Date,
+              ),
+              formattedTitle("Category"),
+              CustomTextField(
+                text: widget.expenseProvider.expense.categoryToString(),
+                controller: categoryController,
+                textFieldBottomPadding: 16.0.h,
+                suffixIcon: Icons.category,
+                clickAction: ClickAction.Category,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DeleteExpenseIcon(
+                    tripProvider: widget.expenseProvider.tripProvider,
+                    expenseId: widget.expenseProvider.expense.getId()!,
+                  ),
+                  SizedBox(width: 11.w),
+                  SizedBox(
+                      width: 250.w,
+                      child: CustomButton(
+                        buttonText: "Save Expense",
+                        useDefaultPadding: false,
+                        skipWaitingForSucces: true,
+                        onPressed: () =>
+                            saveExpense(context, widget.expenseProvider),
+                        onSkippedSuccess: () => Navigator.of(context).pop(),
+                      ))
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }
 
