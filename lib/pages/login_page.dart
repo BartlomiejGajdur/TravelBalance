@@ -73,22 +73,14 @@ class _LoginPageState extends State<LoginPage> {
           AppleIDAuthorizationScopes.fullName,
         ],
         webAuthenticationOptions: WebAuthenticationOptions(
-          clientId:
-              'com.domainname.travelbalance', // Wstaw identyfikator klienta z Apple Developer Console
+          clientId: 'com.domainname.travelbalance',
           redirectUri: Uri.parse('https://travelbalance.pl/callback'),
         ),
       );
-
-      // Przykład: Możesz tutaj przekazać dane logowania do backendu
       print("User email: ${appleCredential.email}");
-      print(
-          "User full name: ${appleCredential.givenName} ${appleCredential.familyName}");
-      print("User identifier: ${appleCredential.userIdentifier}");
-      usernameController.text = appleCredential.email.toString();
-      // Jeśli posiadasz backend do uwierzytelniania, przekaż tutaj token `identityToken`
-      // final idToken = appleCredential.identityToken;
+      
     } catch (error) {
-      print("Error during Apple Sign In: $error");
+      usernameController.text = error.toString();
     }
   }
   //FOR DEBUG
