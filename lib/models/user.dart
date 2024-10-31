@@ -46,6 +46,14 @@ class User {
     return totalCost;
   }
 
+  Set<Country> getVisitedCountries() {
+    Set<Country> countries = {};
+    for (var trip in _trips) {
+      countries.addAll(trip.countries);
+    }
+    return countries;
+  }
+
   void addTrip(
       String tripName, CustomImage customImage, List<Country> countries) {
     Trip newTrip = Trip(

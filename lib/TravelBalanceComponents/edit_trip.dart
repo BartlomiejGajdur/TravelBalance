@@ -98,7 +98,7 @@ class _EditTripState extends State<EditTrip> {
                 ),
               ],
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: 20.h),
             CountryPicker(
               countries: widget.tripProvider.trip.countries,
               onCountriesChanged: _onCountriesChanged,

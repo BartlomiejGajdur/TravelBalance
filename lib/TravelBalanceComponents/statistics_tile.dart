@@ -1,5 +1,7 @@
+import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,14 +64,13 @@ class StatisticsTile extends StatelessWidget {
   // Method to get the statistic value formatted as text
   Widget _buildStatistic(UserProvider userProvider) {
     String statistic;
-    final statistics = userProvider.user!.statistics;
 
     switch (statisticsTileType) {
       case StatisticsTileType.totalTrips:
         statistic = userProvider.user!.trips.length.toString();
         break;
       case StatisticsTileType.countriesVisited:
-        statistic = statistics.visitedCountriesAmount.toString();
+        statistic = userProvider.user!.getVisitedCountries().length.toString();
         break;
       case StatisticsTileType.spendings:
         statistic =
@@ -90,21 +91,72 @@ class StatisticsTile extends StatelessWidget {
     );
   }
 
-  Widget _buildStatisticContainer(UserProvider userProvider) {
-    return Container(
-      height: 85.h,
-      width: 85.w,
-      decoration: BoxDecoration(
-        color: const Color(0xFF92A332).withOpacity(0.2),
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildIcon(),
-          SizedBox(height: 4.h),
-          _buildStatistic(userProvider),
-        ],
+  void _showVisitedCountriesDialog(
+      BuildContext context, UserProvider userProvider) {
+    int sizeOfCountries = userProvider.user!.getVisitedCountries().length;
+    double offset = 50.h;
+    double calculateHeight = sizeOfCountries * 61.h + offset;
+
+    // Upewnij się, że wysokość nie przekracza 700.h
+    if (calculateHeight > 700.h) {
+      calculateHeight = 700.h;
+    }
+
+    showBlurDialog(
+      context: context,
+      barrierDismissible: true,
+      childBuilder: (ctx) {
+        return Container(
+          height: calculateHeight,
+          width: 350.w,
+          padding: EdgeInsets.all(16.0),
+          child: Container(
+            height: calculateHeight - offset,
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: sizeOfCountries,
+              itemBuilder: (context, index) {
+                final Country country =
+                    userProvider.user!.getVisitedCountries().elementAt(index);
+                return Card(
+                  color: thirdColor.withOpacity(0.4),
+                  child: ListTile(
+                    leading: Text(country.flagEmoji),
+                    title: Text(country.displayNameNoCountryCode),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatisticContainer(
+      BuildContext context, UserProvider userProvider) {
+    return GestureDetector(
+      onTap: () {
+        if (statisticsTileType == StatisticsTileType.countriesVisited &&
+            userProvider.user!.getVisitedCountries().isNotEmpty) {
+          _showVisitedCountriesDialog(context, userProvider);
+        }
+      },
+      child: Container(
+        height: 85.h,
+        width: 85.w,
+        decoration: BoxDecoration(
+          color: const Color(0xFF92A332).withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildIcon(),
+            SizedBox(height: 4.h),
+            _buildStatistic(userProvider),
+          ],
+        ),
       ),
     );
   }
@@ -117,7 +169,7 @@ class StatisticsTile extends StatelessWidget {
       children: [
         _buildTitle(),
         SizedBox(height: 4.h),
-        _buildStatisticContainer(userProvider),
+        _buildStatisticContainer(context, userProvider),
       ],
     );
   }

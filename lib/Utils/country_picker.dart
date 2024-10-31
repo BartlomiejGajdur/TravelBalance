@@ -55,6 +55,7 @@ class _CountryPickerState extends State<CountryPicker> {
   }
 
   void _addCountry(Country country) {
+
     setState(() {
       if (!countries.contains(country)) {
         countries.add(country);

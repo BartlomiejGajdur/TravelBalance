@@ -100,7 +100,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
             ),
           ),
           SizedBox(
-            height: 30.h,
+            height: 20.h,
           ),
           CountryPicker(onCountriesChanged: _onCountriesChanged),
           const Spacer(),
