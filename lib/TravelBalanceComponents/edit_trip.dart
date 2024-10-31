@@ -1,10 +1,12 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/delete_dialog.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,11 +26,13 @@ class _EditTripState extends State<EditTrip> {
   final TextEditingController placeholderController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late CustomImage imagePicked;
+  List<Country> countries = [];
   @override
   void initState() {
     super.initState();
     imagePicked = widget.tripProvider.trip.customImage;
     tripNameController.text = widget.tripProvider.trip.name;
+    countries = widget.tripProvider.trip.countries;
   }
 
   @override
@@ -42,12 +46,16 @@ class _EditTripState extends State<EditTrip> {
     return null;
   }
 
-  void _editTrip(
-      BuildContext context, TripProvider tripProvider, String newName) {
+  void _onCountriesChanged(List<Country> countriesChange) {
+    countries = countriesChange;
+  }
+
+  void _editTrip(BuildContext context, TripProvider tripProvider,
+      String newName, List<Country> countries) {
     int? tripId = tripProvider.trip.getId();
     if (tripId != null) {
-      ApiService().editTrip(tripId, newName, imagePicked);
-      tripProvider.editTrip(newName, imagePicked);
+      ApiService().editTrip(tripId, newName, imagePicked, countries);
+      tripProvider.editTrip(newName, imagePicked, countries);
     }
     Navigator.of(context).pop();
   }
@@ -60,7 +68,7 @@ class _EditTripState extends State<EditTrip> {
 
   Widget _buildFormContent(BuildContext context) {
     return SizedBox(
-      height: 350.h,
+      height: 500.h,
       child: Form(
         key: formKey,
         child: Column(
@@ -91,11 +99,10 @@ class _EditTripState extends State<EditTrip> {
               ],
             ),
             SizedBox(height: 30.h),
-            CustomTextFormField(
-              controller: placeholderController,
-              labelText: "Country",
-              hintText: "Enter country",
-              validator: placeholderValidator,
+            CountryPicker(
+              countries: widget.tripProvider.trip.countries,
+              onCountriesChanged: _onCountriesChanged,
+              listHeight: 150.h,
             ),
             SizedBox(height: 12.h),
             Padding(
@@ -130,8 +137,8 @@ class _EditTripState extends State<EditTrip> {
                 ),
                 SizedBox(width: 11.w),
                 GestureDetector(
-                  onTap: () => _editTrip(
-                      context, widget.tripProvider, tripNameController.text),
+                  onTap: () => _editTrip(context, widget.tripProvider,
+                      tripNameController.text, countries),
                   child: Container(
                     height: 56.h,
                     width: 273.w,

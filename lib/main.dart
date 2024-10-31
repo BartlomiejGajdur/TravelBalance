@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/pages/create_expense_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
@@ -28,6 +29,8 @@ SvgPicture.asset(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CountryPicker.loadCountryData();
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   bool wasIntroductionScreenShown =
       prefs.getBool('wasIntroductionScreenShown') ?? false;

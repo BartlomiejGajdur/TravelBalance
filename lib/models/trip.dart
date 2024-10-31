@@ -1,4 +1,6 @@
+import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
@@ -6,6 +8,7 @@ class Trip {
   int? _id;
   String _name;
   CustomImage _customImage;
+  List<Country> _countries;
   double _tripCost;
   DateTime _dateTime;
   List<Expense> _expenses;
@@ -15,6 +18,7 @@ class Trip {
       {int? id,
       required String name,
       CustomImage customImage = CustomImage.defaultLandscape,
+      required List<Country> countries,
       required double tripCost,
       required DateTime dateTime,
       required List<Expense> expenses})
@@ -24,6 +28,7 @@ class Trip {
         _dateTime = dateTime,
         _tripCost = tripCost,
         _expenses = expenses,
+        _countries = countries,
         _expensesByDate = _groupExpensesByDate(expenses),
         _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
 
@@ -31,6 +36,7 @@ class Trip {
   CustomImage get customImage => _customImage;
   double get tripCost => _tripCost;
   DateTime get dateTime => _dateTime;
+  List<Country> get countries => _countries;
   List<Expense> get expenses => _expenses;
   Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
   Map<Category, double> get categoriesWithMoney => _categoriesWithMoney;
@@ -60,12 +66,19 @@ class Trip {
     final List<Expense> expenses = (data['expenses'] as List)
         .map((expenseData) => Expense.fromJson(expenseData, id))
         .toList();
+    final List<Country> countries =
+        (data['countries'] as List).map((countryData) {
+      final int id = countryData['id'];
+      return CountryPicker.getCountryById(id)!;
+    }).toList();
+
     return Trip(
         id: id,
         name: name,
         customImage: getImageById(image),
         dateTime: dateTime,
         tripCost: tripCost,
+        countries: countries,
         expenses: expenses);
   }
 
@@ -131,9 +144,10 @@ class Trip {
     _name = newName;
   }
 
-  void editTrip(String newName, CustomImage newImage) {
+  void editTrip(String newName, CustomImage newImage, List<Country> countries) {
     _name = newName;
     _customImage = newImage;
+    _countries = countries;
   }
 
   static Map<DateTime, List<Expense>> _groupExpensesByDate(
@@ -152,17 +166,15 @@ class Trip {
     }
 
     var sortedKeys = expensesByDate.keys.toList()
-      ..sort((a, b) => b.compareTo(a)); 
-
+      ..sort((a, b) => b.compareTo(a));
 
     Map<DateTime, List<Expense>> sortedExpensesByDate = {
       for (var key in sortedKeys) key: expensesByDate[key]!
     };
 
-
     sortedExpensesByDate.forEach((date, expenses) {
-      expenses.sort((a, b) => b.dateTime.toString().compareTo(
-          a.dateTime.toString())); 
+      expenses.sort(
+          (a, b) => b.dateTime.toString().compareTo(a.dateTime.toString()));
     });
 
     return sortedExpensesByDate;

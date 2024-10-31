@@ -2,6 +2,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
 class TripProvider with ChangeNotifier {
@@ -20,8 +21,8 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
-  void editTrip(String newName, CustomImage newImage) {
-    trip.editTrip(newName, newImage);
+  void editTrip(String newName, CustomImage newImage, List<Country> countries) {
+    trip.editTrip(newName, newImage, countries);
     notifyUi();
   }
 

@@ -1,11 +1,13 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
+import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   CustomImage imagePicked = CustomImage.defaultLandscape;
+  List<Country> countries = [];
 
   @override
   void dispose() {
@@ -40,13 +43,13 @@ class _CreateTripPageState extends State<CreateTripPage> {
   Future<bool> _onCreateTripPressed(BuildContext context) async {
     final String tripName = tripNameController.text;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+    print(countries.length);
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
-    userProvider.addTrip(tripName, imagePicked);
+    userProvider.addTrip(tripName, imagePicked, countries);
     Navigator.of(context).pop();
 
-    int? tripId = await ApiService().addTrip(tripName, imagePicked);
+    int? tripId = await ApiService().addTrip(tripName, imagePicked, countries);
 
     if (tripId != null) {
       userProvider.setTripIdOfLastAddedTrip(tripId);
@@ -66,6 +69,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
     setState(() {
       imagePicked = newImage;
     });
+  }
+
+  void _onCountriesChanged(List<Country> countriesChange) {
+    countries = countriesChange;
   }
 
   Widget _buildFormContent(BuildContext context) {
@@ -95,12 +102,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
           SizedBox(
             height: 30.h,
           ),
-          CustomTextFormField(
-            controller: placeholder,
-            labelText: "Country",
-            hintText: "Enter country",
-            validator: placeholderValidator,
-          ),
+          CountryPicker(onCountriesChanged: _onCountriesChanged),
           const Spacer(),
           Padding(
             padding: EdgeInsets.only(bottom: 35.0.h),

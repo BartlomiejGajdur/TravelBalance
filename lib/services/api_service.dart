@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -200,7 +202,7 @@ class ApiService {
           responseBody['password']
         ].where((error) => error != null).map((error) {
           if (error is List) {
-            return error.join(" "); 
+            return error.join(" ");
           }
           return error.toString();
         }).join(" ");
@@ -297,9 +299,16 @@ class ApiService {
     }
   }
 
-  Future<int?> addTrip(String tripName, CustomImage customImage) async {
+  Future<int?> addTrip(
+      String tripName, CustomImage customImage, List<Country> countries) async {
     try {
-      final body = {'name': tripName, 'image_id': customImage.index};
+      final body = {
+        'name': tripName,
+        'image_id': customImage.index,
+        'countries': countries
+            .map((country) => CountryPicker.getIdByCountry(country))
+            .toList(),
+      };
 
       const endPoint = 'trip/';
       final response = await http.post(
@@ -317,6 +326,8 @@ class ApiService {
         return responseData["id"];
       } else {
         debugPrint('Add Trip failed with status: ${response.statusCode}');
+        final responseData = jsonDecode(response.body);
+        print(responseData.toString());
         return null;
       }
     } catch (e) {
@@ -349,10 +360,18 @@ class ApiService {
     }
   }
 
-  Future<bool> editTrip(
-      int id, String tripName, CustomImage customImage) async {
+  Future<bool> editTrip(int id, String tripName, CustomImage customImage,
+      List<Country> countries) async {
     try {
-      final body = {'name': tripName, 'image_id': customImage.index};
+      final body = {
+        'name': tripName,
+        'image_id': customImage.index,
+        'countries': countries
+            .map((country) => CountryPicker.getIdByCountry(country))
+            .toList(),
+      };
+
+      print(body.toString());
 
       final endPoint = 'trip/$id/';
       final response = await http.put(

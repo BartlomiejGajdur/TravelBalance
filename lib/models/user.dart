@@ -1,5 +1,6 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 
@@ -45,11 +46,13 @@ class User {
     return totalCost;
   }
 
-  void addTrip(String tripName, CustomImage customImage) {
+  void addTrip(
+      String tripName, CustomImage customImage, List<Country> countries) {
     Trip newTrip = Trip(
         name: tripName,
         customImage: customImage,
         dateTime: DateTime.now(),
+        countries: countries,
         tripCost: 0.0,
         expenses: []);
     _trips.insert(0, newTrip);
