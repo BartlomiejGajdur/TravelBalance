@@ -109,8 +109,8 @@ class StatisticsTile extends StatelessWidget {
         return Container(
           height: calculateHeight,
           width: 350.w,
-          padding: EdgeInsets.all(16.0),
-          child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
             height: calculateHeight - offset,
             child: ListView.builder(
               padding: EdgeInsets.zero,

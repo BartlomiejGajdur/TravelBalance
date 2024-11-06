@@ -35,7 +35,7 @@ class CountryPicker extends StatefulWidget {
     return Country.tryParse(countryName);
   }
 
-  CountryPicker(
+  const CountryPicker(
       {super.key, this.countries, this.onCountriesChanged, this.listHeight});
 
   @override
@@ -89,16 +89,16 @@ class _CountryPickerState extends State<CountryPicker> {
           child: Container(
             width: 200.w,
             height: 50.h,
-            child: Center(child: Text("Pick a Country")),
             decoration: BoxDecoration(
                 border: Border.all(width: 1, color: primaryColor),
                 borderRadius: BorderRadius.circular(12)),
+            child: const Center(child: Text("Pick a Country")),
           ),
         ),
         SizedBox(
           height: 15.h,
         ),
-        Container(
+        SizedBox(
           height: listHeight,
           child: ListView.builder(
               padding: EdgeInsets.zero,
@@ -111,7 +111,7 @@ class _CountryPickerState extends State<CountryPicker> {
                     leading: Text(country.flagEmoji),
                     title: Text(country.displayNameNoCountryCode),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () => _removeCountry(country),
                     ),
                   ),
