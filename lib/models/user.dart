@@ -46,12 +46,15 @@ class User {
     return totalCost;
   }
 
-  Set<Country> getVisitedCountries() {
+  List<Country> getVisitedCountries() {
     Set<Country> countries = {};
     for (var trip in _trips) {
       countries.addAll(trip.countries);
     }
-    return countries;
+    final sortedList = countries.toList();
+    sortedList.sort((a, b) => a.displayName.compareTo(b.countryCode));
+
+    return sortedList;
   }
 
   void addTrip(

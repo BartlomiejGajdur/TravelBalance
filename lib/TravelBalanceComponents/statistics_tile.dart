@@ -98,8 +98,8 @@ class StatisticsTile extends StatelessWidget {
     double calculateHeight = sizeOfCountries * 61.h + offset;
 
     // Upewnij się, że wysokość nie przekracza 700.h
-    if (calculateHeight > 700.h) {
-      calculateHeight = 700.h;
+    if (calculateHeight > 500.h) {
+      calculateHeight = 500.h;
     }
 
     showBlurDialog(
