@@ -4,7 +4,6 @@ import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -149,7 +148,7 @@ class AppDrawer extends StatelessWidget {
                       color: secondaryTextColor,
                     ),
                   )
-                : Text(""),
+                : const Text(""),
           ],
         ),
       ),
@@ -162,7 +161,7 @@ void showAbout(BuildContext context) {
       context: context,
       childBuilder: (ctx) {
         return Container(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           width: 335.w,
           height: 300.h,
           child: Column(
@@ -186,7 +185,7 @@ void showAbout(BuildContext context) {
                   style: GoogleFonts.outfit(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF718096),
+                      color: const Color(0xFF718096),
                       letterSpacing: 0.3),
                   textAlign: TextAlign.center,
                 ),
@@ -199,12 +198,12 @@ void showAbout(BuildContext context) {
 
 void showSendFeedback(BuildContext context) {
   final TextEditingController feedbackController = TextEditingController();
-  final int maxLength = 200;
+  const int maxLength = 200;
   showBlurDialog(
       context: context,
       childBuilder: (ctx) {
         return Container(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           width: 335.w,
           height: 450.h,
           child: Column(
@@ -229,7 +228,7 @@ void showSendFeedback(BuildContext context) {
                   style: GoogleFonts.outfit(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF718096),
+                      color: const Color(0xFF718096),
                       letterSpacing: 0.3),
                   textAlign: TextAlign.center,
                 ),
@@ -250,7 +249,7 @@ void showSendFeedback(BuildContext context) {
                       hintStyle: GoogleFonts.outfit(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFF718096),
+                        color: const Color(0xFF718096),
                       ),
                       border: OutlineInputBorder(
                         borderSide:
@@ -269,7 +268,7 @@ void showSendFeedback(BuildContext context) {
                     ),
                   )),
               SizedBox(height: 4.h),
-              CustomButton(buttonText: "Send Feedback")
+              const CustomButton(buttonText: "Send Feedback")
               // Wyświetlamy liczbę znaków
             ],
           ),

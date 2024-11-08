@@ -33,19 +33,19 @@ class _CurrencypickState extends State<Currencypick> {
         color: Colors.grey[200],
         margin: EdgeInsets.fromLTRB(10.w, 0, horizontalPadding, 0),
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
                 CurrencyUtils.currencyToEmoji(widget.currency),
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
               Text(
                 " ${widget.currency.code}",
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
-              Icon(Icons.arrow_drop_up),
+              const Icon(Icons.arrow_drop_up),
             ],
           ),
         ),
