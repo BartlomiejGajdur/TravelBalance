@@ -3,6 +3,14 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+Currency currency(String currencyCode) {
+  Currency? currency = CurrencyService().findByCode(currencyCode);
+  if (currency == null) {
+    throw ArgumentError("Cannot find Currency with given currency Code");
+  }
+  return currency;
+}
+
 class Currencypick extends StatefulWidget {
   Currency currency;
   final Function(Currency) onCurrencyChanged;

@@ -10,7 +10,7 @@ void main() {
     });
 
     test('formattedStringInDateTime parses date correctly', () {
-      final dateString = '2024-11-07';
+      const dateString = '2024-11-07';
       final dateTime = formattedStringInDateTime(dateString);
       expect(dateTime.year, 2024);
       expect(dateTime.month, 11);

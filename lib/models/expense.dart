@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -84,7 +85,7 @@ class Expense {
     final double cost = data['cost'].toDouble();
     final Category category = Category.values[data['category']];
     final Currency currency =
-        CurrencyService().findByCode(data['currency'] ?? "USD")!;
+        CurrencyService().findByCode(data['currency'] ?? defaultCurrencyCode)!;
     DateTime dateTime = DateTime.parse(data['date']);
     return Expense(
       id: id,

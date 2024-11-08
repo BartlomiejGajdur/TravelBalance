@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
 import 'package:country_picker/country_picker.dart';
@@ -18,7 +19,7 @@ class User {
       Currency? baseCurrency})
       : _trips = trips,
         _statistics = statistics,
-        _baseCurrency = getCurrency("USD") {
+        _baseCurrency = getCurrency(defaultCurrencyCode) {
     sortTrips(SortOrder.ascending);
   }
 
@@ -40,7 +41,7 @@ class User {
 
   static Currency getCurrency(String countryCode) {
     final currencyFromCountryCode = CurrencyService().findByCode(countryCode);
-    return currencyFromCountryCode ?? CurrencyService().findByCode("USD")!;
+    return currencyFromCountryCode ?? defaultCurrency;
   }
 
   void sortTrips(SortOrder sortOrder) {

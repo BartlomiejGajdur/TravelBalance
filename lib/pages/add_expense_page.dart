@@ -5,6 +5,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/date_picker.dart';
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
@@ -45,8 +46,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
 
   void _initializeCurrency() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    _expenseCurrency =
-        userProvider.user?.baseCurrency ?? CurrencyService().findByCode("USD")!;
+    _expenseCurrency = userProvider.user?.baseCurrency ?? defaultCurrency;
   }
 
   @override
