@@ -12,6 +12,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchWholeUserData() async {
     _user = await ApiService().fetchUserData();
+    _user!.recalculateCostInBaseCurrency();
     notifyListeners();
   }
 
