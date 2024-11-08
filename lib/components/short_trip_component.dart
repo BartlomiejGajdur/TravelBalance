@@ -25,7 +25,8 @@ class ShortTripComponent extends StatelessWidget {
       child: GestureDetector(
         onTap: moveToDetails,
         child: Padding(
-          padding: EdgeInsets.only(left: 12.0.w, right: 12.0.w, top: 12.0.h),
+          padding: EdgeInsets.only(
+              left: 12.0.w, right: 12.0.w, bottom: 12.0.h, top: 3.h),
           child: Slidable(
             endActionPane: ActionPane(
               motion: const StretchMotion(),

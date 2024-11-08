@@ -228,11 +228,13 @@ class _TripListPageState extends State<TripListPage> {
             ],
           ),
         ),
-        SizedBox(height: 5.h),
         Align(
           alignment: Alignment.centerRight,
           child: Switch(
             value: isSwitched,
+            trackOutlineWidth: WidgetStatePropertyAll(0),
+            inactiveThumbColor: primaryColor,
+            inactiveTrackColor: secondaryColor.withOpacity(0.5),
             activeColor: primaryColor,
             onChanged: (value) {
               setState(() {
