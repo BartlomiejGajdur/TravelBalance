@@ -1,5 +1,6 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
+import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -99,10 +100,16 @@ class AppDrawer extends StatelessWidget {
   Widget clickableListTile(
       BuildContext context, String givenText, Option option,
       [String? moveTo]) {
-    final String baseCurrencyCode = Provider.of<UserProvider>(
+    final User? user = Provider.of<UserProvider>(
       context,
       listen: true,
-    ).user!.baseCurrency.code;
+    ).user;
+    String baseCurrencyCode;
+    if (user != null) {
+      baseCurrencyCode = user.baseCurrency.code;
+    } else {
+      baseCurrencyCode = defaultCurrencyCode;
+    }
 
     return GestureDetector(
       onTap: () {
@@ -342,7 +349,11 @@ void showCurrency(BuildContext context) {
     showCurrencyName: true,
     showCurrencyCode: true,
     onSelect: (Currency newCurrency) {
-      userProvider.setBaseCurrency(newCurrency);
+      User? user = userProvider.user;
+      if (user != null) {
+        userProvider.setBaseCurrency(newCurrency);
+        //ApiService().updateBaseCurrency(user.uuid ,newCurrency);
+      }
     },
   );
 }

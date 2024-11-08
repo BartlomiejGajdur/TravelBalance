@@ -230,17 +230,20 @@ class _TripListPageState extends State<TripListPage> {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: Switch(
-            value: isSwitched,
-            trackOutlineWidth: WidgetStatePropertyAll(0),
-            inactiveThumbColor: primaryColor,
-            inactiveTrackColor: secondaryColor.withOpacity(0.5),
-            activeColor: primaryColor,
-            onChanged: (value) {
-              setState(() {
-                isSwitched = value;
-              });
-            },
+          child: Transform.scale(
+            scale: 0.8, 
+            child: Switch(
+              value: isSwitched,
+              trackOutlineWidth: WidgetStatePropertyAll(0),
+              inactiveThumbColor: primaryColor,
+              inactiveTrackColor: secondaryColor.withOpacity(0.5),
+              activeColor: primaryColor,
+              onChanged: (value) {
+                setState(() {
+                  isSwitched = value;
+                });
+              },
+            ),
           ),
         ),
         isSwitched

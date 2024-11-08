@@ -7,6 +7,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -67,6 +68,8 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
+        debugPrint('Fetch user correct');
+        debugPrint(jsonDecode(response.body).toString());
         return User.fromJson(jsonDecode(response.body));
       } else {
         debugPrint(
@@ -465,12 +468,13 @@ class ApiService {
   }
 
   Future<int?> addExpense(int tripId, String title, double cost,
-      Category category, DateTime dateTime) async {
+      Currency currency, Category category, DateTime dateTime) async {
     try {
       var body = {
         'cost': cost,
         'category': category.index,
         'date': dateTime.toIso8601String(),
+        'currency': currency.code
       };
 
       if (title.isNotEmpty) {
@@ -502,6 +506,35 @@ class ApiService {
     } catch (e) {
       debugPrint("Error Expense Trip in: $e");
       return null;
+    }
+  }
+
+  Future<bool> updateBaseCurrency(String uuid, Currency baseCurrency) async {
+    try {
+      final body = {
+        'base_currency': baseCurrency.code,
+      };
+
+      final endPoint = 'user/$uuid/';
+
+      final response = await http.patch(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('Update Base Currency successful');
+        return true;
+      } else {
+        throw 'Update Base Currency failed with status: ${response.statusCode}';
+      }
+    } catch (e) {
+      debugPrint("Update Base Currency in: $e");
+      rethrow;
     }
   }
 }

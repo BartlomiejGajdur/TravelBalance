@@ -12,34 +12,39 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchWholeUserData() async {
     _user = await ApiService().fetchUserData();
-    _user!.recalculateCostInBaseCurrency();
-    notifyListeners();
+    if (_user != null) {
+      _user!.recalculateCostInBaseCurrency();
+      notifyListeners();
+    }
   }
 
   void addTrip(
       String tripName, CustomImage customImage, List<Country> countries) {
+    if (_user == null) return;
     _user!.addTrip(tripName, customImage, countries);
     notifyListeners();
   }
 
   void setTripIdOfLastAddedTrip(int tripId) {
-    assert(_user!.trips.isNotEmpty, "Trips can't be empty");
+    if (_user == null || _user!.trips.isEmpty) return;
     _user!.trips[0].setId(tripId);
   }
 
   void deleteLastAddedTrip() {
-    assert(_user!.trips.isNotEmpty, "Trips can't be empty");
+    if (_user == null || _user!.trips.isEmpty) return;
     _user!.trips.removeAt(0);
     notifyListeners();
   }
 
   void setBaseCurrency(Currency newCurrency) {
+    if (_user == null) return;
     _user!.setBaseCurrency(newCurrency);
     _user!.recalculateCostInBaseCurrency();
     notifyListeners();
   }
 
   void deleteTrip(int tripId) {
+    if (_user == null) return;
     _user!.deleteTrip(tripId);
     notifyListeners();
   }

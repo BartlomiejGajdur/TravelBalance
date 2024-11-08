@@ -1,3 +1,4 @@
+import 'package:TravelBalance/TravelBalanceComponents/currency_pick.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
@@ -12,14 +13,13 @@ class User {
   List<Trip> _trips;
   Statistics _statistics;
   Currency _baseCurrency;
-
   User(
       {required List<Trip> trips,
       required Statistics statistics,
-      Currency? baseCurrency})
+      required Currency baseCurrency})
       : _trips = trips,
         _statistics = statistics,
-        _baseCurrency = getCurrency(defaultCurrencyCode) {
+        _baseCurrency = baseCurrency {
     sortTrips(SortOrder.ascending);
   }
 
@@ -32,7 +32,13 @@ class User {
         .map((jsonData) => Trip.fromJson(jsonData))
         .toList();
     Statistics statistics = Statistics.fromJson(json['statistics']);
-    return User(trips: trips, statistics: statistics);
+    //TBD Not working
+    //Currency baseCurrency =
+    //    currency(json['base_currency'] ?? defaultCurrencyCode);
+    return User(
+        trips: trips,
+        statistics: statistics,
+        baseCurrency: currency(defaultCurrencyCode));
   }
 
   void setBaseCurrency(Currency newCurrency) {

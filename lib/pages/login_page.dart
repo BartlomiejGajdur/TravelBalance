@@ -78,7 +78,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
       print("User email: ${appleCredential.email}");
-      
     } catch (error) {
       usernameController.text = error.toString();
     }
@@ -97,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 108.h),
               GestureDetector(
                 onTap: () => fillLoginAndPassword(
-                    context, "testowy_user", "testowehaslo123!", true),
+                    context, "testowy_user", "testowehaslo123", true),
                 onDoubleTap: () => fillLoginAndPassword(
                     context, "noTrips", "testowehaslo123!", false),
                 child: Padding(

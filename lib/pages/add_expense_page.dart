@@ -142,6 +142,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
       tripId,
       title,
       cost,
+      _expenseCurrency,
       category,
       dateTime,
     );
