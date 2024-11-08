@@ -111,7 +111,10 @@ class ExpenseChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _buildPieChartSections() {
-    return tripProvider.trip.categoriesWithMoney.entries.map((entry) {
+    return tripProvider.trip
+        .groupCategoriesWithMoneyInBaseCurrency()
+        .entries
+        .map((entry) {
       final Category category = entry.key;
       final double amount = entry.value;
 

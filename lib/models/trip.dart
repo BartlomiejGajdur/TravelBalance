@@ -214,4 +214,18 @@ class Trip {
 
     return categoriesWithMoney;
   }
+
+  Map<Category, double> groupCategoriesWithMoneyInBaseCurrency() {
+    Map<Category, double> categoriesWithMoney = {};
+    for (var expense in expenses) {
+      if (categoriesWithMoney.containsKey(expense.category)) {
+        categoriesWithMoney[expense.category] =
+            categoriesWithMoney[expense.category]! + expense.costInBaseCurrency;
+      } else {
+        categoriesWithMoney[expense.category] = expense.costInBaseCurrency;
+      }
+    }
+
+    return categoriesWithMoney;
+  }
 }
