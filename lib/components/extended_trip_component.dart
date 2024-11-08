@@ -57,16 +57,51 @@ class ExtendedTripComponent extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12.r),
-                      topRight: Radius.circular(12.r),
-                    ),
-                    child: Image.asset(
-                      getPathToImage(trip.customImage),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                  child: Stack(
+                    children: [
+                      // Obraz
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12.r),
+                          topRight: Radius.circular(12.r),
+                        ),
+                        child: Image.asset(
+                          getPathToImage(trip.customImage),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Row(
+                          children: [
+                            for (var country in trip.countries)
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 12,
+                                    backgroundColor: Colors
+                                        .grey[200], // Opcjonalnie kolor tła
+                                    child: Center(
+                                      child: Text(
+                                        country.flagEmoji,
+                                        style: TextStyle(
+                                          fontSize:
+                                              14, // Zwiększony rozmiar dla lepszej widoczności
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: 4
+                                          .w), // Dodanie przestrzeni po każdej fladze
+                                ],
+                              ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 Padding(
