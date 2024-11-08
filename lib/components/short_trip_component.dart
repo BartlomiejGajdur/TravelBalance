@@ -72,7 +72,7 @@ class ShortTripComponent extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${trip.tripCost.toStringAsFixed(2)}${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}',
+                        '${trip.sumOfEachExpenseCostInBaseCurrency().toStringAsFixed(2)}${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,

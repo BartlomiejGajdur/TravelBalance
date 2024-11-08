@@ -98,7 +98,7 @@ class ExtendedTripComponent extends StatelessWidget {
                         ),
                         SizedBox(height: 6.h),
                         Text(
-                          "${trip.tripCost.toStringAsFixed(2)}${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}",
+                          "${trip.sumOfEachExpenseCostInBaseCurrency().toStringAsFixed(2)}${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}",
                           style: GoogleFonts.inter(
                             fontSize: 12.sp,
                             color: primaryColor,

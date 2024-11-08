@@ -76,21 +76,21 @@ class StatisticsTile extends StatelessWidget {
         break;
       case StatisticsTileType.spendings:
         statistic =
-            '${user.getWholeExpenses().toStringAsFixed(2)}${user.baseCurrency.symbol}';
+            '${user.getWholeExpensesInBaseCurrency().toStringAsFixed(2)}${user.baseCurrency.symbol}';
 
         break;
     }
 
-    return Text(
-      statistic,
-      style: GoogleFonts.outfit(
-        fontSize: 12.sp,
-        color: secondaryTextColor,
-        fontWeight: FontWeight.w600,
-      ),
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
+    return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          statistic,
+          style: GoogleFonts.outfit(
+            fontSize: 12.sp,
+            color: secondaryTextColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ));
   }
 
   void _showVisitedCountriesDialog(

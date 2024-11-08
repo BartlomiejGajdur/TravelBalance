@@ -63,6 +63,20 @@ class User {
     return totalCost;
   }
 
+  double getWholeExpensesInBaseCurrency() {
+    double totalCost = 0.0;
+    for (var trip in _trips) {
+      totalCost += trip.sumOfEachExpenseCostInBaseCurrency();
+    }
+    return totalCost;
+  }
+
+  void recalculateCostInBaseCurrency() {
+    for (var trip in trips) {
+      trip.recalculateEachCostInBaseCurrency(_baseCurrency.code);
+    }
+  }
+
   List<Country> getVisitedCountries() {
     Set<Country> countries = {};
     for (var trip in _trips) {

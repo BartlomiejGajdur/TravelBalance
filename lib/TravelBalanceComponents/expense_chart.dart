@@ -47,7 +47,7 @@ class ExpenseChart extends StatelessWidget {
                   children: [
                     FittedBox(
                       child: Text(
-                        "${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}${tripProvider.trip.tripCost.toStringAsFixed(2)}",
+                        "${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}${tripProvider.trip.sumOfEachExpenseCostInBaseCurrency().toStringAsFixed(2)}",
                         style: GoogleFonts.outfit(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,

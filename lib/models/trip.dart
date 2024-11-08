@@ -1,5 +1,7 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -106,17 +108,33 @@ class Trip {
     print("----------------END------------------");
   }
 
+  void recalculateEachCostInBaseCurrency(String baseCurrency) {
+    for (var expense in _expenses) {
+      expense.setCostInBaseCurrency(CurrencyConverter.convertImplicit(
+          expense.cost, expense.currency.code, baseCurrency, _dateTime));
+    }
+  }
+
+  double sumOfEachExpenseCostInBaseCurrency() {
+    double total = 0.0;
+    for (var expense in _expenses) {
+      total += expense.costInBaseCurrency;
+    }
+    return total;
+  }
+
   double calculateTripCost() {
-    return expenses.fold(0, (sum, expense) => sum + expense.cost);
+    return expenses.fold(0, (sum, expense) => sum + expense.costInBaseCurrency);
   }
 
   void addExpense(int tripId, String title, double cost, Currency currency,
-      Category category, DateTime dateTime) {
+      double costInBaseCurrency, Category category, DateTime dateTime) {
     Expense newExpense = Expense(
       tripId: tripId,
       title: title,
       cost: cost,
       currency: currency,
+      costInBaseCurrency: costInBaseCurrency,
       category: category,
       dateTime: dateTime,
     );

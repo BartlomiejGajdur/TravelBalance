@@ -2,6 +2,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,10 @@ class TripProvider with ChangeNotifier {
 
   void addExpense(int tripId, String title, double cost, Currency currency,
       Category category, DateTime dateTime) {
-    trip.addExpense(tripId, title, cost, currency, category, dateTime);
+    double convertedToBaseCurrency = CurrencyConverter.convertExplicit(
+        cost, currency, userProvider.user!.baseCurrency, trip.dateTime);
+    trip.addExpense(tripId, title, cost, currency, convertedToBaseCurrency,
+        category, dateTime);
     notifyUi();
   }
 

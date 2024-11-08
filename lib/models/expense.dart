@@ -19,25 +19,27 @@ class Expense {
   String _title;
   double _cost;
   Currency _currency;
-  final double _costInBaseCurrency = 0.0;
+  double _costInBaseCurrency;
   Category _category;
   DateTime _dateTime;
 
-  Expense({
-    int? id,
-    required final int tripId,
-    required String title,
-    required double cost,
-    required Currency currency,
-    required Category category,
-    required DateTime dateTime,
-  })  : _id = id,
+  Expense(
+      {int? id,
+      required final int tripId,
+      required String title,
+      required double cost,
+      required Currency currency,
+      required Category category,
+      required DateTime dateTime,
+      double costInBaseCurrency = 0.0})
+      : _id = id,
         _tripId = tripId,
         _title = title,
         _cost = cost,
         _category = category,
         _dateTime = dateTime,
-        _currency = currency;
+        _currency = currency,
+        _costInBaseCurrency = costInBaseCurrency;
 
   int get tripId => _tripId;
   String get title => _title;
@@ -77,6 +79,10 @@ class Expense {
 
   void setDateTime(DateTime dateTime) {
     _dateTime = dateTime;
+  }
+
+  void setCostInBaseCurrency(double costInBaseCurrency) {
+    _costInBaseCurrency = costInBaseCurrency;
   }
 
   factory Expense.fromJson(Map<String, dynamic> data, final int tripId) {

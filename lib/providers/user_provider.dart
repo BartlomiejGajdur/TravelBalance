@@ -34,7 +34,7 @@ class UserProvider with ChangeNotifier {
 
   void setBaseCurrency(Currency newCurrency) {
     _user!.setBaseCurrency(newCurrency);
-    // Przeliczenie wszystkich tripów i wartosci ich expenseInBaseCurrency
+    _user!.recalculateCostInBaseCurrency();
     notifyListeners();
   }
 
