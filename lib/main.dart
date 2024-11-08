@@ -1,5 +1,5 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
-import 'package:TravelBalance/pages/create_expense_page.dart';
+import 'package:TravelBalance/pages/add_expense_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';

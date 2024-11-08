@@ -17,6 +17,7 @@ class CustomTextField extends StatefulWidget {
   final String? hintText;
   final ClickAction clickAction;
   final bool numbersOnly;
+  final bool rightPadding;
 
   const CustomTextField({
     super.key,
@@ -28,6 +29,7 @@ class CustomTextField extends StatefulWidget {
     this.clickAction = ClickAction.None,
     this.numbersOnly = false,
     this.hintText,
+    this.rightPadding = true,
   });
 
   @override
@@ -61,7 +63,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: EdgeInsets.only(
         left: widget.textFieldHorizontalPadding ?? horizontalPadding,
-        right: widget.textFieldHorizontalPadding ?? horizontalPadding,
+        right: widget.rightPadding
+            ? widget.textFieldHorizontalPadding ?? horizontalPadding
+            : 0,
         bottom: widget.textFieldBottomPadding ?? 0.0,
       ),
       child: TextFormField(
