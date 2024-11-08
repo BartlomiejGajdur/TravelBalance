@@ -1,10 +1,12 @@
 import 'package:TravelBalance/Utils/delete_dialog.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ShortTripComponent extends StatelessWidget {
   final Trip trip;
@@ -69,7 +71,7 @@ class ShortTripComponent extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${trip.tripCost.toStringAsFixed(2)}\$',
+                        '${trip.tripCost.toStringAsFixed(2)}${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,

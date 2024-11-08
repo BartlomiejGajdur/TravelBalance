@@ -65,16 +65,18 @@ class StatisticsTile extends StatelessWidget {
   Widget _buildStatistic(UserProvider userProvider) {
     String statistic;
 
+    final user = userProvider.user!;
+
     switch (statisticsTileType) {
       case StatisticsTileType.totalTrips:
-        statistic = userProvider.user!.trips.length.toString();
+        statistic = user.trips.length.toString();
         break;
       case StatisticsTileType.countriesVisited:
-        statistic = userProvider.user!.getVisitedCountries().length.toString();
+        statistic = user.getVisitedCountries().length.toString();
         break;
       case StatisticsTileType.spendings:
         statistic =
-            '${userProvider.user!.getWholeExpenses().toStringAsFixed(2)}\$';
+            '${user.getWholeExpenses().toStringAsFixed(2)}${user.baseCurrency.symbol}';
 
         break;
     }

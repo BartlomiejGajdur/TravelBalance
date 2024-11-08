@@ -2,10 +2,12 @@ import 'package:TravelBalance/Utils/category_item.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ExpenseChart extends StatelessWidget {
   final Map<Category, double> categoriesWithMoney;
@@ -45,7 +47,7 @@ class ExpenseChart extends StatelessWidget {
                   children: [
                     FittedBox(
                       child: Text(
-                        "\$${tripProvider.trip.tripCost.toStringAsFixed(2)}",
+                        "${Provider.of<UserProvider>(context, listen: false).user!.baseCurrency.symbol}${tripProvider.trip.tripCost.toStringAsFixed(2)}",
                         style: GoogleFonts.outfit(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,
