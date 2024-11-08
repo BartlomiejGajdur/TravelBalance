@@ -199,27 +199,36 @@ void showAbout(BuildContext context) {
 void showSendFeedback(BuildContext context) {
   final TextEditingController feedbackController = TextEditingController();
   const int maxLength = 200;
+  Set<String> _messageType = {"Other"};
+
+  void onSelectionChanged(Set<String> newMessageType) {
+    _messageType = newMessageType;
+  }
+
   showBlurDialog(
       context: context,
       childBuilder: (ctx) {
         return Container(
           padding: const EdgeInsets.all(0),
           width: 335.w,
-          height: 450.h,
+          height: 460.h,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 25.h),
-              Text(
-                "Share your feedback",
-                style: GoogleFonts.outfit(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  color: mainTextColor,
+              SizedBox(height: 15.h),
+              GestureDetector(
+                onTap: () => print(_messageType.first),
+                child: Text(
+                  "Share your feedback",
+                  style: GoogleFonts.outfit(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                    color: mainTextColor,
+                  ),
                 ),
               ),
               SizedBox(
-                height: 20.h,
+                height: 10.h,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 28.0.w),
@@ -233,12 +242,17 @@ void showSendFeedback(BuildContext context) {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
-                height: 20.h,
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.h),
+                child: CustomSegmentedWidget(
+                  onSelectionChanged: onSelectionChanged,
+                ),
               ),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 17.0.w),
                   child: TextField(
+                    onTapOutside: (event) =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
                     maxLength: maxLength,
                     controller: feedbackController,
                     minLines: 8,
@@ -269,11 +283,50 @@ void showSendFeedback(BuildContext context) {
                   )),
               SizedBox(height: 4.h),
               const CustomButton(buttonText: "Send Feedback")
-              // Wyświetlamy liczbę znaków
             ],
           ),
         );
       });
+}
+
+class CustomSegmentedWidget extends StatefulWidget {
+  void Function(Set<String>) onSelectionChanged;
+  CustomSegmentedWidget({super.key, required this.onSelectionChanged});
+
+  @override
+  State<CustomSegmentedWidget> createState() => _CustomSegmentedWidgetState();
+}
+
+class _CustomSegmentedWidgetState extends State<CustomSegmentedWidget> {
+  Set<String> _selected = {"Other"};
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<String>(
+      segments: <ButtonSegment<String>>[
+        ButtonSegment<String>(value: "Issue", label: Text("Issue")),
+        ButtonSegment<String>(value: "Suggestion", label: Text("Suggestion")),
+        ButtonSegment<String>(value: "Other", label: Text("Other")),
+      ],
+      selected: _selected,
+      showSelectedIcon: false,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.selected)) {
+              return secondaryColor;
+            }
+            return Colors.grey[200]!;
+          },
+        ),
+      ),
+      onSelectionChanged: (Set<String> newValue) {
+        setState(() {
+          _selected = newValue;
+        });
+        widget.onSelectionChanged(newValue);
+      },
+    );
+  }
 }
 
 void moveToChangePassword(BuildContext context) {}
