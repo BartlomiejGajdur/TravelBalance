@@ -78,17 +78,19 @@ class ExtendedTripComponent extends StatelessWidget {
                           children: [
                             for (var country in trip.countries)
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CircleAvatar(
-                                    radius: 12,
+                                    radius: 12.r,
                                     backgroundColor: Colors
                                         .grey[200], // Opcjonalnie kolor tła
                                     child: Center(
                                       child: Text(
                                         country.flagEmoji,
                                         style: TextStyle(
-                                          fontSize:
-                                              14, // Zwiększony rozmiar dla lepszej widoczności
+                                          fontSize: 14
+                                              .sp, // Zwiększony rozmiar dla lepszej widoczności
                                         ),
                                       ),
                                     ),
