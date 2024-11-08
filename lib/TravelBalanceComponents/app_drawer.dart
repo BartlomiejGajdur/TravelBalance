@@ -2,6 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -99,6 +100,11 @@ class AppDrawer extends StatelessWidget {
   Widget clickableListTile(
       BuildContext context, String givenText, Option option,
       [String? moveTo]) {
+    final String baseCurrencyCode = Provider.of<UserProvider>(
+      context,
+      listen: true,
+    ).user!.baseCurrency.code;
+
     return GestureDetector(
       onTap: () {
         switch (option) {
@@ -123,13 +129,28 @@ class AppDrawer extends StatelessWidget {
           Icons.arrow_forward_ios_rounded,
           color: secondaryColor,
         ),
-        title: Text(
-          givenText,
-          style: GoogleFonts.outfit(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w500,
-            color: mainTextColor,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              givenText,
+              style: GoogleFonts.outfit(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: mainTextColor,
+              ),
+            ),
+            option == Option.currency
+                ? Text(
+                    baseCurrencyCode,
+                    style: GoogleFonts.outfit(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: secondaryTextColor,
+                    ),
+                  )
+                : Text(""),
+          ],
         ),
       ),
     );
@@ -258,4 +279,18 @@ void showSendFeedback(BuildContext context) {
 
 void moveToChangePassword(BuildContext context) {}
 
-void showCurrency(BuildContext context) {}
+void showCurrency(BuildContext context) {
+  final userProvider = Provider.of<UserProvider>(
+    context,
+    listen: false,
+  );
+  showCurrencyPicker(
+    context: context,
+    showFlag: true,
+    showCurrencyName: true,
+    showCurrencyCode: true,
+    onSelect: (Currency newCurrency) {
+      userProvider.setBaseCurrency(newCurrency);
+    },
+  );
+}

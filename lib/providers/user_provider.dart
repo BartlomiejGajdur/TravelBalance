@@ -1,5 +1,6 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -14,7 +15,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addTrip(String tripName, CustomImage customImage, List<Country> countries) {
+  void addTrip(
+      String tripName, CustomImage customImage, List<Country> countries) {
     _user!.addTrip(tripName, customImage, countries);
     notifyListeners();
   }
@@ -27,6 +29,11 @@ class UserProvider with ChangeNotifier {
   void deleteLastAddedTrip() {
     assert(_user!.trips.isNotEmpty, "Trips can't be empty");
     _user!.trips.removeAt(0);
+    notifyListeners();
+  }
+
+  void setBaseCurrency(Currency newCurrency) {
+    _user!.setBaseCurrency(newCurrency);
     notifyListeners();
   }
 

@@ -1,6 +1,7 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 
@@ -9,15 +10,21 @@ enum SortOrder { ascending, descending }
 class User {
   List<Trip> _trips;
   Statistics _statistics;
+  Currency _baseCurrency;
 
-  User({required List<Trip> trips, required Statistics statistics})
+  User(
+      {required List<Trip> trips,
+      required Statistics statistics,
+      Currency? baseCurrency})
       : _trips = trips,
-        _statistics = statistics {
+        _statistics = statistics,
+        _baseCurrency = getCurrency("USD") {
     sortTrips(SortOrder.ascending);
   }
 
   List<Trip> get trips => _trips;
   Statistics get statistics => _statistics;
+  Currency get baseCurrency => _baseCurrency;
 
   factory User.fromJson(Map<String, dynamic> json) {
     List<Trip> trips = (json['trips'] as List)
@@ -25,6 +32,15 @@ class User {
         .toList();
     Statistics statistics = Statistics.fromJson(json['statistics']);
     return User(trips: trips, statistics: statistics);
+  }
+
+  void setBaseCurrency(Currency newCurrency) {
+    _baseCurrency = newCurrency;
+  }
+
+  static Currency getCurrency(String countryCode) {
+    final currencyFromCountryCode = CurrencyService().findByCode(countryCode);
+    return currencyFromCountryCode ?? CurrencyService().findByCode("USD")!;
   }
 
   void sortTrips(SortOrder sortOrder) {
