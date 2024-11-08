@@ -90,7 +90,7 @@ class ExpenseComponent extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '- \$${expenseProvider.expense.cost.toStringAsFixed(2)}',
+                    '- ${expenseProvider.expense.currency.symbol}${expenseProvider.expense.cost.toStringAsFixed(2)}',
                     style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                         fontWeight: FontWeight.w600,

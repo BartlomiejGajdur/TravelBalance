@@ -3,6 +3,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 
 class TripProvider with ChangeNotifier {
@@ -26,9 +27,9 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
-  void addExpense(int tripId, String title, double cost, Category category,
-      DateTime dateTime) {
-    trip.addExpense(tripId, title, cost, category, dateTime);
+  void addExpense(int tripId, String title, double cost, Currency currency,
+      Category category, DateTime dateTime) {
+    trip.addExpense(tripId, title, cost, currency, category, dateTime);
     notifyUi();
   }
 

@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 
 enum Category {
@@ -16,6 +17,8 @@ class Expense {
   final int _tripId;
   String _title;
   double _cost;
+  Currency _currency;
+  double _costInBaseCurrency = 0.0;
   Category _category;
   DateTime _dateTime;
 
@@ -24,6 +27,7 @@ class Expense {
     required final int tripId,
     required String title,
     required double cost,
+    required Currency currency,
     required Category category,
     required DateTime dateTime,
   })  : _id = id,
@@ -31,13 +35,16 @@ class Expense {
         _title = title,
         _cost = cost,
         _category = category,
-        _dateTime = dateTime;
+        _dateTime = dateTime,
+        _currency = currency;
 
   int get tripId => _tripId;
   String get title => _title;
   double get cost => _cost;
   Category get category => _category;
   DateTime get dateTime => _dateTime;
+  Currency get currency => _currency;
+  double get costInBaseCurrency => _costInBaseCurrency;
 
   void setId(int expenseId) {
     if (_id == null) {
@@ -76,12 +83,15 @@ class Expense {
     final String title = data['title'];
     final double cost = data['cost'].toDouble();
     final Category category = Category.values[data['category']];
+    final Currency currency =
+        CurrencyService().findByCode(data['currency'] ?? "USD")!;
     DateTime dateTime = DateTime.parse(data['date']);
     return Expense(
       id: id,
       tripId: tripId,
       title: title,
       cost: cost,
+      currency: currency,
       category: category,
       dateTime: dateTime,
     );

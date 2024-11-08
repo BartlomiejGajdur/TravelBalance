@@ -133,10 +133,11 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
     final Category category =
         Expense.stringToCategory(_categoryController.text);
     final int tripId = widget.tripProvider.trip.getId()!;
-    print(_expenseCurrency.name);
-    widget.tripProvider.addExpense(tripId, title, cost, category, dateTime);
+    widget.tripProvider
+        .addExpense(tripId, title, cost, _expenseCurrency, category, dateTime);
     Navigator.of(context).pop();
 
+    //Send currency to API
     int? expenseId = await ApiService().addExpense(
       tripId,
       title,

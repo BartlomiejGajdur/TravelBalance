@@ -1,6 +1,7 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
@@ -109,12 +110,13 @@ class Trip {
     return expenses.fold(0, (sum, expense) => sum + expense.cost);
   }
 
-  void addExpense(int tripId, String title, double cost, Category category,
-      DateTime dateTime) {
+  void addExpense(int tripId, String title, double cost, Currency currency,
+      Category category, DateTime dateTime) {
     Expense newExpense = Expense(
       tripId: tripId,
       title: title,
       cost: cost,
+      currency: currency,
       category: category,
       dateTime: dateTime,
     );
