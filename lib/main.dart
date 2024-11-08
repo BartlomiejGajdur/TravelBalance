@@ -4,21 +4,21 @@ import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
 import 'package:TravelBalance/pages/introduction_screens.dart';
+import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
 import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
+import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/hive_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:TravelBalance/pages/login_page.dart';
-
-import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /* HELPERS
 Navigator.pushNamed(context, LoginPage);
-
 
 SvgPicture.asset(
                   "lib/assets/Logout.svg",
@@ -29,6 +29,10 @@ SvgPicture.asset(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  await CurrencyRatesStorage().initialize();
+
   await CountryPicker.loadCountryData();
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,10 +63,11 @@ class MyApp extends StatelessWidget {
               ? const LoginPage()
               : IntroductionPage(),
           theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              appBarTheme: const AppBarTheme(
-                backgroundColor: Colors.white,
-              )),
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+            ),
+          ),
           onGenerateRoute: (settings) {
             switch (settings.name) {
               case 'LoginPage':
@@ -106,7 +111,6 @@ class MyApp extends StatelessWidget {
                     tripProvider: tripProvider,
                   ),
                 );
-
               default:
                 return null;
             }
