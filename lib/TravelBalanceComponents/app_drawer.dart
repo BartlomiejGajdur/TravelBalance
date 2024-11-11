@@ -1,6 +1,5 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
@@ -368,7 +367,7 @@ void showCurrency(BuildContext context) {
       User? user = userProvider.user;
       if (user != null) {
         userProvider.setBaseCurrency(newCurrency);
-        //ApiService().updateBaseCurrency(user.uuid ,newCurrency);
+        ApiService().updateBaseCurrency(newCurrency);
       }
     },
   );

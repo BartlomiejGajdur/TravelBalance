@@ -27,18 +27,18 @@ class User {
   Statistics get statistics => _statistics;
   Currency get baseCurrency => _baseCurrency;
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    List<Trip> trips = (json['trips'] as List)
+  factory User.fromJson(
+      Map<String, dynamic> fetchTripJson, Map<String, dynamic> userDataJson) {
+    List<Trip> trips = (fetchTripJson['trips'] as List)
         .map((jsonData) => Trip.fromJson(jsonData))
         .toList();
-    Statistics statistics = Statistics.fromJson(json['statistics']);
-    //TBD Not working
-    //Currency baseCurrency =
-    //    currency(json['base_currency'] ?? defaultCurrencyCode);
+    Statistics statistics = Statistics.fromJson(fetchTripJson['statistics']);
+    Currency baseCurrency =
+        currency(userDataJson['base_currency'] ?? defaultCurrencyCode);
     return User(
         trips: trips,
         statistics: statistics,
-        baseCurrency: currency(defaultCurrencyCode));
+        baseCurrency: baseCurrency);
   }
 
   void setBaseCurrency(Currency newCurrency) {

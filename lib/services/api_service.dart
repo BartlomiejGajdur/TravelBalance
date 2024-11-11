@@ -61,23 +61,37 @@ class ApiService {
 
   Future<User?> fetchUserData() async {
     try {
-      const endPoint = 'trip/';
-      final response = await http.get(
-        Uri.parse('$_baseUrl$endPoint'),
+      const fetchTripsEndPoint = 'trip/';
+      const userDataEndPoint = 'user/me';
+
+      final tripsRequest = http.get(
+        Uri.parse('$_baseUrl$fetchTripsEndPoint'),
         headers: {'Authorization': _getAuthorizationHeader()},
       );
 
-      if (response.statusCode == 200) {
-        debugPrint('Fetch user correct');
-        debugPrint(jsonDecode(response.body).toString());
-        return User.fromJson(jsonDecode(response.body));
+      final userDataRequest = http.get(
+        Uri.parse('$_baseUrl$userDataEndPoint'),
+        headers: {'Authorization': _getAuthorizationHeader()},
+      );
+
+      final responses = await Future.wait([tripsRequest, userDataRequest]);
+
+      final tripsResponse = responses[0];
+      final userDataResponse = responses[1];
+
+      if (tripsResponse.statusCode == 200 &&
+          userDataResponse.statusCode == 200) {
+        debugPrint('Fetch trips and user data successful');
+        final tripsData = jsonDecode(tripsResponse.body);
+        final userData = jsonDecode(userDataResponse.body);
+        return User.fromJson(tripsData, userData);
       } else {
         debugPrint(
-            'Request FetchUserData failed with status: ${response.statusCode}');
+            'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
         return null;
       }
     } catch (e) {
-      debugPrint("Error fetching user data: $e");
+      debugPrint("Error fetching data: $e");
       return null;
     }
   }
@@ -515,7 +529,7 @@ class ApiService {
     try {
       final body = {'message': message, 'type': type};
 
-      final endPoint = 'user/feedback/';
+      const endPoint = 'user/feedback/';
 
       final response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
@@ -538,13 +552,13 @@ class ApiService {
     }
   }
 
-  Future<bool> updateBaseCurrency(String uuid, Currency baseCurrency) async {
+  Future<bool> updateBaseCurrency(Currency baseCurrency) async {
     try {
       final body = {
         'base_currency': baseCurrency.code,
       };
 
-      final endPoint = 'user/$uuid/';
+      const endPoint = 'user/me/';
 
       final response = await http.patch(
         Uri.parse('$_baseUrl$endPoint'),
@@ -559,11 +573,13 @@ class ApiService {
         debugPrint('Update Base Currency successful');
         return true;
       } else {
-        throw 'Update Base Currency failed with status: ${response.statusCode}';
+        debugPrint(
+            'Update Base Currency failed with status: ${response.statusCode}');
+        return false;
       }
     } catch (e) {
       debugPrint("Update Base Currency in: $e");
-      rethrow;
+      return false;
     }
   }
 }
