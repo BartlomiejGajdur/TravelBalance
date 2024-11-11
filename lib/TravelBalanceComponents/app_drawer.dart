@@ -1,5 +1,6 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
@@ -212,6 +213,17 @@ void showSendFeedback(BuildContext context) {
     messageType = newMessageType;
   }
 
+  Future<bool> sendFeedback(
+      BuildContext context, String message, String type) async {
+    bool result = await ApiService()
+        .sendFeedback(feedbackController.text, messageType.first);
+    if (result == true) {
+      Navigator.of(context).pop();
+      return true;
+    }
+    return false;
+  }
+
   showBlurDialog(
       context: context,
       childBuilder: (ctx) {
@@ -289,7 +301,11 @@ void showSendFeedback(BuildContext context) {
                     ),
                   )),
               SizedBox(height: 4.h),
-              const CustomButton(buttonText: "Send Feedback")
+              CustomButton(
+                buttonText: "Send Feedback",
+                onPressed: () => sendFeedback(
+                    context, feedbackController.text, messageType.first),
+              )
             ],
           ),
         );

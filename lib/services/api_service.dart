@@ -511,6 +511,33 @@ class ApiService {
     }
   }
 
+  Future<bool> sendFeedback(String message, String type) async {
+    try {
+      final body = {'message': message, 'type': type};
+
+      final endPoint = 'user/feedback/';
+
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 201) {
+        debugPrint('Feedback send successful');
+        return true;
+      } else {
+        throw 'Feedback failed with status: ${response.statusCode}';
+      }
+    } catch (e) {
+      debugPrint("Feedback failed in: $e");
+      rethrow;
+    }
+  }
+
   Future<bool> updateBaseCurrency(String uuid, Currency baseCurrency) async {
     try {
       final body = {
