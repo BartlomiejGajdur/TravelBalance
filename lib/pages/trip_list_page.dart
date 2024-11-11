@@ -6,6 +6,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/components/extended_trip_component.dart';
@@ -195,11 +196,50 @@ class _TripListPageState extends State<TripListPage> {
   }
 
   Widget _buildContent(UserProvider userProvider) {
-    if (userProvider.user == null || userProvider.user!.trips.isEmpty) {
+    if (userProvider.user == null) {
+      return _buildSomethingWentWrongMessage();
+    } else if (userProvider.user!.trips.isEmpty) {
       return _buildNoContentMessage();
     } else {
       return _buildTripContent(userProvider);
     }
+  }
+
+  Widget _buildSomethingWentWrongMessage() {
+    return ListView(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 60.0.h),
+          child: Column(children: [
+            Text(
+              "Uh-oh, Tent Trouble! 😕",
+              style: GoogleFonts.outfit(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w800,
+                color: mainTextColor,
+              ),
+            ),
+            Image.asset(
+              "lib/assets/broken_tent.jpg",
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Text(
+                "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!",
+                style: GoogleFonts.outfit(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: secondaryTextColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ]),
+        ),
+      ],
+    );
   }
 
   Widget _buildNoContentMessage() {
@@ -231,7 +271,7 @@ class _TripListPageState extends State<TripListPage> {
         Align(
           alignment: Alignment.centerRight,
           child: Transform.scale(
-            scale: 0.8, 
+            scale: 0.8,
             child: Switch(
               value: isSwitched,
               trackOutlineWidth: const WidgetStatePropertyAll(0),

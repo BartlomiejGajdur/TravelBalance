@@ -11,10 +11,14 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
 
   Future<void> fetchWholeUserData() async {
-    _user = await ApiService().fetchUserData();
-    if (_user != null) {
+    final fetchedUser = await ApiService().fetchUserData();
+
+    if (fetchedUser != null) {
+      _user = fetchedUser;
       _user!.recalculateCostInBaseCurrency();
       notifyListeners();
+    } else {
+      debugPrint("Failed to fetch user data");
     }
   }
 
