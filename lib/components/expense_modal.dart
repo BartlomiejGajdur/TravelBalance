@@ -1,3 +1,4 @@
+import 'package:TravelBalance/TravelBalanceComponents/currency_pick.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
 import 'package:TravelBalance/Utils/date_picker.dart';
@@ -6,6 +7,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/expense_provider.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,13 +23,11 @@ class ModalBottomSheetExpense extends StatefulWidget {
 
 class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
   final TextEditingController descriptionController = TextEditingController();
-
   final TextEditingController costController = TextEditingController();
-
   final TextEditingController dateController = TextEditingController();
-
   final TextEditingController categoryController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late Currency _newCurrency;
   @override
   void dispose() {
     descriptionController.dispose();
@@ -35,6 +35,18 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
     dateController.dispose();
     categoryController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _newCurrency = widget.expenseProvider.expense.currency;
+    super.initState();
+  }
+
+  void _onCurrencyChanged(Currency newCurrency) {
+    setState(() {
+      _newCurrency = newCurrency;
+    });
   }
 
   Future<bool> saveExpense(
@@ -61,11 +73,13 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
       expenseProvider.expense.getId()!,
       title,
       cost,
+      _newCurrency,
       category,
       newDateTime,
     );
 
-    expenseProvider.editExpense(title, cost, category, newDateTime);
+    expenseProvider.editExpense(
+        title, cost, _newCurrency, category, newDateTime);
 
     return true;
   }
@@ -107,12 +121,22 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
                   controller: descriptionController,
                   textFieldBottomPadding: 16.0.h),
               formattedTitle("Cost"),
-              CustomTextField(
-                text: widget.expenseProvider.expense.cost.toString(),
-                controller: costController,
-                textFieldBottomPadding: 16.0.h,
-                suffixIcon: Icons.monetization_on_outlined,
-                numbersOnly: true,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      text: widget.expenseProvider.expense.cost.toString(),
+                      controller: costController,
+                      textFieldBottomPadding: 16.0.h,
+                      numbersOnly: true,
+                      rightPadding: false,
+                    ),
+                  ),
+                  CurrencyPick(
+                      currency: _newCurrency,
+                      onCurrencyChanged: _onCurrencyChanged)
+                ],
               ),
               formattedTitle("Date"),
               CustomTextField(

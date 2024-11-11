@@ -1,4 +1,5 @@
 import 'package:TravelBalance/providers/trip_provider.dart';
+import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
@@ -14,12 +15,13 @@ class ExpenseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editExpense(
-      String newTitle, double newCost, Category newCategory, DateTime newDate) {
+  void editExpense(String newTitle, double newCost, Currency newCurrency,
+      Category newCategory, DateTime newDate) {
     _expense.setTitle(newTitle);
     _expense.setCost(newCost);
     _expense.setCategory(newCategory);
     _expense.setDateTime(newDate);
+    _expense.setCurrency(newCurrency);
     notifyUi();
   }
 

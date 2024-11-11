@@ -11,17 +11,17 @@ Currency currency(String currencyCode) {
   return currency;
 }
 
-class Currencypick extends StatefulWidget {
+class CurrencyPick extends StatefulWidget {
   final Currency currency;
   final Function(Currency) onCurrencyChanged;
-  const Currencypick(
+  const CurrencyPick(
       {super.key, required this.currency, required this.onCurrencyChanged});
 
   @override
-  State<Currencypick> createState() => _CurrencypickState();
+  State<CurrencyPick> createState() => _CurrencyPickState();
 }
 
-class _CurrencypickState extends State<Currencypick> {
+class _CurrencyPickState extends State<CurrencyPick> {
   late Currency _currency;
   @override
   void initState() {

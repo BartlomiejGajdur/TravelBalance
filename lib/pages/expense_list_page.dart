@@ -40,7 +40,7 @@ class ExpenseListPage extends StatelessWidget {
     );
   }
 
-  void _navigateToCreatTripPage(
+  void _navigateToAddExpensePage(
       BuildContext expenseListPageContext, TripProvider tripProvider) {
     Navigator.pushNamed(
       expenseListPageContext,
@@ -62,7 +62,7 @@ class ExpenseListPage extends StatelessWidget {
         text1: trip.name,
         text2: "Discover your travel costs.",
         onActionButtonClick: () =>
-            _navigateToCreatTripPage(context, tripProvider),
+            _navigateToAddExpensePage(context, tripProvider),
         onEditIconClick: () {
           showModalBottomSheet(
             isScrollControlled: true,

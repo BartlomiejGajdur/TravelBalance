@@ -81,6 +81,10 @@ class Expense {
     _dateTime = dateTime;
   }
 
+  void setCurrency(Currency currency) {
+    _currency = currency;
+  }
+
   void setCostInBaseCurrency(double costInBaseCurrency) {
     _costInBaseCurrency = costInBaseCurrency;
   }

@@ -54,6 +54,8 @@ class TripProvider with ChangeNotifier {
   }
 
   void reCalculate() {
+    trip.recalculateEachCostInBaseCurrency(
+        userProvider.user!.baseCurrency.code);
     trip.reCalculate();
     notifyUi();
   }

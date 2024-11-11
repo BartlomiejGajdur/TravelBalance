@@ -404,6 +404,7 @@ class ApiService {
       final int expenseId,
       String newTitle,
       double newCost,
+      Currency newCurrency,
       Category newCategory,
       DateTime newDate) async {
     try {
@@ -411,6 +412,7 @@ class ApiService {
         'cost': newCost,
         'category': newCategory.index,
         'date': newDate.toIso8601String(),
+        'currency': newCurrency.code
       };
 
       if (newTitle.isNotEmpty) {
