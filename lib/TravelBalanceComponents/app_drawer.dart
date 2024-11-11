@@ -297,8 +297,8 @@ void showSendFeedback(BuildContext context) {
 }
 
 class CustomSegmentedWidget extends StatefulWidget {
-  void Function(Set<String>) onSelectionChanged;
-  CustomSegmentedWidget({super.key, required this.onSelectionChanged});
+  final void Function(Set<String>) onSelectionChanged;
+  const CustomSegmentedWidget({super.key, required this.onSelectionChanged});
 
   @override
   State<CustomSegmentedWidget> createState() => _CustomSegmentedWidgetState();

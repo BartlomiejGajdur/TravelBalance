@@ -12,9 +12,9 @@ Currency currency(String currencyCode) {
 }
 
 class Currencypick extends StatefulWidget {
-  Currency currency;
+  final Currency currency;
   final Function(Currency) onCurrencyChanged;
-  Currencypick(
+  const Currencypick(
       {super.key, required this.currency, required this.onCurrencyChanged});
 
   @override
@@ -22,6 +22,13 @@ class Currencypick extends StatefulWidget {
 }
 
 class _CurrencypickState extends State<Currencypick> {
+  late Currency _currency;
+  @override
+  void initState() {
+    _currency = widget.currency;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,7 +37,7 @@ class _CurrencypickState extends State<Currencypick> {
             context: context,
             onSelect: (Currency newCurrency) {
               setState(() {
-                widget.currency = newCurrency;
+                _currency = newCurrency;
               });
               widget.onCurrencyChanged(newCurrency);
             });
@@ -46,11 +53,11 @@ class _CurrencypickState extends State<Currencypick> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                CurrencyUtils.currencyToEmoji(widget.currency),
+                CurrencyUtils.currencyToEmoji(_currency),
                 style: const TextStyle(fontSize: 15),
               ),
               Text(
-                " ${widget.currency.code}",
+                " ${_currency.code}",
                 style: const TextStyle(fontSize: 15),
               ),
               const Icon(Icons.arrow_drop_up),
