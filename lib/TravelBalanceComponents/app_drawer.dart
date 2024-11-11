@@ -206,10 +206,10 @@ void showAbout(BuildContext context) {
 void showSendFeedback(BuildContext context) {
   final TextEditingController feedbackController = TextEditingController();
   const int maxLength = 200;
-  Set<String> _messageType = {"Other"};
+  Set<String> messageType = {"Other"};
 
   void onSelectionChanged(Set<String> newMessageType) {
-    _messageType = newMessageType;
+    messageType = newMessageType;
   }
 
   showBlurDialog(
@@ -224,7 +224,7 @@ void showSendFeedback(BuildContext context) {
             children: [
               SizedBox(height: 15.h),
               GestureDetector(
-                onTap: () => print(_messageType.first),
+                onTap: () => print(messageType.first),
                 child: Text(
                   "Share your feedback",
                   style: GoogleFonts.outfit(
@@ -309,7 +309,7 @@ class _CustomSegmentedWidgetState extends State<CustomSegmentedWidget> {
   @override
   Widget build(BuildContext context) {
     return SegmentedButton<String>(
-      segments: <ButtonSegment<String>>[
+      segments: const <ButtonSegment<String>>[
         ButtonSegment<String>(value: "Issue", label: Text("Issue")),
         ButtonSegment<String>(value: "Suggestion", label: Text("Suggestion")),
         ButtonSegment<String>(value: "Other", label: Text("Other")),

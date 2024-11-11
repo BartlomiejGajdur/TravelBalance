@@ -94,6 +94,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     controller: tripNameController,
                     labelText: "Trip name",
                     hintText: "Enter trip name",
+                    validator: tripNameValidator,
                   ),
                 ),
               ],

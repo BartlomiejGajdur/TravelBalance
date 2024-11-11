@@ -101,3 +101,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     );
   }
 }
+
+String? tripNameValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'This field is required';
+  }
+
+  final regex = RegExp(r'^[a-zA-Z0-9\s]+$');
+
+  if (!regex.hasMatch(value)) {
+    return 'Only letters (a-z, A-Z), digits (0-9), and spaces are allowed';
+  }
+
+  return null;
+}

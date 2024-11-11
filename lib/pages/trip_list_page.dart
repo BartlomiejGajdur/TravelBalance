@@ -234,7 +234,7 @@ class _TripListPageState extends State<TripListPage> {
             scale: 0.8, 
             child: Switch(
               value: isSwitched,
-              trackOutlineWidth: WidgetStatePropertyAll(0),
+              trackOutlineWidth: const WidgetStatePropertyAll(0),
               inactiveThumbColor: primaryColor,
               inactiveTrackColor: secondaryColor.withOpacity(0.5),
               activeColor: primaryColor,

@@ -94,6 +94,7 @@ class _EditTripState extends State<EditTrip> {
                     controller: tripNameController,
                     labelText: "Trip name",
                     hintText: "Enter trip name",
+                    validator: tripNameValidator,
                   ),
                 ),
               ],

@@ -1,6 +1,5 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
-import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';

@@ -81,23 +81,16 @@ class ExtendedTripComponent extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 12.r,
-                                    backgroundColor: Colors
-                                        .grey[200], // Opcjonalnie kolor tła
-                                    child: Center(
-                                      child: Text(
-                                        country.flagEmoji,
-                                        style: TextStyle(
-                                          fontSize: 14
-                                              .sp, // Zwiększony rozmiar dla lepszej widoczności
-                                        ),
-                                      ),
-                                    ),
+                                  Container(
+                                    width: 22.w,
+                                    height: 22.w,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.grey[300]),
+                                    child:
+                                        Center(child: Text(country.flagEmoji)),
                                   ),
-                                  SizedBox(
-                                      width: 4
-                                          .w), // Dodanie przestrzeni po każdej fladze
+                                  SizedBox(width: 4.w),
                                 ],
                               ),
                           ],
