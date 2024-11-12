@@ -42,12 +42,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
   @override
   void initState() {
     super.initState();
-    _initializeCurrency();
-  }
-
-  void _initializeCurrency() {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    _expenseCurrency = userProvider.user?.baseCurrency ?? defaultCurrency;
+    _expenseCurrency = getCurrency();
   }
 
   @override
