@@ -2,7 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/currency_pick.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:hive/hive.dart';
 
-//tests add
+
 class LastUsedCurrencyStorage {
   static final LastUsedCurrencyStorage _instance =
       LastUsedCurrencyStorage._internal();

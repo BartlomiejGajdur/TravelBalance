@@ -77,7 +77,6 @@ class StatisticsTile extends StatelessWidget {
       case StatisticsTileType.spendings:
         statistic =
             '${user.getWholeExpensesInBaseCurrency().toStringAsFixed(2)}${user.baseCurrency.symbol}';
-
         break;
     }
 

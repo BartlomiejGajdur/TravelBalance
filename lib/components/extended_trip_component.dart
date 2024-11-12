@@ -89,7 +89,7 @@ class ExtendedTripComponent extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(country.countryCode.toFlag,
-                                      style: const TextStyle(fontSize: 22)),
+                                      style: TextStyle(fontSize: 18.sp)),
                                   SizedBox(width: 6.w),
                                 ],
                               ),

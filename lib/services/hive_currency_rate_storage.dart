@@ -33,7 +33,6 @@ class CurrencyRatesStorage {
     _currencyBox = await Hive.openBox<Map<String, double>>('currencyRatesBox');
 
     //Load Default data
-
     _defaultCurrencyRates = await _loadDefaultCurrencyRates();
 
     //Load data from Hive

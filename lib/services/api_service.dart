@@ -25,8 +25,6 @@ class ApiService {
   BaseTokenType _tokenType = BaseTokenType.Token;
   String _token = "";
   final String _baseUrl = "https://travelbalance.pl/api/v1/";
-  //final String _baseUrl =
-  //    "http://wanderer-test-fe529f1fdf47.herokuapp.com/api/v1/";
 
   BaseTokenType getToken() {
     return _tokenType;
@@ -62,7 +60,7 @@ class ApiService {
   Future<User?> fetchUserData() async {
     try {
       const fetchTripsEndPoint = 'trip/';
-      const userDataEndPoint = 'user/me';
+      const userDataEndPoint = 'user/me/';
 
       final tripsRequest = http.get(
         Uri.parse('$_baseUrl$fetchTripsEndPoint'),
@@ -152,6 +150,7 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         setToken(responseBody['access_token'], BaseTokenType.Bearer);
+        debugPrint('Login successful: bearer: $responseBody');
         return true;
       } else {
         showCustomSnackBar(

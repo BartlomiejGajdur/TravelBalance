@@ -19,8 +19,8 @@ class Expense {
   String _title;
   double _cost;
   Currency _currency;
-  double _costInBaseCurrency;
   Category _category;
+  double _costInBaseCurrency;
   DateTime _dateTime;
 
   Expense(
