@@ -77,21 +77,33 @@ class ExtendedTripComponent extends StatelessWidget {
                         child: Row(
                           children: [
                             for (var country in trip.countries)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 22.w,
-                                    height: 22.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.grey[300]),
-                                    child:
-                                        Center(child: Text(country.flagEmoji)),
+                              IntrinsicWidth(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 22.w,
+                                        height: 22.w,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.grey[300],
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            country.flagEmoji,
+                                            style: TextStyle(fontSize: 16.sp),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 4.w),
+                                    ],
                                   ),
-                                  SizedBox(width: 4.w),
-                                ],
+                                ),
                               ),
                           ],
                         ),
