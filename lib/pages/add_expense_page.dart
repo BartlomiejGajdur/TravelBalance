@@ -100,7 +100,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
           ),
         ),
         CurrencyPick(
-            currency: getCurrency(), onCurrencyChanged: _onCurrencyChanged),
+            currency: _expenseCurrency, onCurrencyChanged: _onCurrencyChanged),
       ],
     );
   }
