@@ -97,8 +97,6 @@ class _LoginPageState extends State<LoginPage> {
               GestureDetector(
                 onTap: () => fillLoginAndPassword(
                     context, "testowy_user", "testowehaslo123", true),
-                onDoubleTap: () => fillLoginAndPassword(
-                    context, "noTrips", "testowehaslo123!", false),
                 child: Padding(
                   padding: EdgeInsets.only(left: horizontalPadding),
                   child: Text("Welcome back wanderer!", style: mainTextStyle),

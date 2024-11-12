@@ -10,6 +10,13 @@ import 'package:TravelBalance/models/trip.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+extension convertFlag on String {
+  String get toFlag {
+    return (this).toUpperCase().replaceAllMapped(RegExp(r'[A-Z]'),
+        (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+  }
+}
+
 class ExtendedTripComponent extends StatelessWidget {
   final Trip trip;
   final void Function() moveToDetails;
@@ -77,33 +84,14 @@ class ExtendedTripComponent extends StatelessWidget {
                         child: Row(
                           children: [
                             for (var country in trip.countries)
-                              IntrinsicWidth(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 22.w,
-                                        height: 22.w,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.grey[300],
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            country.flagEmoji,
-                                            style: TextStyle(fontSize: 16.sp),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 4.w),
-                                    ],
-                                  ),
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(country.countryCode.toFlag,
+                                      style: const TextStyle(fontSize: 22)),
+                                  SizedBox(width: 6.w),
+                                ],
                               ),
                           ],
                         ),
