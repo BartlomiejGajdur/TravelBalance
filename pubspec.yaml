@@ -53,10 +53,20 @@ dependencies:
   currency_picker: ^2.0.21
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  flutter_launcher_icons: ^0.14.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_test: ^1.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "lib/assets/icon/TripBalanceIcon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "lib/assets/icon/TripBalanceIcon.png"
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -81,6 +91,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/jsonData/
   #   - images/a_dot_ham.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
