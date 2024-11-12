@@ -1,5 +1,5 @@
 import 'package:TravelBalance/Utils/globals.dart';
-import 'package:TravelBalance/services/hive_service.dart';
+import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:currency_picker/currency_picker.dart';
 
 class CurrencyConverter {

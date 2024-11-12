@@ -1,4 +1,4 @@
-import 'package:TravelBalance/services/hive_service.dart';
+import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_test/hive_test.dart';
 

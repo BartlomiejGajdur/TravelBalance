@@ -10,7 +10,8 @@ import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
-import 'package:TravelBalance/services/hive_service.dart';
+import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
+import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -32,6 +33,7 @@ void main() async {
 
   await Hive.initFlutter();
   await CurrencyRatesStorage().initialize();
+  await LastUsedCurrencyStorage().initialize();
 
   await CountryPicker.loadCountryData();
 

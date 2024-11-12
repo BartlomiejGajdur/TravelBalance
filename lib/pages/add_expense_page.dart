@@ -10,6 +10,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -104,9 +105,18 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
           ),
         ),
         CurrencyPick(
-            currency: _expenseCurrency, onCurrencyChanged: _onCurrencyChanged),
+            currency: getCurrency(), onCurrencyChanged: _onCurrencyChanged),
       ],
     );
+  }
+
+  Currency getCurrency() {
+    final tripId = widget.tripProvider.trip.getId() ?? -1;
+    final lastUsedCurrency =
+        LastUsedCurrencyStorage().getLastUsedCurrency(tripId);
+    final Currency baseCurrency =
+        Provider.of<UserProvider>(context, listen: false).user!.baseCurrency;
+    return lastUsedCurrency ?? baseCurrency;
   }
 
   Widget _buildDateField() {
@@ -149,6 +159,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
 
     if (expenseId != null) {
       widget.tripProvider.setExpenseIdOfLastAddedExpense(expenseId);
+      LastUsedCurrencyStorage().setLastUsedCurrency(tripId, _expenseCurrency);
       return true;
     } else {
       widget.tripProvider.deleteLastAddedExpense();
