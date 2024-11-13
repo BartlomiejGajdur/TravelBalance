@@ -99,6 +99,7 @@ class User {
         customImage: customImage,
         dateTime: DateTime.now(),
         countries: countries,
+        rates: {},
         expenses: []);
     _trips.insert(0, newTrip);
   }

@@ -1,6 +1,7 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/services/currency_converter.dart';
+import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +16,20 @@ class Trip {
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
   Map<Category, double> _categoriesWithMoney = {};
+  Map<String, double> _rates = {};
   Trip(
       {int? id,
       required String name,
       CustomImage customImage = CustomImage.defaultLandscape,
       required List<Country> countries,
       required DateTime dateTime,
+      required Map<String, double> rates,
       required List<Expense> expenses})
       : _id = id,
         _name = name,
         _customImage = customImage,
         _dateTime = dateTime,
+        _rates = rates,
         _expenses = expenses,
         _countries = countries,
         _expensesByDate = _groupExpensesByDate(expenses),
@@ -63,17 +67,23 @@ class Trip {
     final List<Expense> expenses = (data['expenses'] as List)
         .map((expenseData) => Expense.fromJson(expenseData, id))
         .toList();
+    final Map<String, double> rates =
+        (data['currencies_rates']['rates'] as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, value.toDouble()));
     final List<Country> countries =
         (data['countries'] as List).map((countryData) {
       final int id = countryData['id'];
       return CountryPicker.getCountryById(id)!;
     }).toList();
 
+    CurrencyRatesStorage().addCurrencyRates(dateTime, rates);
+
     return Trip(
         id: id,
         name: name,
         customImage: getImageById(image),
         dateTime: dateTime,
+        rates: rates,
         countries: countries,
         expenses: expenses);
   }

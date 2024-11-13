@@ -8,11 +8,11 @@ class CurrencyRatesStorage {
   static final CurrencyRatesStorage _instance =
       CurrencyRatesStorage._internal();
 
-  late Box<Map<String, double>> _currencyBox;
-  final Map<DateTime, Map<String, double>> _currencyRates = {};
+  late Box<Map<dynamic, dynamic>> _currencyBox;
   late Map<String, double> _defaultCurrencyRates;
 
   Map<String, double> get defaultCurrencyRates => _defaultCurrencyRates;
+
   CurrencyRatesStorage._internal();
 
   factory CurrencyRatesStorage() {
@@ -30,33 +30,38 @@ class CurrencyRatesStorage {
   }
 
   Future<void> initialize() async {
-    _currencyBox = await Hive.openBox<Map<String, double>>('currencyRatesBox');
+    _currencyBox =
+        await Hive.openBox<Map<dynamic, dynamic>>('currencyRatesBox');
 
-    //Load Default data
     _defaultCurrencyRates = await _loadDefaultCurrencyRates();
-
-    //Load data from Hive
-    for (var entry in _currencyBox.toMap().entries) {
-      DateTime date = formattedStringInDateTime(entry.key);
-      _currencyRates[date] = entry.value;
-    }
   }
 
-  // Add new currency rates after trip Creation
   Future<void> addCurrencyRates(
       DateTime date, Map<String, double> rates) async {
-    if (_currencyRates[date] == null) {
-      _currencyRates[date] = rates;
-      await _currencyBox.put(formattedDateTimeInString(date), rates);
+    String dateKey = formattedDateTimeInString(date);
+
+    Map<dynamic, dynamic> convertedRates = rates.map(
+      (key, value) => MapEntry(key, value),
+    );
+
+    if (_currencyBox.get(dateKey) == null) {
+      await _currencyBox.put(dateKey, convertedRates);
     }
   }
 
   Map<String, double> getCurrencyRates(DateTime? date) {
     if (date == null) return _defaultCurrencyRates;
 
-    Map<String, double>? associatedCurrencies =
+    Map<dynamic, dynamic>? associatedCurrencies =
         _currencyBox.get(formattedDateTimeInString(date));
 
-    return associatedCurrencies ?? _defaultCurrencyRates;
+    if (associatedCurrencies != null) {
+      return associatedCurrencies.map(
+        (key, value) => MapEntry(key.toString(), (value as num).toDouble()),
+      );
+    }
+
+    return _defaultCurrencyRates;
   }
 }
+//43418.1
