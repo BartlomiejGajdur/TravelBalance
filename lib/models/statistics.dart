@@ -9,7 +9,15 @@ class Statistics {
     required this.spendings,
   });
 
-  factory Statistics.fromJson(Map<String, dynamic> json) {
+  factory Statistics.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return Statistics(
+        totalTripsAmount: 0,
+        visitedCountriesAmount: 0,
+        spendings: 0,
+      );
+    }
+
     return Statistics(
       totalTripsAmount: json['totalTripsAmount'] ?? 0,
       visitedCountriesAmount: json['visitedCountriesAmount'] ?? 0,

@@ -19,7 +19,7 @@ class ExpenseListPage extends StatelessWidget {
           children: [
             ExpenseChart(
               categoriesWithMoney: tripProvider.trip.categoriesWithMoney,
-              totalTripCost: tripProvider.trip.tripCost,
+              totalTripCost: tripProvider.trip.calculateTripCost(),
               tripProvider: tripProvider,
             ),
             Expanded(

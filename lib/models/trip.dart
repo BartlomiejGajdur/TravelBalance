@@ -11,7 +11,6 @@ class Trip {
   String _name;
   CustomImage _customImage;
   List<Country> _countries;
-  double _tripCost;
   DateTime _dateTime;
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
@@ -21,14 +20,12 @@ class Trip {
       required String name,
       CustomImage customImage = CustomImage.defaultLandscape,
       required List<Country> countries,
-      required double tripCost,
       required DateTime dateTime,
       required List<Expense> expenses})
       : _id = id,
         _name = name,
         _customImage = customImage,
         _dateTime = dateTime,
-        _tripCost = tripCost,
         _expenses = expenses,
         _countries = countries,
         _expensesByDate = _groupExpensesByDate(expenses),
@@ -36,7 +33,6 @@ class Trip {
 
   String get name => _name;
   CustomImage get customImage => _customImage;
-  double get tripCost => _tripCost;
   DateTime get dateTime => _dateTime;
   List<Country> get countries => _countries;
   List<Expense> get expenses => _expenses;
@@ -63,7 +59,6 @@ class Trip {
     final int id = data['id'];
     final String name = data['name'];
     final int image = data['image_id'] ?? 0;
-    final double tripCost = data['trip_cost'].toDouble();
     DateTime dateTime = DateTime.parse(data['date']);
     final List<Expense> expenses = (data['expenses'] as List)
         .map((expenseData) => Expense.fromJson(expenseData, id))
@@ -79,7 +74,6 @@ class Trip {
         name: name,
         customImage: getImageById(image),
         dateTime: dateTime,
-        tripCost: tripCost,
         countries: countries,
         expenses: expenses);
   }
@@ -89,7 +83,6 @@ class Trip {
     debugPrint('  ID: $_id');
     debugPrint('  Name: $_name');
     debugPrint('  Image ${customImage.index}');
-    debugPrint('  Trip Cost: $_tripCost');
     debugPrint('  Expenses:');
     for (var expense in _expenses) {
       expense.printDetails();
@@ -156,7 +149,6 @@ class Trip {
   void reCalculate() {
     _expensesByDate = _groupExpensesByDate(_expenses);
     _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
-    _tripCost = calculateTripCost();
   }
 
   void setName(String newName) {

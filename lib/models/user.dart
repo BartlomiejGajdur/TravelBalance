@@ -36,9 +36,7 @@ class User {
     Currency baseCurrency =
         currency(userDataJson['base_currency'] ?? defaultCurrencyCode);
     return User(
-        trips: trips,
-        statistics: statistics,
-        baseCurrency: baseCurrency);
+        trips: trips, statistics: statistics, baseCurrency: baseCurrency);
   }
 
   void setBaseCurrency(Currency newCurrency) {
@@ -64,7 +62,7 @@ class User {
   double getWholeExpenses() {
     double totalCost = 0.0;
     for (var trip in _trips) {
-      totalCost += trip.tripCost;
+      totalCost += trip.calculateTripCost();
     }
     return totalCost;
   }
@@ -101,7 +99,6 @@ class User {
         customImage: customImage,
         dateTime: DateTime.now(),
         countries: countries,
-        tripCost: 0.0,
         expenses: []);
     _trips.insert(0, newTrip);
   }
