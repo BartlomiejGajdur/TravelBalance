@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/globals.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showCustomDatePicker(BuildContext context, DateTime? time,
@@ -7,6 +8,16 @@ Future<void> showCustomDatePicker(BuildContext context, DateTime? time,
     initialDate: time,
     firstDate: DateTime.now().subtract(const Duration(days: 365)),
     lastDate: DateTime.now(),
+    builder: (context, child) {
+      return Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: ColorScheme.light(
+            primary: primaryColor,
+          ),
+        ),
+        child: child!,
+      );
+    },
   );
 
   if (pickedDate != null) {
@@ -48,12 +59,22 @@ DateTime getDateTimeWithCurrentTime(String dateTime) {
 
 String formatDate(DateTime dateTime) {
   const List<String> monthNames = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
   ];
 
-  String month = monthNames[dateTime.month - 1]; 
-  String day = dateTime.day.toString().padLeft(2, '0'); 
+  String month = monthNames[dateTime.month - 1];
+  String day = dateTime.day.toString().padLeft(2, '0');
   String year = dateTime.year.toString();
   return '$month $day $year';
 }

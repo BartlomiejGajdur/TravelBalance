@@ -55,7 +55,6 @@ class _CountryPickerState extends State<CountryPicker> {
   }
 
   void _addCountry(Country country) {
-
     setState(() {
       if (!countries.contains(country)) {
         countries.add(country);
@@ -82,6 +81,20 @@ class _CountryPickerState extends State<CountryPicker> {
         GestureDetector(
           onTap: () => showCountryPicker(
             context: context,
+            countryListTheme: CountryListThemeData(
+              inputDecoration: InputDecoration(
+                labelText: 'Search country',
+                hintText: 'Entry country name',
+                labelStyle: TextStyle(color: primaryColor),
+                prefixIcon: Icon(Icons.search, color: primaryColor),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor),
+                ),
+              ),
+            ),
             onSelect: (Country country) {
               _addCountry(country);
             },

@@ -35,6 +35,20 @@ class _CurrencyPickState extends State<CurrencyPick> {
       onTap: () {
         showCurrencyPicker(
             context: context,
+            theme: CurrencyPickerThemeData(
+              inputDecoration: InputDecoration(
+                labelText: 'Search currency',
+                hintText: 'Entry currency name',
+                labelStyle: TextStyle(color: primaryColor),
+                prefixIcon: Icon(Icons.search, color: primaryColor),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: primaryColor),
+                ),
+              ),
+            ),
             onSelect: (Currency newCurrency) {
               setState(() {
                 _currency = newCurrency;
