@@ -1,4 +1,5 @@
 import 'package:TravelBalance/models/custom_image.dart';
+import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,14 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() async {
+  void logout(BuildContext context) async {
     _user = null;
+    final tokenType = ApiService().getToken();
+    if (tokenType == BaseTokenType.Token) {
+      await ApiService().logout();
+    } else if (tokenType == BaseTokenType.Bearer) {
+      await GoogleSignInApi().logout(context);
+    }
     notifyListeners();
-    await ApiService().logout();
   }
 }

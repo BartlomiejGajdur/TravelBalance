@@ -79,7 +79,7 @@ class ExpenseChart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        categoryIcon(category,null,  0.4),
+        categoryIcon(category, null, 0.4),
         SizedBox(width: 4.w),
         Text(categoryName)
       ],
@@ -111,23 +111,34 @@ class ExpenseChart extends StatelessWidget {
   }
 
   List<PieChartSectionData> _buildPieChartSections() {
-    return tripProvider.trip
-        .groupCategoriesWithMoneyInBaseCurrency()
-        .entries
-        .map((entry) {
+    final Map<Category, double> groupedData =
+        tripProvider.trip.groupCategoriesWithMoneyInBaseCurrency();
+
+    // Obliczamy całkowitą wartość wszystkich kategorii
+    final double totalAmount =
+        groupedData.values.fold(0.0, (sum, value) => sum + value);
+
+    return groupedData.entries.map((entry) {
       final Category category = entry.key;
       final double amount = entry.value;
 
+      // Obliczamy procentowy udział danej kategorii
+      final double percentage = (amount / totalAmount) * 100;
+
+      // Sprawdzamy, czy wartość jest większa niż 5% całkowitej wartości
+      final bool showTitle = percentage >= 5;
+
       final sectionData = PieChartSectionData(
-          value: amount,
-          color: getCategoryColor(category).withOpacity(0.5),
-          title: amount.toStringAsFixed(2),
-          titleStyle: GoogleFonts.outfit(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
-          radius: 43.r);
+        value: amount,
+        color: getCategoryColor(category).withOpacity(0.5),
+        title: showTitle ? "${percentage.toStringAsFixed(1)}%" : "",
+        titleStyle: GoogleFonts.outfit(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+        radius: 43.r,
+      );
       return sectionData;
     }).toList();
   }

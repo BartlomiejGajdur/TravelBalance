@@ -77,12 +77,8 @@ class AppDrawer extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                     (Route<dynamic> route) => false,
                   );
-                  final tokenType = ApiService().getToken();
-                  if (tokenType == BaseTokenType.Token) {
-                    Provider.of<UserProvider>(context, listen: false).logout();
-                  } else if (tokenType == BaseTokenType.Bearer) {
-                    GoogleSignInApi().logout(context);
-                  }
+                  Provider.of<UserProvider>(context, listen: false)
+                      .logout(context);
                 },
                 child: SvgPicture.asset(
                   "lib/assets/Logout.svg",

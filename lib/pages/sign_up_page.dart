@@ -24,7 +24,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController repeatPasswordController =
       TextEditingController();
-
+  bool forceLoading = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -34,6 +34,16 @@ class _SignUpPageState extends State<SignUpPage> {
     passwordController.dispose();
     repeatPasswordController.dispose();
     super.dispose();
+  }
+
+  void toggleLoading() {
+    setState(() {
+      forceLoading = !forceLoading;
+    });
+  }
+
+  void moveToTrips() {
+    Navigator.pushNamed(context, "TripListPage");
   }
 
   Future<bool> signUp() async {
@@ -130,8 +140,19 @@ class _SignUpPageState extends State<SignUpPage> {
                     actionType: ActionType.signUp),
               ),
               SizedBox(height: 24.h),
-              const MockButton(
-                  buttonType: ButtonType.google, actionType: ActionType.signUp),
+              GestureDetector(
+                onTap: () async {
+                  toggleLoading();
+                  bool result = await ApiService().loginGoogle(context);
+                  if (result) {
+                    moveToTrips();
+                  }
+                  toggleLoading();
+                },
+                child: const MockButton(
+                    buttonType: ButtonType.google,
+                    actionType: ActionType.login),
+              ),
               SizedBox(height: 30.h),
               const DoubleLineText(
                   first: "Have an account?",
