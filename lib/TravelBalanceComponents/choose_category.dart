@@ -54,7 +54,7 @@ class _ChooseCategoryState extends State<ChooseCategory> {
         width: 85.w,
         child: Column(
           children: [
-            categoryIcon(category),
+            categoryIcon(category, _isCategoryMatch(category)),
             Text(
               Expense.staticCategoryToString(category),
               style: TextStyle(

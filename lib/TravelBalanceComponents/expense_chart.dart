@@ -79,7 +79,7 @@ class ExpenseChart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        categoryIcon(category, 0.4),
+        categoryIcon(category,null,  0.4),
         SizedBox(width: 4.w),
         Text(categoryName)
       ],

@@ -25,7 +25,8 @@ Color getCategoryColor(Category category) {
   return categoryColors[category] ?? Colors.grey;
 }
 
-Widget categoryIcon(Category category, [double sizeMultiplier = 1]) {
+Widget categoryIcon(Category category, bool? selected,
+    [double sizeMultiplier = 1]) {
   Map<Category, MapEntry<IconData, Color>> categoryIcon = {
     Category.activities: MapEntry(Icons.local_activity, localActivityColor),
     Category.accommodation: MapEntry(Icons.hotel, accommodationColor),
@@ -47,9 +48,10 @@ Widget categoryIcon(Category category, [double sizeMultiplier = 1]) {
         width: 60.w * sizeMultiplier,
         height: 60.h * sizeMultiplier,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          color: color.withOpacity(0.2),
-        ),
+            borderRadius: BorderRadius.circular(16.r),
+            color: color.withOpacity(0.2),
+            border:
+                selected ?? false ? Border.all(color: color, width: 2) : null),
       ),
       Icon(
         icon,

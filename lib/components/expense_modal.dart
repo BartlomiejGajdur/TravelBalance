@@ -152,7 +152,6 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
                 text: widget.expenseProvider.expense.categoryToString(),
                 controller: categoryController,
                 textFieldBottomPadding: 16.0.h,
-                suffixIcon: Icons.category,
                 clickAction: ClickAction.Category,
               ),
               Row(

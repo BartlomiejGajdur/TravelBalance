@@ -52,7 +52,7 @@ class ExpenseComponent extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(width: 17.w),
-            categoryIcon(expenseProvider.expense.category),
+            categoryIcon(expenseProvider.expense.category, null),
             SizedBox(width: 9.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
