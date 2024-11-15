@@ -11,13 +11,14 @@ import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
+import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /* HELPERS
 Navigator.pushNamed(context, LoginPage);
@@ -31,24 +32,41 @@ SvgPicture.asset(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Hive.initFlutter();
-  await CurrencyRatesStorage().initialize();
-  await LastUsedCurrencyStorage().initialize();
 
-  await CountryPicker.loadCountryData();
+  await Future.wait([
+    CurrencyRatesStorage().initialize(),
+    LastUsedCurrencyStorage().initialize(),
+    CountryPicker.loadCountryData(),
+    SharedPrefsStorage().initialize(),
+  ]);
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool wasIntroductionScreenShown =
-      prefs.getBool('wasIntroductionScreenShown') ?? false;
-
-  runApp(MyApp(wasIntroductionScreenShown: wasIntroductionScreenShown));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool wasIntroductionScreenShown;
+  const MyApp({super.key});
 
-  const MyApp({super.key, required this.wasIntroductionScreenShown});
+  Future<Widget> _setStartingPage() async {
+    try {
+      final bool wasIntroductionScreenShown =
+          await SharedPrefsStorage().getBool('wasIntroductionScreenShown');
+
+      if (!wasIntroductionScreenShown) {
+        return IntroductionPage();
+      }
+
+      final authToken = await SharedPrefsStorage().getToken();
+      if (authToken != null) {
+        ApiService().setToken(authToken.token, authToken.tokenType);
+        return TripListPage();
+      }
+
+      return const LoginPage();
+    } catch (e) {
+      return const LoginPage();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +80,23 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (context, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: wasIntroductionScreenShown
-              ? const LoginPage()
-              : IntroductionPage(),
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
             appBarTheme: const AppBarTheme(
               backgroundColor: Colors.white,
             ),
+          ),
+          home: FutureBuilder<Widget>(
+            future: _setStartingPage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasData) {
+                return snapshot.data ?? const LoginPage();
+              } else {
+                return const LoginPage();
+              }
+            },
           ),
           onGenerateRoute: (settings) {
             switch (settings.name) {
@@ -99,13 +126,16 @@ class MyApp extends StatelessWidget {
                 final verificationCode = args['verificationCode']!;
                 return MaterialPageRoute(
                   builder: (context) => CreateNewPasswordPage(
-                      email: email, verificationCode: verificationCode),
+                    email: email,
+                    verificationCode: verificationCode,
+                  ),
                 );
               case 'CreateListPage':
                 final mainPageContext = settings.arguments as BuildContext;
                 return MaterialPageRoute(
-                    builder: (context) =>
-                        CreateTripPage(mainPageContext: mainPageContext));
+                  builder: (context) =>
+                      CreateTripPage(mainPageContext: mainPageContext),
+                );
               case 'CreateExpensePage':
                 final arguments = settings.arguments as Map<String, dynamic>;
                 final expenseListPageContext =

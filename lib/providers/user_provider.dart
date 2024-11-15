@@ -1,5 +1,6 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
+import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class UserProvider with ChangeNotifier {
       await GoogleSignInApi().logout(context);
     }
     ApiService().clearToken();
+    SharedPrefsStorage().clearToken();
     notifyListeners();
   }
 }

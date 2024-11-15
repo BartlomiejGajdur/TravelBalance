@@ -6,6 +6,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
+import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class ApiService {
   void setToken(String token, BaseTokenType tokenType) {
     _token = token;
     _tokenType = tokenType;
+    SharedPrefsStorage().saveToken(token, tokenType);
   }
 
   void clearToken() {
@@ -40,28 +42,27 @@ class ApiService {
     _tokenType = BaseTokenType.None;
   }
 
-  String _getTokenPrefix() {
-    switch (_tokenType) {
-      case BaseTokenType.Bearer:
-        return 'Bearer ';
-      case BaseTokenType.Token:
-        return 'Token ';
-      case BaseTokenType.None:
+  BaseTokenType getBaseTokenTypeFromString(String tokenType) {
+    switch (tokenType) {
+      case 'Bearer':
+        return BaseTokenType.Bearer;
+      case 'Token':
+        return BaseTokenType.Token;
+      case '':
       default:
-        return '';
+        return BaseTokenType.None;
     }
   }
 
   String _getAuthorizationHeader() {
-    final tokenPrefix = _getTokenPrefix();
-    return '$tokenPrefix$_token';
+    final tokenPrefix = _tokenType.name;
+    return '$tokenPrefix $_token';
   }
 
   Future<User?> fetchUserData() async {
     try {
       const fetchTripsEndPoint = 'trip/';
       const userDataEndPoint = 'user/me/';
-
       final tripsRequest = http.get(
         Uri.parse('$_baseUrl$fetchTripsEndPoint'),
         headers: {'Authorization': _getAuthorizationHeader()},

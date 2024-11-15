@@ -1,17 +1,16 @@
 import 'package:TravelBalance/Utils/globals.dart';
+import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionPage extends StatelessWidget {
   IntroductionPage({super.key});
 
   void goToLoginPage(BuildContext context) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setBool('wasIntroductionScreenShown', true);
+    SharedPrefsStorage().setBool('wasIntroductionScreenShown', true);
     Navigator.pushNamed(context, "LoginPage");
   }
 
