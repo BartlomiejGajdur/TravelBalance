@@ -179,7 +179,6 @@ class ApiService {
       );
 
       if (response.statusCode == 204) {
-        clearToken();
         debugPrint('Logout successful');
       } else {
         debugPrint('Logout failed with status: ${response.statusCode}');
@@ -254,9 +253,49 @@ class ApiService {
             'Forgot Password failed with status: ${response.statusCode}');
         return false;
       }
+    } on SocketException catch (e) {
+      debugPrint('No internet connection: $e');
+      throw ("No internet connection!");
     } catch (e) {
-      debugPrint("Error Forgot Password in: $e");
-      return false;
+      throw 'Unexpected error: $e';
+    }
+  }
+
+  Future<bool> changePassword(String oldPassword, String newPassword,
+      String newPasswordRepeated) async {
+    try {
+      final body = {
+        'old_password': oldPassword,
+        'password': newPassword,
+        'password2': newPasswordRepeated
+      };
+      const endPoint = 'user/change_password/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Change Password successful');
+        return true;
+      } else {
+        final responseBody = jsonDecode(response.body);
+        if (responseBody.containsKey('old_password')) {
+          throw responseBody['old_password'];
+        } else {
+          throw "Change Password failed with status: ${response.statusCode}";
+        }
+      }
+    } on SocketException catch (e) {
+      debugPrint('No internet connection: $e');
+      throw ("No internet connection!");
+    } catch (e) {
+      debugPrint('Unexpected error: $e');
+      throw 'Unexpected error: $e';
     }
   }
 

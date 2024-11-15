@@ -62,6 +62,7 @@ class UserProvider with ChangeNotifier {
     } else if (tokenType == BaseTokenType.Bearer) {
       await GoogleSignInApi().logout(context);
     }
+    ApiService().clearToken();
     notifyListeners();
   }
 }

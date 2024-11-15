@@ -1,5 +1,6 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/pages/add_expense_page.dart';
+import 'package:TravelBalance/pages/change_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/create_new_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/reset_password_page.dart';
 import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
@@ -84,6 +85,9 @@ class MyApp extends StatelessWidget {
               case 'ForgotPasswordPage':
                 return MaterialPageRoute(
                     builder: (context) => ForgotPasswordPage());
+              case 'ChangePasswordPage':
+                return MaterialPageRoute(
+                    builder: (context) => ChangePasswordPage());
               case 'VerificationCodePage':
                 final email = settings.arguments as String;
                 return MaterialPageRoute(

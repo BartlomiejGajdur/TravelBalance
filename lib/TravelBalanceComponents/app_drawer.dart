@@ -2,7 +2,6 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
-import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +66,7 @@ class AppDrawer extends StatelessWidget {
                 context, "Change password", Option.changePassword),
             clickableListTile(context, "Send feedback", Option.sendFeedback),
             clickableListTile(context, "About", Option.about),
-            const Spacer(), // Użyj Spacer, aby wypchnąć SVG na dół
+            const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
               child: GestureDetector(
@@ -347,7 +346,9 @@ class _CustomSegmentedWidgetState extends State<CustomSegmentedWidget> {
   }
 }
 
-void moveToChangePassword(BuildContext context) {}
+void moveToChangePassword(BuildContext context) {
+  Navigator.pushNamed(context, "ChangePasswordPage");
+}
 
 void showCurrency(BuildContext context) {
   final userProvider = Provider.of<UserProvider>(

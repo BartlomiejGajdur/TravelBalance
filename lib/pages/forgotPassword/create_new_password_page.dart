@@ -66,7 +66,7 @@ class CreateNewPasswordPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(bottom: 50.h),
               child: CustomButton(
-                  buttonText: "ResetPassword",
+                  buttonText: "Reset Password",
                   onPressed: () => resetPassword(
                       passwordController.text, repeatPasswordController.text),
                   onSuccess: () => showPasswordUpdateDialog(context)),
