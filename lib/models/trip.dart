@@ -16,7 +16,6 @@ class Trip {
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
   Map<Category, double> _categoriesWithMoney = {};
-  Map<String, double> _rates = {};
   Trip(
       {int? id,
       required String name,
@@ -29,7 +28,6 @@ class Trip {
         _name = name,
         _customImage = customImage,
         _dateTime = dateTime,
-        _rates = rates,
         _expenses = expenses,
         _countries = countries,
         _expensesByDate = _groupExpensesByDate(expenses),
