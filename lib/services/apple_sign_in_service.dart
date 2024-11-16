@@ -1,6 +1,7 @@
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'dart:io' show Platform;
 
 class AppleSignInButton extends StatelessWidget {
   final ActionType actionTypeButton;
@@ -9,15 +10,17 @@ class AppleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await _signInWithApple(context);
-      },
-      child: MockButton(
-        buttonType: ButtonType.apple,
-        actionType: actionTypeButton,
-      ),
-    );
+    return Platform.isIOS
+        ? GestureDetector(
+            onTap: () async {
+              await _signInWithApple(context);
+            },
+            child: MockButton(
+              buttonType: ButtonType.apple,
+              actionType: actionTypeButton,
+            ),
+          )
+        : SizedBox();
   }
 
   Future<void> _signInWithApple(BuildContext context) async {

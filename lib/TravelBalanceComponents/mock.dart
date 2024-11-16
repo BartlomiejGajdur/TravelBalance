@@ -35,25 +35,23 @@ class MockButton extends StatelessWidget {
         width: double.infinity,
         height: 56.h,
         decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius:
-              BorderRadius.circular(buttonRadius), 
-        ),
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(buttonRadius),
+            border: Border.all(width: 1)),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, 
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (buttonType == ButtonType.google)
               const FaIcon(FontAwesomeIcons.google, color: Colors.red)
             else
               Icon(Icons.apple, size: 24.sp, color: textColor),
-            SizedBox(width: 8.w), 
+            SizedBox(width: 8.w),
             Text(
               text,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: textColor, 
+                color: textColor,
               ),
             ),
           ],
