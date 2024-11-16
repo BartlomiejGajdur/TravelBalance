@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushNamed(context, "TripListPage");
   }
 
-
   //FOR DEBUG
   void fillLoginAndPassword(
       BuildContext context, String login, String password, bool haveTrips) {
@@ -64,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         context: context, message: textMsg, type: SnackBarType.information);
   }
 
-  Future<void> signInWithApple() async {
+  Future<void> signInWithApple(BuildContext context) async {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -76,11 +75,71 @@ class _LoginPageState extends State<LoginPage> {
           redirectUri: Uri.parse('https://travelbalance.pl/callback'),
         ),
       );
-      print("User email: ${appleCredential.email}");
+
+      // Zbieramy dane logowania
+      String userIdentifier = appleCredential.userIdentifier ?? "Brak";
+      String givenName = appleCredential.givenName ?? "Brak";
+      String familyName = appleCredential.familyName ?? "Brak";
+      String email = appleCredential.email ?? "Brak";
+      String identityToken = appleCredential.identityToken ?? "Brak";
+      String authorizationCode = appleCredential.authorizationCode ?? "Brak";
+      String state = appleCredential.state ?? "Brak";
+
+      // Wyświetlamy popup z danymi użytkownika
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Dane użytkownika'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('User Identifier: $userIdentifier'),
+                Text('Given Name: $givenName'),
+                Text('Family Name: $familyName'),
+                Text('Email: $email'),
+                Text('Identity Token: $identityToken'),
+                Text('Authorization Code: $authorizationCode'),
+                Text('State: $state'),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     } catch (error) {
-      usernameController.text = error.toString();
+      // Obsługa błędów
+      print("Error during sign-in: $error");
+      // Możesz także pokazać popup z błędem
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+                'NIE DZIALA NA ANDROIDZIE, JAK JESTES NA IOS TO COS NIE TAK JEST :('),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
+
   //FOR DEBUG
 
   @override
@@ -135,7 +194,9 @@ class _LoginPageState extends State<LoginPage> {
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
               GestureDetector(
-                onTap: signInWithApple,
+                onTap: () async {
+                  signInWithApple(context);
+                },
                 child: const MockButton(
                     buttonType: ButtonType.apple, actionType: ActionType.login),
               ),
