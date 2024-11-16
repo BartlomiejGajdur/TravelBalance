@@ -5,6 +5,7 @@ import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -63,83 +64,6 @@ class _LoginPageState extends State<LoginPage> {
         context: context, message: textMsg, type: SnackBarType.information);
   }
 
-  Future<void> signInWithApple(BuildContext context) async {
-    try {
-      final appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'com.domainname.travelbalance',
-          redirectUri: Uri.parse('https://travelbalance.pl/callback'),
-        ),
-      );
-
-      // Zbieramy dane logowania
-      String userIdentifier = appleCredential.userIdentifier ?? "Brak";
-      String givenName = appleCredential.givenName ?? "Brak";
-      String familyName = appleCredential.familyName ?? "Brak";
-      String email = appleCredential.email ?? "Brak";
-      String identityToken = appleCredential.identityToken ?? "Brak";
-      String authorizationCode = appleCredential.authorizationCode ?? "Brak";
-      String state = appleCredential.state ?? "Brak";
-
-      // Wyświetlamy popup z danymi użytkownika
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Dane użytkownika'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('User Identifier: $userIdentifier'),
-                Text('Given Name: $givenName'),
-                Text('Family Name: $familyName'),
-                Text('Email: $email'),
-                Text('Identity Token: $identityToken'),
-                Text('Authorization Code: $authorizationCode'),
-                Text('State: $state'),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } catch (error) {
-      // Obsługa błędów
-      print("Error during sign-in: $error");
-      // Możesz także pokazać popup z błędem
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-                'NIE DZIALA NA ANDROIDZIE, JAK JESTES NA IOS TO COS NIE TAK JEST :('),
-            content: Text(error.toString()),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
   //FOR DEBUG
 
   @override
@@ -193,13 +117,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 40.h),
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              GestureDetector(
-                onTap: () async {
-                  signInWithApple(context);
-                },
-                child: const MockButton(
-                    buttonType: ButtonType.apple, actionType: ActionType.login),
-              ),
+              AppleSignInButton(actionTypeButton: ActionType.login),
               SizedBox(height: 24.h),
               GestureDetector(
                 onTap: () async {

@@ -7,6 +7,7 @@ import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/Utils/helper_functions.dart';
 import 'package:TravelBalance/pages/email_confirmation.dart';
+import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -133,12 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 30.h),
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              GestureDetector(
-                onTap: () => fillLoginAndPassword(context),
-                child: const MockButton(
-                    buttonType: ButtonType.apple,
-                    actionType: ActionType.signUp),
-              ),
+              AppleSignInButton(actionTypeButton: ActionType.signUp),
               SizedBox(height: 24.h),
               GestureDetector(
                 onTap: () async {
