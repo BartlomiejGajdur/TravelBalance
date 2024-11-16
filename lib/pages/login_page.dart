@@ -9,7 +9,6 @@ import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../Utils/globals.dart';
 
 class LoginPage extends StatefulWidget {
