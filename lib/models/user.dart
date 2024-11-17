@@ -4,7 +4,6 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/trip.dart';
 
 enum SortOrder { ascending, descending }
@@ -41,11 +40,6 @@ class User {
 
   void setBaseCurrency(Currency newCurrency) {
     _baseCurrency = newCurrency;
-  }
-
-  static Currency getCurrency(String countryCode) {
-    final currencyFromCountryCode = CurrencyService().findByCode(countryCode);
-    return currencyFromCountryCode ?? defaultCurrency;
   }
 
   void sortTrips(SortOrder sortOrder) {
@@ -110,13 +104,6 @@ class User {
       _trips.removeAt(index);
     } else {
       throw ("Something went wrong with Trip delete, cannot find trip of given id!");
-    }
-  }
-
-  printDetails() {
-    debugPrint('User Trips:');
-    for (var trip in _trips) {
-      trip.printDetails();
     }
   }
 }

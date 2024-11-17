@@ -10,15 +10,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ExpenseChart extends StatelessWidget {
-  final Map<Category, double> categoriesWithMoney;
-  final double totalTripCost;
   final TripProvider tripProvider;
 
   const ExpenseChart(
-      {super.key,
-      required this.categoriesWithMoney,
-      required this.totalTripCost,
-      required this.tripProvider});
+      {super.key, required this.tripProvider});
 
   @override
   Widget build(BuildContext context) {

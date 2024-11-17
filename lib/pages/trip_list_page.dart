@@ -1,7 +1,7 @@
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
 import 'package:TravelBalance/TravelBalanceComponents/statistics_tile.dart';
 import 'package:TravelBalance/Utils/floating_action_button.dart';
-import 'package:TravelBalance/components/short_trip_component.dart';
+import 'package:TravelBalance/TravelBalanceComponents/short_trip_component.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
-import 'package:TravelBalance/components/extended_trip_component.dart';
+import 'package:TravelBalance/TravelBalanceComponents/extended_trip_component.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/pages/expense_list_page.dart';
 import 'package:TravelBalance/providers/user_provider.dart';

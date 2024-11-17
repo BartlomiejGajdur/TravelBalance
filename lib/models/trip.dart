@@ -4,7 +4,6 @@ import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:TravelBalance/models/expense.dart';
 
 class Trip {
@@ -15,7 +14,6 @@ class Trip {
   DateTime _dateTime;
   List<Expense> _expenses;
   Map<DateTime, List<Expense>> _expensesByDate = {};
-  Map<Category, double> _categoriesWithMoney = {};
   Trip(
       {int? id,
       required String name,
@@ -30,8 +28,7 @@ class Trip {
         _dateTime = dateTime,
         _expenses = expenses,
         _countries = countries,
-        _expensesByDate = _groupExpensesByDate(expenses),
-        _categoriesWithMoney = _groupCategoriesWithMoney(expenses);
+        _expensesByDate = _groupExpensesByDate(expenses);
 
   String get name => _name;
   CustomImage get customImage => _customImage;
@@ -39,7 +36,6 @@ class Trip {
   List<Country> get countries => _countries;
   List<Expense> get expenses => _expenses;
   Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
-  Map<Category, double> get categoriesWithMoney => _categoriesWithMoney;
 
   void setId(int tripId) {
     if (_id == null) {
@@ -84,28 +80,6 @@ class Trip {
         rates: rates,
         countries: countries,
         expenses: expenses);
-  }
-
-  void printDetails() {
-    debugPrint('  Trip Details:');
-    debugPrint('  ID: $_id');
-    debugPrint('  Name: $_name');
-    debugPrint('  Image ${customImage.index}');
-    debugPrint('  Expenses:');
-    for (var expense in _expenses) {
-      expense.printDetails();
-    }
-  }
-
-  void printExpensesByDate() {
-    print("----------------Start--------------");
-    _expensesByDate.forEach((date, expenses) {
-      print("--------Date: $date");
-      for (var expense in expenses) {
-        expense.printDetails();
-      }
-    });
-    print("----------------END------------------");
   }
 
   void recalculateEachCostInBaseCurrency(String baseCurrency) {
@@ -156,7 +130,6 @@ class Trip {
 
   void reCalculate() {
     _expensesByDate = _groupExpensesByDate(_expenses);
-    _categoriesWithMoney = _groupCategoriesWithMoney(_expenses);
   }
 
   void setName(String newName) {
@@ -197,21 +170,6 @@ class Trip {
     });
 
     return sortedExpensesByDate;
-  }
-
-  static Map<Category, double> _groupCategoriesWithMoney(
-      List<Expense> expenses) {
-    Map<Category, double> categoriesWithMoney = {};
-    for (var expense in expenses) {
-      if (categoriesWithMoney.containsKey(expense.category)) {
-        categoriesWithMoney[expense.category] =
-            categoriesWithMoney[expense.category]! + expense.cost;
-      } else {
-        categoriesWithMoney[expense.category] = expense.cost;
-      }
-    }
-
-    return categoriesWithMoney;
   }
 
   Map<Category, double> groupCategoriesWithMoneyInBaseCurrency() {

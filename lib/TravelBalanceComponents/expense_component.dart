@@ -3,7 +3,7 @@ import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/Utils/category_item.dart';
-import 'package:TravelBalance/components/expense_modal.dart';
+import 'package:TravelBalance/TravelBalanceComponents/expense_modal.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

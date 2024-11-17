@@ -176,17 +176,4 @@ class Expense {
         throw Exception('Unknown category: $categoryString');
     }
   }
-
-  void printDetails() {
-    debugPrint('      Expense Details:');
-    debugPrint('      ID: ${_id ?? -1}');
-    debugPrint('      TRIP ID: $_tripId');
-    debugPrint('      Title: $_title');
-    debugPrint('      Cost: $_cost');
-    debugPrint('      Category: $_category');
-    debugPrint('      DateTime: $_dateTime');
-    debugPrint('      --------------------------');
-  }
-
-  //No setters - no editable.
 }
