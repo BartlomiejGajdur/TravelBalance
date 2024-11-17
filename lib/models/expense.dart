@@ -1,6 +1,5 @@
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:currency_picker/currency_picker.dart';
-import 'package:flutter/material.dart';
 
 enum Category {
   activities,

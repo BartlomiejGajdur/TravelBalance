@@ -13,7 +13,6 @@ class Trip {
   List<Country> _countries;
   DateTime _dateTime;
   List<Expense> _expenses;
-  Map<DateTime, List<Expense>> _expensesByDate = {};
   Trip(
       {int? id,
       required String name,
@@ -27,15 +26,13 @@ class Trip {
         _customImage = customImage,
         _dateTime = dateTime,
         _expenses = expenses,
-        _countries = countries,
-        _expensesByDate = _groupExpensesByDate(expenses);
+        _countries = countries;
 
   String get name => _name;
   CustomImage get customImage => _customImage;
   DateTime get dateTime => _dateTime;
   List<Country> get countries => _countries;
   List<Expense> get expenses => _expenses;
-  Map<DateTime, List<Expense>> get expensesByDate => _expensesByDate;
 
   void setId(int tripId) {
     if (_id == null) {
@@ -114,7 +111,6 @@ class Trip {
     );
 
     _expenses.insert(0, newExpense);
-    reCalculate();
   }
 
   void deleteExpense(int expenseId) {
@@ -122,14 +118,9 @@ class Trip {
 
     if (index != -1) {
       expenses.removeAt(index);
-      reCalculate();
     } else {
       throw ("Something went wrong with Expense delete, cannot find expense of given id!");
     }
-  }
-
-  void reCalculate() {
-    _expensesByDate = _groupExpensesByDate(_expenses);
   }
 
   void setName(String newName) {
@@ -142,11 +133,10 @@ class Trip {
     _countries = countries;
   }
 
-  static Map<DateTime, List<Expense>> _groupExpensesByDate(
-      List<Expense> expenses) {
+  Map<DateTime, List<Expense>> groupExpensesByDate() {
     Map<DateTime, List<Expense>> expensesByDate = {};
 
-    for (var expense in expenses) {
+    for (var expense in _expenses) {
       DateTime date = DateTime(
           expense.dateTime.year, expense.dateTime.month, expense.dateTime.day);
 

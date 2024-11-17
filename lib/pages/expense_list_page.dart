@@ -22,12 +22,14 @@ class ExpenseListPage extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                key: ValueKey(tripProvider.trip.expensesByDate),
+                key: ValueKey(tripProvider.trip.groupExpensesByDate()),
                 padding: const EdgeInsets.all(0),
-                itemCount: tripProvider.trip.expensesByDate.length,
+                itemCount: tripProvider.trip.groupExpensesByDate().length,
                 itemBuilder: (context, index) {
-                  DateTime date =
-                      tripProvider.trip.expensesByDate.keys.toList()[index];
+                  DateTime date = tripProvider.trip
+                      .groupExpensesByDate()
+                      .keys
+                      .toList()[index];
                   return ExpenseSheetComponent(dateTime: date);
                 },
               ),

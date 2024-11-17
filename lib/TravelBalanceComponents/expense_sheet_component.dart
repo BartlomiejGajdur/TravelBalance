@@ -32,7 +32,8 @@ class ExpenseSheetComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TripProvider>(
       builder: (context, tripProvider, child) {
-        List<Expense> expenses = tripProvider.trip.expensesByDate[dateTime] ?? [];
+        List<Expense> expenses =
+            tripProvider.trip.groupExpensesByDate()[dateTime] ?? [];
 
         return Container(
           child: Column(
