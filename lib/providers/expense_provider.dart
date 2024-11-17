@@ -10,11 +10,6 @@ class ExpenseProvider with ChangeNotifier {
 
   Expense get expense => _expense;
 
-  void notifyUi() {
-    tripProvider.reCalculate();
-    notifyListeners();
-  }
-
   void editExpense(String newTitle, double newCost, Currency newCurrency,
       Category newCategory, DateTime newDate) {
     _expense.setTitle(newTitle);
@@ -22,26 +17,27 @@ class ExpenseProvider with ChangeNotifier {
     _expense.setCategory(newCategory);
     _expense.setDateTime(newDate);
     _expense.setCurrency(newCurrency);
-    notifyUi();
+    notifyListeners();
   }
 
   void editExpenseTitle(String newTitle) {
     _expense.setTitle(newTitle);
-    notifyUi();
+    notifyListeners();
   }
 
   void editExpenseCost(double newCost) {
     _expense.setCost(newCost);
-    notifyUi();
+    tripProvider.reCalculate();
+    notifyListeners();
   }
 
   void editExpenseCategory(Category newCategory) {
     _expense.setCategory(newCategory);
-    notifyUi();
+    notifyListeners();
   }
 
   void editExpenseDateTime(DateTime newDateTime) {
     _expense.setDateTime(newDateTime);
-    notifyUi();
+    notifyListeners();
   }
 }

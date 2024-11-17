@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
-import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -45,7 +44,6 @@ class GoogleSignInApi {
           context: context,
           message: 'User signed out successfully.',
           type: SnackBarType.correct);
-      ApiService().clearToken();
       return true;
     } on Exception catch (e) {
       showCustomSnackBar(
