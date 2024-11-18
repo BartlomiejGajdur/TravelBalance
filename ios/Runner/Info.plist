@@ -2,50 +2,88 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- Aplikacja nie używa szyfrowania wymagającego zgłoszenia -->
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
+
+    <!-- Region językowy używany przez aplikację -->
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
+
+    <!-- Wyświetlana nazwa aplikacji -->
     <key>CFBundleDisplayName</key>
     <string>TravelBalance</string>
+
+    <!-- Nazwa pliku wykonywalnego aplikacji -->
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
+
+    <!-- Unikalny identyfikator aplikacji (bundle identifier) -->
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+    <!-- Wersja słownika Info.plist -->
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
+
+    <!-- Nazwa aplikacji -->
     <key>CFBundleName</key>
     <string>TravelBalance</string>
+
+    <!-- Typ pakietu aplikacji (APPL oznacza aplikację) -->
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+
+    <!-- Krótka wersja aplikacji (wersja wyświetlana użytkownikowi) -->
     <key>CFBundleShortVersionString</key>
     <string>$(FLUTTER_BUILD_NAME)</string>
+
+    <!-- Sygnatura aplikacji (zazwyczaj nie używana) -->
     <key>CFBundleSignature</key>
     <string>????</string>
+
+    <!-- Numer wersji builda aplikacji -->
     <key>CFBundleVersion</key>
     <string>$(FLUTTER_BUILD_NUMBER)</string>
+
+    <!-- Wymaga systemu iOS (nie działa na macOS) -->
     <key>LSRequiresIPhoneOS</key>
     <true/>
+
+    <!-- Nazwa storyboardu ekranu startowego -->
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
+
+    <!-- Główna storyboard aplikacji (niedostępna w aplikacjach Flutter) -->
     <key>UIMainStoryboardFile</key>
     <string>Main</string>
+
+    <!-- Obsługiwane orientacje ekranu (tylko pionowa) -->
     <key>UISupportedInterfaceOrientations</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
         <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+
+    <!-- Obsługiwane orientacje ekranu na iPadzie -->
     <key>UISupportedInterfaceOrientations~ipad</key>
     <array>
         <string>UIInterfaceOrientationPortrait</string>
         <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+
+    <!-- Wyłącza minimalne ograniczenie klatki na telefonach (używane do płynniejszej animacji) -->
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
+
+    <!-- Wsparcie dla pośrednich zdarzeń wejściowych (np. obsługa rysika Apple Pencil) -->
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
+
+    <!-- Schematy URL, które aplikacja może obsługiwać (integracja z Google Sign-In) -->
     <key>CFBundleURLTypes</key>
     <array>
+        <!-- Schemat URL dla Google Sign-In -->
         <dict>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
@@ -54,6 +92,7 @@
                 <string>com.googleusercontent.apps.1007518232866-9ef0serrldjq7ti29b7apbhtoqp6tbb6</string>
             </array>
         </dict>
+        <!-- Schemat URL dla aplikacji (custom URL scheme) -->
         <dict>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
@@ -63,16 +102,26 @@
             </array>
         </dict>
     </array>
+
+    <!-- Opis użycia Face ID (wymagane do uzyskania zgody użytkownika) -->
     <key>NSFaceIDUsageDescription</key>
     <string>This app uses Face ID to log you in securely.</string>
+
+    <!-- Wsparcie dla funkcji Sign in with Apple -->
     <key>ASProviderCapabilities</key>
     <array>
         <string>SignInWithApple</string>
     </array>
+
+    <!-- ID klienta Google (Google Sign-In) -->
     <key>GIDClientID</key>
     <string>G479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com</string>
+
+    <!-- Wymaga pełnoekranowego działania aplikacji (bez wsparcia dla Split View) -->
     <key>UIRequiresFullScreen</key>
     <true/>
+
+    <!-- Identyfikator aplikacji AdMob (do wyświetlania reklam) -->
     <key>GADApplicationIdentifier</key>
     <string>ca-app-pub-7301667226211856~9393157406</string>
 </dict>

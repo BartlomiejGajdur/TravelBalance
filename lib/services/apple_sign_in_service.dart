@@ -2,6 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:io' show Platform;
+import 'package:flutter/services.dart';
 
 class AppleSignInButton extends StatelessWidget {
   final ActionType actionTypeButton;
@@ -10,17 +11,19 @@ class AppleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isIOS
-        ? GestureDetector(
-            onTap: () async {
-              await _signInWithApple(context);
-            },
-            child: MockButton(
-              buttonType: ButtonType.apple,
-              actionType: actionTypeButton,
-            ),
-          )
-        : SizedBox();
+    return GestureDetector(
+      onTap: () async {
+        await _signInWithApple(context);
+      },
+      child: MockButton(
+        buttonType: ButtonType.apple,
+        actionType: actionTypeButton,
+      ),
+    );
+  }
+
+  void CopyToClipboard(String textToCopy) async {
+    await Clipboard.setData(ClipboardData(text: textToCopy));
   }
 
   Future<void> _signInWithApple(BuildContext context) async {
@@ -57,12 +60,46 @@ class AppleSignInButton extends StatelessWidget {
                 shrinkWrap: true,
                 children: <Widget>[
                   Text('User Identifier: $userIdentifier'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(userIdentifier),
+                    child: Text("Copy User Identifier"),
+                  ),
+                  SizedBox(height: 10),
                   Text('Given Name: $givenName'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(givenName),
+                    child: Text("Copy Given Name"),
+                  ),
+                  SizedBox(height: 10),
                   Text('Family Name: $familyName'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(familyName),
+                    child: Text("Copy Family Name"),
+                  ),
+                  SizedBox(height: 10),
                   Text('Email: $email'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(email),
+                    child: Text("Copy Email"),
+                  ),
+                  SizedBox(height: 10),
                   Text('Identity Token: $identityToken'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(identityToken),
+                    child: Text("Copy Identity Token"),
+                  ),
+                  SizedBox(height: 10),
                   Text('Authorization Code: $authorizationCode'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(authorizationCode),
+                    child: Text("Copy Authorization Code"),
+                  ),
+                  SizedBox(height: 10),
                   Text('State: $state'),
+                  ElevatedButton(
+                    onPressed: () => CopyToClipboard(state),
+                    child: Text("Copy State"),
+                  ),
                 ],
               ),
             ),
