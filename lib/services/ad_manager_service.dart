@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:async';
 
@@ -21,58 +25,82 @@ class AdManagerService {
     print("Google Mobile Ads zainicjalizowane.");
   }
 
-  void adOnCreateTrip(int tripsSize) async {
+  void adOnCreateTrip(BuildContext context, int tripsSize) async {
     if (tripsSize >= maxTripsWithoutAds) {
-      await showInterstitialAd();
+      await showInterstitialAd(context);
     }
   }
 
-  void adOnCreateExpense(int expensesSize) async {
+  void adOnCreateExpense(BuildContext context, int expensesSize) async {
     if (expensesSize > 0 &&
         expensesSize % showAdAfterAddingExpensesCount == 0) {
-      await showInterstitialAd();
+      await showInterstitialAd(context);
     }
   }
 
   // Funkcja ładująca reklamę pełnoekranową
-  void loadInterstitialAd() {
+  void loadInterstitialAd(BuildContext context) {
+    final String adUnitId = Platform.isAndroid
+        ? 'ca-app-pub-7301667226211856/9994692556'
+        : 'ca-app-pub-7301667226211856/6111950571';
+
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-7301667226211856/9994692556',
+      adUnitId: adUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           _interstitialAd = ad;
           _isAdLoaded = true;
-          print("Reklama pełnoekranowa załadowana.");
+          showCustomSnackBar(
+            context: context,
+            message: "Reklama pełnoekranowa załadowana.",
+            type: SnackBarType.correct,
+          );
         },
         onAdFailedToLoad: (error) {
-          print("Nie udało się załadować reklamy: $error");
           _isAdLoaded = false;
+          showCustomSnackBar(
+            context: context,
+            message: "Nie udało się załadować reklamy: $error",
+            type: SnackBarType.error,
+          );
         },
       ),
     );
   }
 
   // Funkcja wyświetlająca reklamę pełnoekranową
-  Future<void> showInterstitialAd() async {
+  Future<void> showInterstitialAd(BuildContext context) async {
     if (_isAdLoaded && _interstitialAd != null) {
       // Użyj Completer, aby czekać na zamknięcie reklamy
       final completer = Completer<void>();
 
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (ad) {
-          print("Reklama pełnoekranowa wyświetlona.");
+          showCustomSnackBar(
+            context: context,
+            message: "Reklama pełnoekranowa wyświetlona.",
+            type: SnackBarType.information,
+          );
         },
         onAdDismissedFullScreenContent: (ad) {
-          print("Reklama pełnoekranowa zamknięta.");
+          showCustomSnackBar(
+            context: context,
+            message: "Reklama pełnoekranowa zamknięta.",
+            type: SnackBarType.information,
+          );
           ad.dispose();
-          loadInterstitialAd(); // Ładuj nową reklamę po zamknięciu
+          loadInterstitialAd(context); // Ładuj nową reklamę po zamknięciu
           completer.complete(); // Uzupełnij Completer po zamknięciu reklamy
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
-          print("Nie udało się wyświetlić reklamy: $error");
+          showCustomSnackBar(
+            context: context,
+            message: "Nie udało się wyświetlić reklamy: $error",
+            type: SnackBarType.error,
+          );
           ad.dispose();
-          loadInterstitialAd();
+          loadInterstitialAd(context);
           completer.complete(); // Uzupełnij Completer w przypadku błędu
         },
       );
@@ -84,9 +112,17 @@ class AdManagerService {
 
       // Oczekuj na zamknięcie reklamy
       await completer.future;
-      print("Kontynuuj działanie po zamknięciu reklamy.");
+      showCustomSnackBar(
+        context: context,
+        message: "Kontynuuj działanie po zamknięciu reklamy.",
+        type: SnackBarType.correct,
+      );
     } else {
-      print("Reklama nie jest jeszcze załadowana.");
+      showCustomSnackBar(
+        context: context,
+        message: "Reklama nie jest jeszcze załadowana.",
+        type: SnackBarType.error,
+      );
     }
   }
 }

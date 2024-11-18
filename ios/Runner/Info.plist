@@ -59,7 +59,7 @@
             <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>com.domainname.travelbalance</string> <!-- Wprowadź tutaj swój Bundle ID -->
+                <string>com.domainname.travelbalance</string>
             </array>
         </dict>
     </array>
@@ -73,5 +73,7 @@
     <string>G479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com</string>
     <key>UIRequiresFullScreen</key>
     <true/>
+    <key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-7301667226211856~9393157406</string>
 </dict>
 </plist>

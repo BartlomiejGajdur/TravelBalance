@@ -41,8 +41,9 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
   late Currency _expenseCurrency;
   @override
   void initState() {
-    super.initState();
+    AdManagerService().loadInterstitialAd(context);
     _expenseCurrency = getCurrency();
+    super.initState();
   }
 
   @override
@@ -140,8 +141,8 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
     final int tripId = widget.tripProvider.trip.getId()!;
 
     AdManagerService()
-        .adOnCreateExpense(widget.tripProvider.trip.expenses.length);
-        
+        .adOnCreateExpense(context, widget.tripProvider.trip.expenses.length);
+
     widget.tripProvider
         .addExpense(tripId, title, cost, _expenseCurrency, category, dateTime);
     Navigator.of(context).pop();

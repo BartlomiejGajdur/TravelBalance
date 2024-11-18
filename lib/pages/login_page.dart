@@ -3,7 +3,6 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
@@ -33,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    AdManagerService().loadInterstitialAd();
+    AdManagerService().loadInterstitialAd(context);
     super.initState();
   }
 
@@ -68,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 108.h),
               GestureDetector(
                 onTap: () async {
-                  await AdManagerService().showInterstitialAd();
+                  await AdManagerService().showInterstitialAd(context);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(left: horizontalPadding),

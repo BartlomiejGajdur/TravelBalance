@@ -42,7 +42,7 @@ class AppleSignInButton extends StatelessWidget {
       String familyName = appleCredential.familyName ?? "Brak";
       String email = appleCredential.email ?? "Brak";
       String identityToken = appleCredential.identityToken ?? "Brak";
-      String authorizationCode = appleCredential.authorizationCode ?? "Brak";
+      String authorizationCode = appleCredential.authorizationCode;
       String state = appleCredential.state ?? "Brak";
 
       // Wyświetlamy popup z danymi użytkownika
