@@ -6,6 +6,7 @@ import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +44,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
   Future<bool> _onCreateTripPressed(BuildContext context) async {
     final String tripName = tripNameController.text;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    print(countries.length);
+
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
+    AdManagerService().adOnCreateTrip(userProvider.user!.trips.length);
     userProvider.addTrip(tripName, imagePicked, countries);
     Navigator.of(context).pop();
 

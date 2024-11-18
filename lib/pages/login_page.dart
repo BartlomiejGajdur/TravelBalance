@@ -4,6 +4,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dar
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,12 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    AdManagerService().loadInterstitialAd();
+    super.initState();
+  }
+
   void toggleLoading() {
     setState(() {
       forceLoading = !forceLoading;
@@ -49,22 +56,6 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushNamed(context, "TripListPage");
   }
 
-  //FOR DEBUG
-  void fillLoginAndPassword(
-      BuildContext context, String login, String password, bool haveTrips) {
-    usernameController.text = login;
-    passwordController.text = password;
-    String textMsg = "[DEBUG ONLY] - ";
-    textMsg += haveTrips
-        ? "User credentials with trips"
-        : "User credentials without trips";
-
-    showCustomSnackBar(
-        context: context, message: textMsg, type: SnackBarType.information);
-  }
-
-  //FOR DEBUG
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +67,9 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               SizedBox(height: 108.h),
               GestureDetector(
-                onTap: () => fillLoginAndPassword(
-                    context, "testowy_user", "testowehaslo123", true),
+                onTap: () async {
+                  await AdManagerService().showInterstitialAd();
+                },
                 child: Padding(
                   padding: EdgeInsets.only(left: horizontalPadding),
                   child: Text("Welcome back wanderer!", style: mainTextStyle),

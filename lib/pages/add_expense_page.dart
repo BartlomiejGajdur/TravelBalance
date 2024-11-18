@@ -8,6 +8,7 @@ import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -137,6 +138,10 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
     final Category category =
         Expense.stringToCategory(_categoryController.text);
     final int tripId = widget.tripProvider.trip.getId()!;
+
+    AdManagerService()
+        .adOnCreateExpense(widget.tripProvider.trip.expenses.length);
+        
     widget.tripProvider
         .addExpense(tripId, title, cost, _expenseCurrency, category, dateTime);
     Navigator.of(context).pop();

@@ -5,6 +5,11 @@
         android:label="TravelBalance"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7301667226211856~6785145677" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
