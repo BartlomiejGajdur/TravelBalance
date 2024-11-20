@@ -51,19 +51,19 @@ class AdManagerService {
         onAdLoaded: (ad) {
           _interstitialAd = ad;
           _isAdLoaded = true;
-          showCustomSnackBar(
-            context: context,
-            message: "Reklama pełnoekranowa załadowana.",
-            type: SnackBarType.correct,
-          );
+          // showCustomSnackBar(
+          //   context: context,
+          //   message: "Reklama pełnoekranowa załadowana.",
+          //   type: SnackBarType.correct,
+          // );
         },
         onAdFailedToLoad: (error) {
           _isAdLoaded = false;
-          showCustomSnackBar(
-            context: context,
-            message: "Nie udało się załadować reklamy: $error",
-            type: SnackBarType.error,
-          );
+          // showCustomSnackBar(
+          //   context: context,
+          //   message: "Nie udało się załadować reklamy: $error",
+          //   type: SnackBarType.error,
+          // );
         },
       ),
     );
@@ -77,28 +77,28 @@ class AdManagerService {
 
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (ad) {
-          showCustomSnackBar(
-            context: context,
-            message: "Reklama pełnoekranowa wyświetlona.",
-            type: SnackBarType.information,
-          );
+          // showCustomSnackBar(
+          //   context: context,
+          //   message: "Reklama pełnoekranowa wyświetlona.",
+          //   type: SnackBarType.information,
+          // );
         },
         onAdDismissedFullScreenContent: (ad) {
-          showCustomSnackBar(
-            context: context,
-            message: "Reklama pełnoekranowa zamknięta.",
-            type: SnackBarType.information,
-          );
+          // showCustomSnackBar(
+          //   context: context,
+          //   message: "Reklama pełnoekranowa zamknięta.",
+          //   type: SnackBarType.information,
+          // );
           ad.dispose();
           loadInterstitialAd(context); // Ładuj nową reklamę po zamknięciu
           completer.complete(); // Uzupełnij Completer po zamknięciu reklamy
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
-          showCustomSnackBar(
-            context: context,
-            message: "Nie udało się wyświetlić reklamy: $error",
-            type: SnackBarType.error,
-          );
+          // showCustomSnackBar(
+          //   context: context,
+          //   message: "Nie udało się wyświetlić reklamy: $error",
+          //   type: SnackBarType.error,
+          // );
           ad.dispose();
           loadInterstitialAd(context);
           completer.complete(); // Uzupełnij Completer w przypadku błędu
@@ -112,17 +112,17 @@ class AdManagerService {
 
       // Oczekuj na zamknięcie reklamy
       await completer.future;
-      showCustomSnackBar(
-        context: context,
-        message: "Kontynuuj działanie po zamknięciu reklamy.",
-        type: SnackBarType.correct,
-      );
+      // showCustomSnackBar(
+      //   context: context,
+      //   message: "Kontynuuj działanie po zamknięciu reklamy.",
+      //   type: SnackBarType.correct,
+      // );
     } else {
-      showCustomSnackBar(
-        context: context,
-        message: "Reklama nie jest jeszcze załadowana.",
-        type: SnackBarType.error,
-      );
+      // showCustomSnackBar(
+      //   context: context,
+      //   message: "Reklama nie jest jeszcze załadowana.",
+      //   type: SnackBarType.error,
+      // );
     }
   }
 }
