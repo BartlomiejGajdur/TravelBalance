@@ -56,13 +56,15 @@ class UserProvider with ChangeNotifier {
   }
 
   void logout(BuildContext context) async {
-    _user = null;
-    final tokenType = ApiService().getToken();
-    if (tokenType == BaseTokenType.Token) {
+    final loginType = ApiService().getLoginType();
+
+    if (loginType == LoginType.Email) {
       await ApiService().logout();
-    } else if (tokenType == BaseTokenType.Bearer) {
+    } else if (loginType == LoginType.Google) {
       await GoogleSignInApi().logout(context);
-    }
+    } else if (loginType == LoginType.Apple) {/* fill with logout Apple */}
+
+    _user = null;
     ApiService().clearToken();
     SharedPrefsStorage().clearToken();
     notifyListeners();

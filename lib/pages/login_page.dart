@@ -65,14 +65,9 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 108.h),
-              GestureDetector(
-                onTap: () async {
-                  //await AdManagerService().showInterstitialAd(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: horizontalPadding),
-                  child: Text("Welcome back wanderer!", style: mainTextStyle),
-                ),
+              Padding(
+                padding: EdgeInsets.only(left: horizontalPadding),
+                child: Text("Welcome back wanderer!", style: mainTextStyle),
               ),
               SizedBox(height: 8.h),
               Padding(

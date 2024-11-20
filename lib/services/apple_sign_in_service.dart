@@ -11,15 +11,17 @@ class AppleSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await _signInWithApple(context);
-      },
-      child: MockButton(
-        buttonType: ButtonType.apple,
-        actionType: actionTypeButton,
-      ),
-    );
+    return Platform.isIOS
+        ? GestureDetector(
+            onTap: () async {
+              await _signInWithApple(context);
+            },
+            child: MockButton(
+              buttonType: ButtonType.apple,
+              actionType: actionTypeButton,
+            ),
+          )
+        : SizedBox();
   }
 
   void CopyToClipboard(String textToCopy) async {

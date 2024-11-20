@@ -44,7 +44,6 @@ void main() async {
   ]);
 
   runApp(MyApp());
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -61,7 +60,8 @@ class MyApp extends StatelessWidget {
 
       final authToken = await SharedPrefsStorage().getToken();
       if (authToken != null) {
-        ApiService().setToken(authToken.token, authToken.tokenType);
+        ApiService().setToken(
+            authToken.token, authToken.tokenType, authToken.loginType);
         return TripListPage();
       }
 

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:TravelBalance/Utils/country_picker.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
@@ -16,6 +15,8 @@ import 'dart:convert';
 
 enum BaseTokenType { Token, Bearer, None }
 
+enum LoginType { Google, Apple, Email, None }
+
 class ApiService {
   static final ApiService _instance = ApiService._internal();
 
@@ -24,6 +25,7 @@ class ApiService {
   factory ApiService() => _instance;
 
   BaseTokenType _tokenType = BaseTokenType.Token;
+  LoginType _loginType = LoginType.None;
   String _token = "";
   final String _baseUrl = "https://travelbalance.pl/api/v1/";
 
@@ -31,15 +33,21 @@ class ApiService {
     return _tokenType;
   }
 
-  void setToken(String token, BaseTokenType tokenType) {
+  LoginType getLoginType() {
+    return _loginType;
+  }
+
+  void setToken(String token, BaseTokenType tokenType, LoginType loginType) {
     _token = token;
     _tokenType = tokenType;
-    SharedPrefsStorage().saveToken(token, tokenType);
+    _loginType = loginType;
+    SharedPrefsStorage().saveToken(token, tokenType, loginType);
   }
 
   void clearToken() {
     _token = "";
     _tokenType = BaseTokenType.None;
+    _loginType = LoginType.None;
   }
 
   BaseTokenType getBaseTokenTypeFromString(String tokenType) {
@@ -51,6 +59,19 @@ class ApiService {
       case '':
       default:
         return BaseTokenType.None;
+    }
+  }
+
+  LoginType getLoginTypeFromString(String loginType) {
+    switch (loginType) {
+      case 'Google':
+        return LoginType.Google;
+      case 'Apple':
+        return LoginType.Apple;
+      case 'Email':
+        return LoginType.Email;
+      default:
+        return LoginType.None;
     }
   }
 
@@ -110,7 +131,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        setToken(responseBody['token'], BaseTokenType.Token);
+        setToken(responseBody['token'], BaseTokenType.Token, LoginType.Email);
         debugPrint('Login successful: $responseBody');
         return true;
       } else {
@@ -131,6 +152,7 @@ class ApiService {
     try {
       final user = await GoogleSignInApi().login(context);
       if (user == null) {
+        debugPrint("User null po logowaniu google");
         return false;
       }
       final GoogleSignInAuthentication googleAuth = await user.authentication;
@@ -150,23 +172,16 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        setToken(responseBody['access_token'], BaseTokenType.Bearer);
+        setToken(responseBody['access_token'], BaseTokenType.Bearer,
+            LoginType.Google);
         debugPrint('Login successful: bearer: $responseBody');
         return true;
       } else {
-        showCustomSnackBar(
-          context: context,
-          message: 'Login Google failed with status: ${response.statusCode}',
-          type: SnackBarType.error,
-        );
+        debugPrint("'Login Google failed with status: ${response.statusCode}");
         return false;
       }
     } catch (e) {
-      showCustomSnackBar(
-        context: context,
-        message: "Error Google logging in: $e",
-        type: SnackBarType.error,
-      );
+      debugPrint("Error Google logging in: $e");
       return false;
     }
   }
