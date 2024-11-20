@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 108.h),
               GestureDetector(
                 onTap: () async {
-                  await AdManagerService().showInterstitialAd(context);
+                  //await AdManagerService().showInterstitialAd(context);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(left: horizontalPadding),
