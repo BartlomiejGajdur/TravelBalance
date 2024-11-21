@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
-import 'package:TravelBalance/pages/login_page.dart';
 
 enum Option {
   currency,
@@ -71,7 +70,6 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 20.h),
               child: GestureDetector(
                 onTap: () {
-                 
                   Provider.of<UserProvider>(context, listen: false)
                       .logout(context);
                 },
