@@ -148,9 +148,9 @@ class ApiService {
     }
   }
 
-  Future<bool> loginGoogle(BuildContext context) async {
+  Future<bool> loginGoogle() async {
     try {
-      final user = await GoogleSignInApi().login(context);
+      final user = await GoogleSignInApi().login();
       if (user == null) {
         debugPrint("User null po logowaniu google");
         return false;

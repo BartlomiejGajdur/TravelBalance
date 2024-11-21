@@ -4,6 +4,7 @@ import 'package:TravelBalance/Utils/floating_action_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/short_trip_component.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
+import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,6 +39,12 @@ class _TripListPageState extends State<TripListPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     precacheAllImages(context);
+  }
+
+  @override
+  void dispose() {
+    AdManagerService().bannerAdManager.disposeAd();
+    super.dispose();
   }
 
   Future<void> _fetchUserData() async {
@@ -286,6 +293,7 @@ class _TripListPageState extends State<TripListPage> {
             ),
           ),
         ),
+        AdManagerService().bannerAdManager.getAdWidget(),
         isSwitched
             ? _buildShortTripList(userProvider)
             : _buildExtendedTripList(userProvider),

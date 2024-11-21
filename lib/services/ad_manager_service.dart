@@ -3,41 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:async';
 
-final int maxTripsWithoutAds = 2;
-final int showAdAfterAddingExpensesCount = 5;
+// Konfiguracja limitów reklam
+const int maxTripsWithoutAds = 2;
+const int showAdAfterAddingExpensesCount = 5;
 
-class AdManagerService {
-  static final AdManagerService _instance = AdManagerService._internal();
+class InterstitialAdManager {
   InterstitialAd? _interstitialAd;
   bool _isAdLoaded = false;
 
-  AdManagerService._internal();
-
-  factory AdManagerService() {
-    return _instance;
-  }
-
-  // Inicjalizacja Google Mobile Ads
-  Future<void> initialize() async {
-    await MobileAds.instance.initialize();
-    print("Google Mobile Ads zainicjalizowane.");
-  }
-
-  void adOnCreateTrip(BuildContext context, int tripsSize) async {
-    if (tripsSize >= maxTripsWithoutAds) {
-      await showInterstitialAd(context);
-    }
-  }
-
-  void adOnCreateExpense(BuildContext context, int expensesSize) async {
-    if (expensesSize > 0 &&
-        expensesSize % showAdAfterAddingExpensesCount == 0) {
-      await showInterstitialAd(context);
-    }
-  }
-
   // Funkcja ładująca reklamę pełnoekranową
-  void loadInterstitialAd(BuildContext context) {
+  void loadAd() {
     final String adUnitId = Platform.isAndroid
         ? 'ca-app-pub-7301667226211856/9994692556'
         : 'ca-app-pub-7301667226211856/6111950571';
@@ -49,78 +24,134 @@ class AdManagerService {
         onAdLoaded: (ad) {
           _interstitialAd = ad;
           _isAdLoaded = true;
-          // showCustomSnackBar(
-          //   context: context,
-          //   message: "Reklama pełnoekranowa załadowana.",
-          //   type: SnackBarType.correct,
-          // );
+          debugPrint("Reklama pełnoekranowa załadowana.");
         },
         onAdFailedToLoad: (error) {
           _isAdLoaded = false;
-          // showCustomSnackBar(
-          //   context: context,
-          //   message: "Nie udało się załadować reklamy: $error",
-          //   type: SnackBarType.error,
-          // );
+          debugPrint("Nie udało się załadować reklamy: $error");
         },
       ),
     );
   }
 
   // Funkcja wyświetlająca reklamę pełnoekranową
-  Future<void> showInterstitialAd(BuildContext context) async {
+  Future<void> showInterstitialAd() async {
     if (_isAdLoaded && _interstitialAd != null) {
-      // Użyj Completer, aby czekać na zamknięcie reklamy
       final completer = Completer<void>();
 
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdShowedFullScreenContent: (ad) {
-          // showCustomSnackBar(
-          //   context: context,
-          //   message: "Reklama pełnoekranowa wyświetlona.",
-          //   type: SnackBarType.information,
-          // );
+          debugPrint("Reklama pełnoekranowa wyświetlona.");
         },
         onAdDismissedFullScreenContent: (ad) {
-          // showCustomSnackBar(
-          //   context: context,
-          //   message: "Reklama pełnoekranowa zamknięta.",
-          //   type: SnackBarType.information,
-          // );
+          debugPrint("Reklama pełnoekranowa zamknięta.");
           ad.dispose();
-          loadInterstitialAd(context); // Ładuj nową reklamę po zamknięciu
-          completer.complete(); // Uzupełnij Completer po zamknięciu reklamy
+          loadAd(); // Ładowanie nowej reklamy
+          completer.complete();
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
-          // showCustomSnackBar(
-          //   context: context,
-          //   message: "Nie udało się wyświetlić reklamy: $error",
-          //   type: SnackBarType.error,
-          // );
+          debugPrint("Nie udało się wyświetlić reklamy: $error");
           ad.dispose();
-          loadInterstitialAd(context);
-          completer.complete(); // Uzupełnij Completer w przypadku błędu
+          loadAd();
+          completer.complete();
         },
       );
 
-      // Wyświetl reklamę
       _interstitialAd!.show();
       _isAdLoaded = false;
       _interstitialAd = null;
 
-      // Oczekuj na zamknięcie reklamy
       await completer.future;
-      // showCustomSnackBar(
-      //   context: context,
-      //   message: "Kontynuuj działanie po zamknięciu reklamy.",
-      //   type: SnackBarType.correct,
-      // );
+      debugPrint("Kontynuacja po zamknięciu reklamy.");
     } else {
-      // showCustomSnackBar(
-      //   context: context,
-      //   message: "Reklama nie jest jeszcze załadowana.",
-      //   type: SnackBarType.error,
-      // );
+      debugPrint("Reklama nie jest jeszcze załadowana.");
+    }
+  }
+}
+
+class BannerAdManager {
+  BannerAd? _bannerAd;
+  bool _isAdLoaded = false;
+
+  void loadAd() {
+    final String adUnitId = Platform.isAndroid
+        ? 'ca-app-pub-7301667226211856/2946740920'
+        : 'ca-app-pub-7301667226211856/4168323258';
+
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          _isAdLoaded = true;
+          debugPrint("Reklama banerowa załadowana.");
+        },
+        onAdFailedToLoad: (ad, error) {
+          _isAdLoaded = false;
+          ad.dispose();
+          debugPrint("Nie udało się załadować reklamy banerowej: $error");
+        },
+      ),
+    );
+
+    _bannerAd!.load();
+  }
+
+  // Funkcja zwracająca widżet reklamy banerowej
+  Widget getAdWidget() {
+    if (_isAdLoaded && _bannerAd != null) {
+      return Container(
+        alignment: Alignment.center,
+        width: _bannerAd!.size.width.toDouble(),
+        height: _bannerAd!.size.height.toDouble(),
+        child: AdWidget(ad: _bannerAd!),
+      );
+    } else {
+      debugPrint("Reklama banerowa nie jest jeszcze gotowa.");
+      return const SizedBox();
+    }
+  }
+
+  // Funkcja usuwająca zasoby związane z reklamą
+  void disposeAd() {
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    _isAdLoaded = false;
+    debugPrint("Reklama banerowa została usunięta.");
+  }
+}
+
+// Klasa zarządzająca logiką wyświetlania reklam
+class AdManagerService {
+  static final AdManagerService _instance = AdManagerService._internal();
+  final InterstitialAdManager _interstitialAdManager = InterstitialAdManager();
+  final BannerAdManager _bannerAdManager = BannerAdManager();
+
+  AdManagerService._internal();
+
+  factory AdManagerService() => _instance;
+
+  InterstitialAdManager get interstitialAdManager => _interstitialAdManager;
+  BannerAdManager get bannerAdManager => _bannerAdManager;
+
+  Future<void> initialize() async {
+    await MobileAds.instance.initialize();
+    debugPrint("Google Mobile Ads zainicjalizowane.");
+    _interstitialAdManager.loadAd();
+    _bannerAdManager.loadAd();
+  }
+
+  void adOnCreateTrip(BuildContext context, int tripsSize) async {
+    if (tripsSize >= maxTripsWithoutAds) {
+      await _interstitialAdManager.showInterstitialAd();
+    }
+  }
+
+  void adOnCreateExpense(BuildContext context, int expensesSize) async {
+    if (expensesSize > 0 &&
+        expensesSize % showAdAfterAddingExpensesCount == 0) {
+      await _interstitialAdManager.showInterstitialAd();
     }
   }
 }

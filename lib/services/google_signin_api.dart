@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInApi {
   GoogleSignInApi._privateConstructor();
 
-  static final GoogleSignInApi _instance = GoogleSignInApi._privateConstructor();
+  static final GoogleSignInApi _instance =
+      GoogleSignInApi._privateConstructor();
 
   factory GoogleSignInApi() {
     return _instance;
@@ -18,36 +18,26 @@ class GoogleSignInApi {
         : null,
   );
 
-  Future<GoogleSignInAccount?> login(BuildContext context) async {
+  Future<GoogleSignInAccount?> login() async {
     try {
       final GoogleSignInAccount? user = await _googleSignIn.signIn();
       if (user == null) {
-        showCustomSnackBar(
-            context: context,
-            message: 'User declined login!',
-            type: SnackBarType.warning);
+        debugPrint('User declined login!');
       }
       return user;
     } on Exception catch (e) {
-      showCustomSnackBar(
-        context: context,
-        message: 'Error during Google Sign-In: $e',
-      );
+      debugPrint('Error during Google Sign-In: $e');
       return null;
     }
   }
 
-  Future<bool> logout(BuildContext context) async {
+  Future<bool> logout() async {
     try {
       await _googleSignIn.signOut();
-      showCustomSnackBar(
-          context: context,
-          message: 'User signed out successfully.',
-          type: SnackBarType.correct);
+      debugPrint('User signed out successfully.');
       return true;
     } on Exception catch (e) {
-      showCustomSnackBar(
-          context: context, message: 'Error during Google Sign-Out: $e');
+      debugPrint('Error during Google Sign-Out: $e');
       return false;
     }
   }

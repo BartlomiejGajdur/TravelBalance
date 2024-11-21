@@ -41,7 +41,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
   late Currency _expenseCurrency;
   @override
   void initState() {
-    AdManagerService().loadInterstitialAd(context);
+    AdManagerService().interstitialAdManager.loadAd();
     _expenseCurrency = getCurrency();
     super.initState();
   }

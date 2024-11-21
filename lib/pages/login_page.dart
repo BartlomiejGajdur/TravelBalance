@@ -3,7 +3,6 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
-import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +27,6 @@ class _LoginPageState extends State<LoginPage> {
     usernameController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    AdManagerService().loadInterstitialAd(context);
-    super.initState();
   }
 
   void toggleLoading() {
@@ -107,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
               GestureDetector(
                 onTap: () async {
                   toggleLoading();
-                  bool result = await ApiService().loginGoogle(context);
+                  bool result = await ApiService().loginGoogle();
                   if (result) {
                     moveToTrips();
                   }

@@ -1,4 +1,5 @@
 import 'package:TravelBalance/models/custom_image.dart';
+import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
@@ -56,12 +57,18 @@ class UserProvider with ChangeNotifier {
   }
 
   void logout(BuildContext context) async {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+      (Route<dynamic> route) => false,
+    );
+
     final loginType = ApiService().getLoginType();
 
     if (loginType == LoginType.Email) {
       await ApiService().logout();
     } else if (loginType == LoginType.Google) {
-      await GoogleSignInApi().logout(context);
+      await GoogleSignInApi().logout();
     } else if (loginType == LoginType.Apple) {/* fill with logout Apple */}
 
     _user = null;

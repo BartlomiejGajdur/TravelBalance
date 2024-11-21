@@ -39,7 +39,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
   @override
   void initState() {
-    AdManagerService().loadInterstitialAd(context);
+    AdManagerService().interstitialAdManager.loadAd();
     super.initState();
   }
 
@@ -53,7 +53,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
-    AdManagerService().adOnCreateTrip(context,userProvider.user!.trips.length);
+    AdManagerService().adOnCreateTrip(context, userProvider.user!.trips.length);
     userProvider.addTrip(tripName, imagePicked, countries);
     Navigator.of(context).pop();
 

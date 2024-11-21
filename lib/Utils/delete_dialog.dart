@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void deleteTrip(BuildContext context, Trip trip) {
-  Navigator.of(context).pop();
   int? tripId = trip.getId();
   if (tripId != null) {
     Provider.of<UserProvider>(context, listen: false).deleteTrip(tripId);
@@ -70,7 +69,7 @@ void showDeleteTripDialog(BuildContext context, Trip trip) {
               GestureDetector(
                 onTap: () {
                   deleteTrip(ctx, trip);
-                  Navigator.pushNamed(ctx, "TripListPage");
+                  Navigator.of(ctx).pop();
                 },
                 child: Container(
                   height: 46.h,

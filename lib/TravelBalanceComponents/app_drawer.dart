@@ -71,11 +71,7 @@ class AppDrawer extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 20.h),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (Route<dynamic> route) => false,
-                  );
+                 
                   Provider.of<UserProvider>(context, listen: false)
                       .logout(context);
                 },

@@ -139,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
               GestureDetector(
                 onTap: () async {
                   toggleLoading();
-                  bool result = await ApiService().loginGoogle(context);
+                  bool result = await ApiService().loginGoogle();
                   if (result) {
                     moveToTrips();
                   }
