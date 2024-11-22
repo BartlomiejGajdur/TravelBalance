@@ -206,35 +206,67 @@ class ApiService {
   Future<bool> loginApple(BuildContext context) async {
     try {
       final user = await AppleSignInButton.signInWithApple();
-      assert(user.identityToken != null);
+
+      if (user.identityToken == null) {
+        debugPrint('Identity token is null.');
+        showCustomSnackBar(
+            context: context,
+            message: 'Apple sign-in failed. Please try again.');
+        return false;
+      }
 
       final body = {
         "client_id": _secrets.APPLE_CLIENT_ID,
         "backend": "apple-id",
         "grant_type": "convert_token",
-        "token": user.identityToken,
+        "token": user.identityToken!,
       };
+      final encodedBody = body.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+
+      showCustomSnackBar(context: context, message: body.toString());
+
       const endPoint = 'auth/convert-token/';
       final response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: jsonEncode(body),
+        body: encodedBody,
       );
 
-      if (response.statusCode == 200) {
+      try {
         final responseBody = jsonDecode(response.body);
-        setToken(responseBody['access_token'], BaseTokenType.Bearer,
-            LoginType.Apple);
-        debugPrint('Login APPLE successful: bearer: $responseBody');
-        return true;
-      } else {
-        debugPrint("'Login APPLE failed with status: ${response.statusCode}");
+
+        if (response.statusCode == 200) {
+          setToken(
+            responseBody['access_token'],
+            BaseTokenType.Bearer,
+            LoginType.Apple,
+          );
+          debugPrint('Login APPLE successful: bearer: $responseBody');
+          return true;
+        } else {
+          debugPrint('Login failed: $responseBody');
+          showCustomSnackBar(
+              context: context,
+              message: responseBody['error'] ??
+                  'Unknown error occurred. $responseBody');
+          return false;
+        }
+      } catch (e) {
+        debugPrint('Error decoding response: $e');
         showCustomSnackBar(
-            context: context, message: jsonDecode(response.body).toString());
+            context: context,
+            message: 'Unexpected server error. Please try again. $e');
         return false;
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       debugPrint("Error APPLE logging in: $e");
+      debugPrint("Stacktrace: $stacktrace");
+      showCustomSnackBar(
+          context: context,
+          message: 'Apple login failed. Please try again.$e \n $stacktrace');
       return false;
     }
   }
