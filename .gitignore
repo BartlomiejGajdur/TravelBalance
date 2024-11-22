@@ -1,4 +1,5 @@
-*.env
+# SECRET KEYS
+runner.bat
 # Miscellaneous
 *.class
 *.log
