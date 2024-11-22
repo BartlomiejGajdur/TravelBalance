@@ -100,6 +100,9 @@ class AppDrawer extends StatelessWidget {
       baseCurrencyCode = defaultCurrencyCode;
     }
 
+    final bool isChangePasswordUnaccessible = option == Option.changePassword &&
+        ApiService().getLoginType() != LoginType.Email;
+
     return GestureDetector(
       onTap: () {
         switch (option) {
@@ -107,7 +110,9 @@ class AppDrawer extends StatelessWidget {
             showCurrency(context);
             break;
           case Option.changePassword:
-            moveToChangePassword(context);
+            if (!isChangePasswordUnaccessible) {
+              moveToChangePassword(context);
+            }
             break;
           case Option.sendFeedback:
             showSendFeedback(context);
@@ -120,9 +125,9 @@ class AppDrawer extends StatelessWidget {
         }
       },
       child: ListTile(
-        trailing: const Icon(
+        trailing: Icon(
           Icons.arrow_forward_ios_rounded,
-          color: secondaryColor,
+          color: isChangePasswordUnaccessible ? Colors.grey : secondaryColor,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,7 +137,8 @@ class AppDrawer extends StatelessWidget {
               style: GoogleFonts.outfit(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
-                color: mainTextColor,
+                color:
+                    isChangePasswordUnaccessible ? Colors.grey : mainTextColor,
               ),
             ),
             option == Option.currency
