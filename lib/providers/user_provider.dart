@@ -14,15 +14,20 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
 
   Future<void> fetchWholeUserData() async {
-    final fetchedUser = await ApiService().fetchUserData();
-
-    if (fetchedUser != null) {
-      _user = fetchedUser;
-      _user!.recalculateCostInBaseCurrency();
-      notifyListeners();
-    } else {
-      debugPrint("Failed to fetch user data");
+    User? fetchedUser = await ApiService().fetchUserData();
+    if (fetchedUser == null) {
+      await ApiService().refreshToken();
+      fetchedUser = await ApiService().fetchUserData();
     }
+
+    if (fetchedUser == null) {
+      debugPrint("Failed to fetch user data");
+      return;
+    }
+
+    _user = fetchedUser;
+    _user!.recalculateCostInBaseCurrency();
+    notifyListeners();
   }
 
   void addTrip(

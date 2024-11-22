@@ -21,13 +21,20 @@ enum LoginType { Google, Apple, Email, None }
 
 class Authentication {
   String token;
+  String? refreshToken;
   BaseTokenType tokenType;
   LoginType loginType;
 
-  Authentication(this.token, this.tokenType, this.loginType);
+  Authentication(
+    this.token,
+    this.refreshToken,
+    this.tokenType,
+    this.loginType,
+  );
 
   void reset() {
     token = "";
+    refreshToken = null;
     tokenType = BaseTokenType.None;
     loginType = LoginType.None;
   }
@@ -59,6 +66,64 @@ class ApiService {
   }
 
   LoginType get loginType => _authentication.loginType;
+
+  Future<void> refreshToken() async {
+    if (loginType == LoginType.Google) {
+      //TO DO - > Implement Google Refresh Token
+      await refreshGoogleToken();
+    }
+
+    if (loginType == LoginType.Apple) {
+      //TO DO - > Check correctness Of Refresh Apple token
+      await refreshAppleToken();
+    }
+  }
+
+  Future<bool> refreshAppleToken() async {
+    assert(_authentication.refreshToken != null);
+    try {
+      final body = {
+        "client_id": _secrets.APPLE_CLIENT_ID,
+        "client_secret": _secrets.APPLE_CLIENT_SECRET,
+        "grant_type": "refresh_token",
+        "token": _authentication.refreshToken!,
+      };
+
+      //TO DO - > Nie wiadomo czy to ma byc encodowane TBH
+      final encodedBody = body.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+
+      const endPoint = 'auth/token/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: encodedBody,
+      );
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setAuthentication(Authentication(
+          responseBody['access_token'],
+          responseBody['refresh_token'],
+          BaseTokenType.Bearer,
+          LoginType.Apple,
+        ));
+        debugPrint('Refresh Token Apple successful $responseBody');
+        return true;
+      } else {
+        debugPrint('Refresh Token Apple failed: $responseBody');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('Refresh Token Apple failed: $e');
+      return false;
+    }
+  }
+
+  Future<void> refreshGoogleToken() async {}
 
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
@@ -125,6 +190,7 @@ class ApiService {
         final userData = jsonDecode(userDataResponse.body);
         return User.fromJson(tripsData, userData);
       } else {
+        //Last Response code (?)
         debugPrint(
             'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
         return null;
@@ -151,7 +217,7 @@ class ApiService {
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         setAuthentication(Authentication(
-            responseBody['token'], BaseTokenType.Token, LoginType.Email));
+            responseBody['token'], null, BaseTokenType.Token, LoginType.Email));
         debugPrint('Login successful: $responseBody');
         return true;
       } else {
@@ -190,8 +256,11 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        setAuthentication(Authentication(responseBody['access_token'],
-            BaseTokenType.Bearer, LoginType.Google));
+        setAuthentication(Authentication(
+            responseBody['access_token'],
+            responseBody['refresh_token'],
+            BaseTokenType.Bearer,
+            LoginType.Google));
         debugPrint('Login successful: bearer: $responseBody');
         return true;
       } else {
@@ -241,6 +310,7 @@ class ApiService {
       if (response.statusCode == 200) {
         setAuthentication(Authentication(
           responseBody['access_token'],
+          responseBody['refresh_token'],
           BaseTokenType.Bearer,
           LoginType.Apple,
         ));
