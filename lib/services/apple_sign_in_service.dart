@@ -20,7 +20,7 @@ class AppleSignInButton extends StatelessWidget {
     return Platform.isIOS
         ? GestureDetector(
             onTap: () async {
-              bool result = await ApiService().loginApple();
+              bool result = await ApiService().loginApple(context);
               if (result) {
                 moveToTrips(context);
               } else {
