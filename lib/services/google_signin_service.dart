@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +36,10 @@ class GoogleSignInButton extends StatelessWidget {
     );
   }
 
-  static final _googleSignIn = GoogleSignIn();
+  static final _googleSignIn = GoogleSignIn(
+      clientId: Platform.isIOS
+          ? "1007518232866-2j5uguag2hs5rmg7r7k4120v640k0pqs.apps.googleusercontent.com"
+          : null);
 
   static Future<GoogleSignInAccount?> login() async {
     try {
