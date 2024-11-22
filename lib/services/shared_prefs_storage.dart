@@ -1,8 +1,10 @@
 import 'package:TravelBalance/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefsStorage {
   final String token = "Token";
+  final String refreshToken = "RefreshToken";
   final String tokenType = "TokenType";
   final String loginType = "LoginType";
   //Singleton
@@ -32,28 +34,38 @@ class SharedPrefsStorage {
   }
 
   void saveAuthentication(Authentication newAuthentication) async {
-    await _prefs.setString(token, newAuthentication.token);
-    await _prefs.setString(tokenType, newAuthentication.tokenType.name);
-    await _prefs.setString(loginType, newAuthentication.loginType.name);
+    try {
+      await Future.wait([
+        _prefs.setString(token, newAuthentication.token),
+        _prefs.setString(tokenType, newAuthentication.tokenType.name),
+        _prefs.setString(loginType, newAuthentication.loginType.name),
+        if (newAuthentication.refreshToken != null)
+          _prefs.setString(refreshToken, newAuthentication.refreshToken!),
+      ]);
+    } catch (e) {
+      debugPrint('Error saving authentication: $e');
+    }
   }
 
   void resetAuthentication() async {
     await _prefs.remove(token);
     await _prefs.remove(tokenType);
     await _prefs.remove(loginType);
+    await _prefs.remove(refreshToken);
   }
 
-  Future<Authentication?> getAuthentication() async {
-    final String? l_token = await _prefs.getString(token);
-    final String? l_tokenType = await _prefs.getString(tokenType);
-    final String? l_loginType = await _prefs.getString(loginType);
+  Authentication? getAuthentication() {
+    final String? l_token = _prefs.getString(token);
+    final String? l_tokenType = _prefs.getString(tokenType);
+    final String? l_loginType = _prefs.getString(loginType);
+    final String? l_refreshToken = _prefs.getString(refreshToken);
 
     if (l_tokenType == null || l_token == null || l_loginType == null)
       return null;
 
     return Authentication(
         l_token,
-        null,
+        l_refreshToken,
         ApiService().getBaseTokenTypeFromString(l_tokenType),
         ApiService().getLoginTypeFromString(l_loginType));
   }

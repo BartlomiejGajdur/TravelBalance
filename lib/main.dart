@@ -82,16 +82,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<Widget> _setStartingPage() async {
+  Widget _setStartingPage() {
     try {
       final bool wasIntroductionScreenShown =
-          await SharedPrefsStorage().getBool('wasIntroductionScreenShown');
+          SharedPrefsStorage().getBool('wasIntroductionScreenShown');
 
       if (!wasIntroductionScreenShown) {
         return IntroductionPage();
       }
 
-      final authentication = await SharedPrefsStorage().getAuthentication();
+      final authentication = SharedPrefsStorage().getAuthentication();
       if (authentication != null) {
         ApiService().setAuthentication(authentication);
         return TripListPage();
@@ -121,18 +121,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.white,
             ),
           ),
-          home: FutureBuilder<Widget>(
-            future: _setStartingPage(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasData) {
-                return snapshot.data ?? const LoginPage();
-              } else {
-                return const LoginPage();
-              }
-            },
-          ),
+          home: _setStartingPage(),
           onGenerateRoute: (settings) {
             switch (settings.name) {
               case 'LoginPage':

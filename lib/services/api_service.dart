@@ -69,54 +69,51 @@ class ApiService {
 
   LoginType get loginType => _authentication.loginType;
 
-  Future<void> refreshToken() async {
-    if (loginType == LoginType.Google) {
-      //TO DO - > Implement Google Refresh Token
-      await refreshGoogleToken();
-    }
+  Future<bool> refreshToken() async {
+    if (loginType != LoginType.Google && loginType != LoginType.Apple)
+      return false;
 
-    if (loginType == LoginType.Apple) {
-      //TO DO - > Check correctness Of Refresh Apple token
-      await refreshAppleToken();
+    if (_authentication.refreshToken == null) {
+      debugPrint('No refresh token available.');
+      return false;
     }
-  }
-
-  Future<bool> refreshAppleToken() async {
-    assert(_authentication.refreshToken != null);
     try {
-      final body = {
-        "client_id": _secrets.APPLE_CLIENT_ID,
-        "client_secret": _secrets.APPLE_CLIENT_SECRET,
-        "grant_type": "refresh_token",
-        "token": _authentication.refreshToken!,
-      };
+      late final String CLIENT_ID, CLIENT_SECRET;
+      if (loginType == LoginType.Google) {
+        CLIENT_ID = _secrets.GOOGLE_CLIENT_ID;
+        CLIENT_SECRET = _secrets.GOOGLE_CLIENT_SECRET;
+      }
+      if (loginType == LoginType.Apple) {
+        CLIENT_ID = _secrets.APPLE_CLIENT_ID;
+        CLIENT_SECRET = _secrets.APPLE_CLIENT_SECRET;
+      }
 
-      //TO DO - > Nie wiadomo czy to ma byc encodowane TBH
-      final encodedBody = body.entries
-          .map((e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-          .join('&');
+      final body = {
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "grant_type": "refresh_token",
+        "refresh_token": _authentication.refreshToken!,
+      };
 
       const endPoint = 'auth/token/';
       final response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: encodedBody,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body),
       );
 
-      final responseBody = jsonDecode(response.body);
-
       if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
         setAuthentication(Authentication(
           responseBody['access_token'],
           responseBody['refresh_token'],
           BaseTokenType.Bearer,
-          LoginType.Apple,
+          loginType,
         ));
-        debugPrint('Refresh Token Apple successful $responseBody');
+        debugPrint('Refresh Token Apple successful');
         return true;
       } else {
-        debugPrint('Refresh Token Apple failed: $responseBody');
+        debugPrint('Refresh Token Apple failed:');
         return false;
       }
     } catch (e) {
@@ -124,8 +121,6 @@ class ApiService {
       return false;
     }
   }
-
-  Future<void> refreshGoogleToken() async {}
 
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
@@ -263,10 +258,10 @@ class ApiService {
             responseBody['refresh_token'],
             BaseTokenType.Bearer,
             LoginType.Google));
-        debugPrint('Login successful: bearer: $responseBody');
+        debugPrint('Login Google successful');
         return true;
       } else {
-        debugPrint("'Login Google failed with status: ${response.statusCode}");
+        debugPrint("Login Google failed with status: ${response.statusCode}");
         return false;
       }
     } catch (e) {
@@ -316,14 +311,14 @@ class ApiService {
           BaseTokenType.Bearer,
           LoginType.Apple,
         ));
-        debugPrint('Login APPLE successful: bearer: $responseBody');
+        debugPrint('Login apple successful');
         return true;
       } else {
-        debugPrint('Login failed: $responseBody');
+        debugPrint('Login apple failed: $responseBody');
         return false;
       }
     } catch (e, stacktrace) {
-      debugPrint("Error APPLE logging in: $e");
+      debugPrint("Error apple logging in: $e");
       debugPrint("Stacktrace: $stacktrace");
       return false;
     }

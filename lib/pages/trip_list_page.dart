@@ -1,10 +1,12 @@
 import 'package:TravelBalance/TravelBalanceComponents/no_content_message.dart';
 import 'package:TravelBalance/TravelBalanceComponents/statistics_tile.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/floating_action_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/short_trip_component.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/ad_manager_service.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
