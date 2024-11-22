@@ -109,7 +109,7 @@ class AppDrawer extends StatelessWidget {
           case Option.currency:
             showCurrency(context);
             break;
-          case Option.changePassword:
+          case Option.changePassword: 
             if (!isChangePasswordUnaccessible) {
               moveToChangePassword(context);
             }
