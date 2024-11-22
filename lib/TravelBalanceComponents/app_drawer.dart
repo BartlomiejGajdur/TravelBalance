@@ -101,7 +101,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     final bool isChangePasswordUnaccessible = option == Option.changePassword &&
-        ApiService().getLoginType() != LoginType.Email;
+        ApiService().loginType != LoginType.Email;
 
     return GestureDetector(
       onTap: () {
@@ -109,7 +109,7 @@ class AppDrawer extends StatelessWidget {
           case Option.currency:
             showCurrency(context);
             break;
-          case Option.changePassword: 
+          case Option.changePassword:
             if (!isChangePasswordUnaccessible) {
               moveToChangePassword(context);
             }

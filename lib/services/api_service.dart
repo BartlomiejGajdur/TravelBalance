@@ -19,6 +19,20 @@ enum BaseTokenType { Token, Bearer, None }
 
 enum LoginType { Google, Apple, Email, None }
 
+class Authentication {
+  String token;
+  BaseTokenType tokenType;
+  LoginType loginType;
+
+  Authentication(this.token, this.tokenType, this.loginType);
+
+  void reset() {
+    token = "";
+    tokenType = BaseTokenType.None;
+    loginType = LoginType.None;
+  }
+}
+
 class SecretKeys {
   final String GOOGLE_CLIENT_ID;
   final String APPLE_CLIENT_SECRET;
@@ -34,38 +48,25 @@ class SecretKeys {
 class ApiService {
   static final ApiService _instance = ApiService._internal();
   ApiService._internal();
-
   factory ApiService() => _instance;
 
-  BaseTokenType _tokenType = BaseTokenType.Token;
-  LoginType _loginType = LoginType.None;
-  String _token = "";
-  final String _baseUrl = "https://travelbalance.pl/api/v1/";
   late final SecretKeys _secrets;
+  late Authentication _authentication;
+  final String _baseUrl = "https://travelbalance.pl/api/v1/";
 
   void initializeSecrets(SecretKeys secrets) {
     this._secrets = secrets;
   }
 
-  BaseTokenType getToken() {
-    return _tokenType;
+  LoginType get loginType => _authentication.loginType;
+
+  void setAuthentication(Authentication newAuthentication) {
+    _authentication = newAuthentication;
+    SharedPrefsStorage().saveAuthentication(newAuthentication);
   }
 
-  LoginType getLoginType() {
-    return _loginType;
-  }
-
-  void setToken(String token, BaseTokenType tokenType, LoginType loginType) {
-    _token = token;
-    _tokenType = tokenType;
-    _loginType = loginType;
-    SharedPrefsStorage().saveToken(token, tokenType, loginType);
-  }
-
-  void clearToken() {
-    _token = "";
-    _tokenType = BaseTokenType.None;
-    _loginType = LoginType.None;
+  void resetAuthentication() {
+    _authentication.reset();
   }
 
   BaseTokenType getBaseTokenTypeFromString(String tokenType) {
@@ -94,8 +95,8 @@ class ApiService {
   }
 
   String _getAuthorizationHeader() {
-    final tokenPrefix = _tokenType.name;
-    return '$tokenPrefix $_token';
+    final tokenPrefix = _authentication.tokenType.name;
+    return '$tokenPrefix ${_authentication.token}';
   }
 
   Future<User?> fetchUserData() async {
@@ -149,7 +150,8 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        setToken(responseBody['token'], BaseTokenType.Token, LoginType.Email);
+        setAuthentication(Authentication(
+            responseBody['token'], BaseTokenType.Token, LoginType.Email));
         debugPrint('Login successful: $responseBody');
         return true;
       } else {
@@ -188,8 +190,8 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        setToken(responseBody['access_token'], BaseTokenType.Bearer,
-            LoginType.Google);
+        setAuthentication(Authentication(responseBody['access_token'],
+            BaseTokenType.Bearer, LoginType.Google));
         debugPrint('Login successful: bearer: $responseBody');
         return true;
       } else {
@@ -234,23 +236,18 @@ class ApiService {
         body: encodedBody,
       );
 
-      try {
-        final responseBody = jsonDecode(response.body);
+      final responseBody = jsonDecode(response.body);
 
-        if (response.statusCode == 200) {
-          setToken(
-            responseBody['access_token'],
-            BaseTokenType.Bearer,
-            LoginType.Apple,
-          );
-          debugPrint('Login APPLE successful: bearer: $responseBody');
-          return true;
-        } else {
-          debugPrint('Login failed: $responseBody');
-          return false;
-        }
-      } catch (e) {
-        debugPrint('Error decoding response: $e');
+      if (response.statusCode == 200) {
+        setAuthentication(Authentication(
+          responseBody['access_token'],
+          BaseTokenType.Bearer,
+          LoginType.Apple,
+        ));
+        debugPrint('Login APPLE successful: bearer: $responseBody');
+        return true;
+      } else {
+        debugPrint('Login failed: $responseBody');
         return false;
       }
     } catch (e, stacktrace) {

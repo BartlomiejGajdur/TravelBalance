@@ -1,14 +1,6 @@
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Authentication {
-  String token;
-  BaseTokenType tokenType;
-  LoginType loginType;
-
-  Authentication(this.token, this.tokenType, this.loginType);
-}
-
 class SharedPrefsStorage {
   final String token = "Token";
   final String tokenType = "TokenType";
@@ -39,19 +31,19 @@ class SharedPrefsStorage {
     return _prefs.getBool(key) ?? false;
   }
 
-  void saveToken(
-      String currentToken, BaseTokenType type, LoginType login) async {
-    await _prefs.setString(token, currentToken);
-    await _prefs.setString(tokenType, type.name);
-    await _prefs.setString(loginType, login.name);
+  void saveAuthentication(Authentication newAuthentication) async {
+    await _prefs.setString(token, newAuthentication.token);
+    await _prefs.setString(tokenType, newAuthentication.tokenType.name);
+    await _prefs.setString(loginType, newAuthentication.loginType.name);
   }
 
-  void clearToken() async {
+  void resetAuthentication() async {
     await _prefs.remove(token);
     await _prefs.remove(tokenType);
+    await _prefs.remove(loginType);
   }
 
-  Future<Authentication?> getToken() async {
+  Future<Authentication?> getAuthentication() async {
     final String? l_token = await _prefs.getString(token);
     final String? l_tokenType = await _prefs.getString(tokenType);
     final String? l_loginType = await _prefs.getString(loginType);

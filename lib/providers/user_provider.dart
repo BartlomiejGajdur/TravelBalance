@@ -63,7 +63,7 @@ class UserProvider with ChangeNotifier {
       (Route<dynamic> route) => false,
     );
 
-    final loginType = ApiService().getLoginType();
+    final loginType = ApiService().loginType;
 
     if (loginType == LoginType.Email) {
       await ApiService().logout();
@@ -72,8 +72,8 @@ class UserProvider with ChangeNotifier {
     } else if (loginType == LoginType.Apple) {/* fill with logout Apple */}
 
     _user = null;
-    ApiService().clearToken();
-    SharedPrefsStorage().clearToken();
+    ApiService().resetAuthentication();
+    SharedPrefsStorage().resetAuthentication();
     notifyListeners();
   }
 }
