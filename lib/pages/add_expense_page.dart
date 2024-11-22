@@ -80,12 +80,29 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
     );
   }
 
+  String? expenseNameValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    if (value.length > 32) {
+      return 'This field cannot have more than 32 characters.';
+    }
+
+    final regex = RegExp(r'^[a-zA-Z0-9\s]+$');
+    if (!regex.hasMatch(value)) {
+      return 'Only letters (a-z, A-Z), digits (0-9), and spaces are allowed.';
+    }
+
+    return null;
+  }
+
   Widget _buildDescriptionField() {
     return CustomTextField(
-      controller: _expenseDescController,
-      text: "",
-      hintText: "Description",
-    );
+        controller: _expenseDescController,
+        text: "",
+        hintText: "Description",
+        validator: expenseNameValidator);
   }
 
   Widget _buildCostAndCurrencyRow() {

@@ -18,19 +18,20 @@ class CustomTextField extends StatefulWidget {
   final ClickAction clickAction;
   final bool numbersOnly;
   final bool rightPadding;
+  final String? Function(String?)? validator;
 
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    this.text,
-    this.suffixIcon,
-    this.textFieldHorizontalPadding,
-    this.textFieldBottomPadding,
-    this.clickAction = ClickAction.None,
-    this.numbersOnly = false,
-    this.hintText,
-    this.rightPadding = true,
-  });
+  const CustomTextField(
+      {super.key,
+      required this.controller,
+      this.text,
+      this.suffixIcon,
+      this.textFieldHorizontalPadding,
+      this.textFieldBottomPadding,
+      this.clickAction = ClickAction.None,
+      this.numbersOnly = false,
+      this.hintText,
+      this.rightPadding = true,
+      this.validator});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -58,6 +59,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return null;
   }
 
+  String? Function(String?)? chooseValidator() {
+    if (widget.numbersOnly) return defaultValidator;
+    return widget.validator;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -69,7 +75,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         bottom: widget.textFieldBottomPadding ?? 0.0,
       ),
       child: TextFormField(
-        validator: widget.numbersOnly ? defaultValidator : null,
+        validator: chooseValidator(),
         onChanged: (value) {
           final FormState form = Form.of(context);
           form.validate();
