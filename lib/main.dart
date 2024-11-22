@@ -38,6 +38,9 @@ Future<SecretKeys> loadSecrets() async {
   const GOOGLE_CLIENT_ID =
       String.fromEnvironment('GOOGLE_CLIENT_ID', defaultValue: missingVariable);
 
+  const GOOGLE_CLIENT_SECRET = String.fromEnvironment('GOOGLE_CLIENT_SECRET',
+      defaultValue: missingVariable);
+
   const APPLE_CLIENT_SECRET = String.fromEnvironment('APPLE_CLIENT_SECRET',
       defaultValue: missingVariable);
 
@@ -45,6 +48,7 @@ Future<SecretKeys> loadSecrets() async {
       String.fromEnvironment('APPLE_CLIENT_ID', defaultValue: missingVariable);
 
   if (GOOGLE_CLIENT_ID == missingVariable ||
+      GOOGLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_ID == missingVariable) {
     throw Exception(
@@ -53,6 +57,7 @@ Future<SecretKeys> loadSecrets() async {
 
   return SecretKeys(
     GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
     APPLE_CLIENT_SECRET: APPLE_CLIENT_SECRET,
     APPLE_CLIENT_ID: APPLE_CLIENT_ID,
   );

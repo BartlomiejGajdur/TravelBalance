@@ -42,11 +42,13 @@ class Authentication {
 
 class SecretKeys {
   final String GOOGLE_CLIENT_ID;
+  final String GOOGLE_CLIENT_SECRET;
   final String APPLE_CLIENT_SECRET;
   final String APPLE_CLIENT_ID;
 
   SecretKeys({
     required this.GOOGLE_CLIENT_ID,
+    required this.GOOGLE_CLIENT_SECRET,
     required this.APPLE_CLIENT_SECRET,
     required this.APPLE_CLIENT_ID,
   });
