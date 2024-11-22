@@ -3,7 +3,6 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_divider.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:flutter/material.dart';
@@ -59,17 +58,9 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 108.h),
-              GestureDetector(
-                onTap: () {
-                  String Secret1s = ApiService().secrets.APPLE_CLIENT_ID +
-                      ApiService().secrets.GOOGLE_CLIENT_ID +
-                      ApiService().secrets.APPLE_CLIENT_SECRET;
-                  showCustomSnackBar(context: context, message: Secret1s);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: horizontalPadding),
-                  child: Text("Welcome back wanderer!", style: mainTextStyle),
-                ),
+              Padding(
+                padding: EdgeInsets.only(left: horizontalPadding),
+                child: Text("Welcome back wanderer!", style: mainTextStyle),
               ),
               SizedBox(height: 8.h),
               Padding(

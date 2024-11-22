@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:TravelBalance/Utils/country_picker.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
+import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:TravelBalance/services/google_signin_api.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
@@ -39,10 +41,10 @@ class ApiService {
   LoginType _loginType = LoginType.None;
   String _token = "";
   final String _baseUrl = "https://travelbalance.pl/api/v1/";
-  late final SecretKeys secrets;
+  late final SecretKeys _secrets;
 
   void initializeSecrets(SecretKeys secrets) {
-    this.secrets = secrets;
+    this._secrets = secrets;
   }
 
   BaseTokenType getToken() {
@@ -174,8 +176,7 @@ class ApiService {
       final GoogleSignInAuthentication googleAuth = await user.authentication;
       final body = {
         "grant_type": "convert_token",
-        "client_id":
-            "OoJlTyPxfFjtd4IxwioAE4Op2fWe2P7DkBBuMRim", // Must change before release!
+        "client_id": _secrets.GOOGLE_CLIENT_ID,
         "backend": "google-oauth2",
         "token": googleAuth.accessToken.toString(),
       };
@@ -198,6 +199,42 @@ class ApiService {
       }
     } catch (e) {
       debugPrint("Error Google logging in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> loginApple(BuildContext context) async {
+    try {
+      final user = await AppleSignInButton.signInWithApple();
+      assert(user.identityToken != null);
+
+      final body = {
+        "client_id": _secrets.APPLE_CLIENT_ID,
+        "backend": "apple-id",
+        "grant_type": "convert_token",
+        "token": user.identityToken,
+      };
+      const endPoint = 'auth/convert-token/';
+      final response = await http.post(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        setToken(responseBody['access_token'], BaseTokenType.Bearer,
+            LoginType.Apple);
+        debugPrint('Login APPLE successful: bearer: $responseBody');
+        return true;
+      } else {
+        debugPrint("'Login APPLE failed with status: ${response.statusCode}");
+        showCustomSnackBar(
+            context: context, message: jsonDecode(response.body).toString());
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Error APPLE logging in: $e");
       return false;
     }
   }
