@@ -8,6 +8,7 @@ import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/Utils/helper_functions.dart';
 import 'package:TravelBalance/pages/email_confirmation.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
+import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/services/api_service.dart';
@@ -130,25 +131,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: signUp,
                 buttonText: "Sign up",
                 onSuccess: moveToEmailConfirmation,
+                forceLoading: forceLoading,
               ),
               SizedBox(height: 30.h),
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              AppleSignInButton(actionTypeButton: ActionType.signUp),
+              AppleSignInButton(
+                  actionTypeButton: ActionType.signUp,
+                  toggleLoadingFunc: toggleLoading),
               SizedBox(height: 24.h),
-              GestureDetector(
-                onTap: () async {
-                  toggleLoading();
-                  bool result = await ApiService().loginGoogle();
-                  if (result) {
-                    moveToTrips();
-                  }
-                  toggleLoading();
-                },
-                child: const MockButton(
-                    buttonType: ButtonType.google,
-                    actionType: ActionType.login),
-              ),
+              GoogleSignInButton(
+                  actionTypeButton: ActionType.signUp,
+                  toggleLoadingFunc: toggleLoading),
               SizedBox(height: 30.h),
               const DoubleLineText(
                   first: "Have an account?",

@@ -5,7 +5,7 @@ import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
-import 'package:TravelBalance/services/google_signin_api.dart';
+import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
@@ -168,9 +168,8 @@ class ApiService {
 
   Future<bool> loginGoogle() async {
     try {
-      final user = await GoogleSignInApi().login();
+      final user = await GoogleSignInButton.login();
       if (user == null) {
-        debugPrint("User null po logowaniu google");
         return false;
       }
       final GoogleSignInAuthentication googleAuth = await user.authentication;
@@ -211,7 +210,8 @@ class ApiService {
         debugPrint('Identity token is null.');
         showCustomSnackBar(
             context: context,
-            message: 'Apple sign-in failed. Please try again.');
+            message: 'Apple sign-in failed. Please try again.',
+            type: SnackBarType.error);
         return false;
       }
 
@@ -221,12 +221,11 @@ class ApiService {
         "grant_type": "convert_token",
         "token": user.identityToken!,
       };
+
       final encodedBody = body.entries
           .map((e) =>
               '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
           .join('&');
-
-      showCustomSnackBar(context: context, message: body.toString());
 
       const endPoint = 'auth/convert-token/';
       final response = await http.post(
@@ -248,25 +247,15 @@ class ApiService {
           return true;
         } else {
           debugPrint('Login failed: $responseBody');
-          showCustomSnackBar(
-              context: context,
-              message: responseBody['error'] ??
-                  'Unknown error occurred. $responseBody');
           return false;
         }
       } catch (e) {
         debugPrint('Error decoding response: $e');
-        showCustomSnackBar(
-            context: context,
-            message: 'Unexpected server error. Please try again. $e');
         return false;
       }
     } catch (e, stacktrace) {
       debugPrint("Error APPLE logging in: $e");
       debugPrint("Stacktrace: $stacktrace");
-      showCustomSnackBar(
-          context: context,
-          message: 'Apple login failed. Please try again.$e \n $stacktrace');
       return false;
     }
   }

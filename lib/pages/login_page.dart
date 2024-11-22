@@ -5,6 +5,7 @@ import 'package:TravelBalance/TravelBalanceComponents/double_line_text.dart';
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
+import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -95,21 +96,13 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 40.h),
               const CustomDivider(text: "Or"),
               SizedBox(height: 24.h),
-              AppleSignInButton(actionTypeButton: ActionType.login),
+              AppleSignInButton(
+                  actionTypeButton: ActionType.login,
+                  toggleLoadingFunc: toggleLoading),
               SizedBox(height: 24.h),
-              GestureDetector(
-                onTap: () async {
-                  toggleLoading();
-                  bool result = await ApiService().loginGoogle();
-                  if (result) {
-                    moveToTrips();
-                  }
-                  toggleLoading();
-                },
-                child: const MockButton(
-                    buttonType: ButtonType.google,
-                    actionType: ActionType.login),
-              ),
+              GoogleSignInButton(
+                  actionTypeButton: ActionType.login,
+                  toggleLoadingFunc: toggleLoading),
               SizedBox(height: 88.h),
               const DoubleLineText(
                   first: "Don’t have an account?",

@@ -1,6 +1,6 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
-import 'package:TravelBalance/services/google_signin_api.dart';
+import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -68,7 +68,7 @@ class UserProvider with ChangeNotifier {
     if (loginType == LoginType.Email) {
       await ApiService().logout();
     } else if (loginType == LoginType.Google) {
-      await GoogleSignInApi().logout();
+      await GoogleSignInButton.logout();
     } else if (loginType == LoginType.Apple) {/* fill with logout Apple */}
 
     _user = null;
