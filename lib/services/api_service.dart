@@ -17,9 +17,20 @@ enum BaseTokenType { Token, Bearer, None }
 
 enum LoginType { Google, Apple, Email, None }
 
+class SecretKeys {
+  final String GOOGLE_CLIENT_ID;
+  final String APPLE_CLIENT_SECRET;
+  final String APPLE_CLIENT_ID;
+
+  SecretKeys({
+    required this.GOOGLE_CLIENT_ID,
+    required this.APPLE_CLIENT_SECRET,
+    required this.APPLE_CLIENT_ID,
+  });
+}
+
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-
   ApiService._internal();
 
   factory ApiService() => _instance;
@@ -28,6 +39,11 @@ class ApiService {
   LoginType _loginType = LoginType.None;
   String _token = "";
   final String _baseUrl = "https://travelbalance.pl/api/v1/";
+  late final SecretKeys secrets;
+
+  void initializeSecrets(SecretKeys secrets) {
+    this.secrets = secrets;
+  }
 
   BaseTokenType getToken() {
     return _tokenType;

@@ -55,6 +55,7 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_launcher_icons: ^0.14.1
   google_mobile_ads: ^5.2.0
+  flutter_dotenv: ^5.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -91,6 +92,7 @@ flutter:
     - lib/assets/
     - lib/assets/images/
     - lib/assets/jsonData/
+    - .env
   #   - images/a_dot_ham.jpeg
 
 

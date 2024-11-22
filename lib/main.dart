@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /* HELPERS
 Navigator.pushNamed(context, LoginPage);
@@ -30,6 +31,40 @@ SvgPicture.asset(
                   width: 114.w,
                 ),
 */
+
+Future<SecretKeys> loadSecrets() async {
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('Brak pliku .env lub błąd wczytywania: $e');
+  }
+
+  // load varaibles from dart-define,
+  const GOOGLE_CLIENT_ID =
+      String.fromEnvironment('GOOGLE_CLIENT_ID', defaultValue: '');
+  const APPLE_CLIENT_SECRET =
+      String.fromEnvironment('APPLE_CLIENT_SECRET', defaultValue: '');
+  const APPLE_CLIENT_ID =
+      String.fromEnvironment('APPLE_CLIENT_ID', defaultValue: '');
+
+  // If not loaded from dart-define (codemagic) load locally from .env
+  final loaded_GOOGLE_CLIENT_ID = GOOGLE_CLIENT_ID.isNotEmpty
+      ? GOOGLE_CLIENT_ID
+      : dotenv.env['GOOGLE_CLIENT_ID'] ?? 'MISSING GOOGLE_CLIENT_ID';
+
+  final loaded_APPLE_CLIENT_SECRET = APPLE_CLIENT_SECRET.isNotEmpty
+      ? APPLE_CLIENT_SECRET
+      : dotenv.env['APPLE_CLIENT_SECRET'] ?? 'MISSING APPLE_CLIENT_SECRET';
+
+  final loaded_APPLE_CLIENT_ID = APPLE_CLIENT_ID.isNotEmpty
+      ? APPLE_CLIENT_ID
+      : dotenv.env['APPLE_CLIENT_ID'] ?? 'MISSING APPLE_CLIENT_ID';
+
+  return SecretKeys(
+      GOOGLE_CLIENT_ID: loaded_GOOGLE_CLIENT_ID,
+      APPLE_CLIENT_SECRET: loaded_APPLE_CLIENT_SECRET,
+      APPLE_CLIENT_ID: loaded_APPLE_CLIENT_ID);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +77,8 @@ void main() async {
     SharedPrefsStorage().initialize(),
     AdManagerService().initialize(),
   ]);
+
+  ApiService().initializeSecrets(await loadSecrets());
 
   runApp(MyApp());
 }
