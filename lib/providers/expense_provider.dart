@@ -17,6 +17,7 @@ class ExpenseProvider with ChangeNotifier {
     _expense.setCategory(newCategory);
     _expense.setDateTime(newDate);
     _expense.setCurrency(newCurrency);
+    tripProvider.reCalculate();
     notifyListeners();
   }
 

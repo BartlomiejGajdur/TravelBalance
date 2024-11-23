@@ -293,10 +293,10 @@ class _TripListPageState extends State<TripListPage> {
             ),
           ),
         ),
-        AdManagerService().bannerAdManager.getAdWidget(),
         isSwitched
             ? _buildShortTripList(userProvider)
             : _buildExtendedTripList(userProvider),
+        AdManagerService().bannerAdManager.getAdWidget(),
       ],
     );
   }
