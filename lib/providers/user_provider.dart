@@ -2,7 +2,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
-import 'package:TravelBalance/services/shared_prefs_storage.dart';
+import 'package:TravelBalance/services/secure_storage_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,7 @@ class UserProvider with ChangeNotifier {
       debugPrint("Failed to fetch user data");
       return;
     }
+    
     AdManagerService().configure(fetchedUser.isPremiumUser);
 
     _user = fetchedUser;
@@ -80,7 +81,7 @@ class UserProvider with ChangeNotifier {
 
     _user = null;
     ApiService().resetAuthentication();
-    SharedPrefsStorage().resetAuthentication();
+    SecureStorage().resetAuthentication();
     notifyListeners();
   }
 }

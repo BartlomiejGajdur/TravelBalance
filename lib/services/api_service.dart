@@ -7,7 +7,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:TravelBalance/models/user.dart';
-import 'package:TravelBalance/services/shared_prefs_storage.dart';
+import 'package:TravelBalance/services/secure_storage_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +15,42 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-enum BaseTokenType { Token, Bearer, None }
+enum BaseTokenType {
+  Token,
+  Bearer,
+  None;
 
-enum LoginType { Google, Apple, Email, None }
+  static BaseTokenType fromString(String baseTokenType) {
+    switch (baseTokenType) {
+      case 'Bearer':
+        return BaseTokenType.Bearer;
+      case 'Token':
+        return BaseTokenType.Token;
+      default:
+        return BaseTokenType.None;
+    }
+  }
+}
+
+enum LoginType {
+  Google,
+  Apple,
+  Email,
+  None;
+
+  static LoginType fromString(String loginType) {
+    switch (loginType) {
+      case 'Google':
+        return LoginType.Google;
+      case 'Apple':
+        return LoginType.Apple;
+      case 'Email':
+        return LoginType.Email;
+      default:
+        return LoginType.None;
+    }
+  }
+}
 
 class Authentication {
   String token;
@@ -31,7 +64,7 @@ class Authentication {
     this.tokenType,
     this.loginType,
   );
-
+  
   void reset() {
     token = "";
     refreshToken = null;
@@ -124,36 +157,11 @@ class ApiService {
 
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
-    SharedPrefsStorage().saveAuthentication(newAuthentication);
+    SecureStorage().saveAuthentication(newAuthentication);
   }
 
   void resetAuthentication() {
     _authentication.reset();
-  }
-
-  BaseTokenType getBaseTokenTypeFromString(String tokenType) {
-    switch (tokenType) {
-      case 'Bearer':
-        return BaseTokenType.Bearer;
-      case 'Token':
-        return BaseTokenType.Token;
-      case '':
-      default:
-        return BaseTokenType.None;
-    }
-  }
-
-  LoginType getLoginTypeFromString(String loginType) {
-    switch (loginType) {
-      case 'Google':
-        return LoginType.Google;
-      case 'Apple':
-        return LoginType.Apple;
-      case 'Email':
-        return LoginType.Email;
-      default:
-        return LoginType.None;
-    }
   }
 
   String _getAuthorizationHeader() {
@@ -187,7 +195,6 @@ class ApiService {
         final userData = jsonDecode(userDataResponse.body);
         return User.fromJson(tripsData, userData);
       } else {
-       
         debugPrint(
             'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
         return null;

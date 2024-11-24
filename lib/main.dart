@@ -14,6 +14,7 @@ import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
+import 'package:TravelBalance/services/secure_storage_service.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,13 +75,13 @@ void main() async {
   ]);
   ApiService().initializeSecrets(await loadSecrets());
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Widget _setStartingPage() {
+  Future<Widget> _setStartingPage() async {
     try {
       final bool wasIntroductionScreenShown =
           SharedPrefsStorage().getBool('wasIntroductionScreenShown');
@@ -89,14 +90,15 @@ class MyApp extends StatelessWidget {
         return IntroductionPage();
       }
 
-      final authentication = SharedPrefsStorage().getAuthentication();
+      final authentication = await SecureStorage().getAuthentication();
       if (authentication != null) {
         ApiService().setAuthentication(authentication);
-        return TripListPage();
+        return const TripListPage();
       }
 
       return const LoginPage();
     } catch (e) {
+      debugPrint('Error determining starting page: $e');
       return const LoginPage();
     }
   }
@@ -119,62 +121,74 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.white,
             ),
           ),
-          home: _setStartingPage(),
-          onGenerateRoute: (settings) {
-            switch (settings.name) {
-              case 'LoginPage':
-                return MaterialPageRoute(
-                    builder: (context) => const LoginPage());
-              case 'SignUpPage':
-                return MaterialPageRoute(
-                    builder: (context) => const SignUpPage());
-              case 'TripListPage':
-                return MaterialPageRoute(
-                    builder: (context) => const TripListPage());
-              case 'ForgotPasswordPage':
-                return MaterialPageRoute(
-                    builder: (context) => ForgotPasswordPage());
-              case 'ChangePasswordPage':
-                return MaterialPageRoute(
-                    builder: (context) => ChangePasswordPage());
-              case 'VerificationCodePage':
-                final email = settings.arguments as String;
-                return MaterialPageRoute(
-                  builder: (context) => VerificationCodePage(email: email),
-                );
-              case 'CreateNewPasswordPage':
-                final args = settings.arguments as Map<String, String>;
-                final email = args['email']!;
-                final verificationCode = args['verificationCode']!;
-                return MaterialPageRoute(
-                  builder: (context) => CreateNewPasswordPage(
-                    email: email,
-                    verificationCode: verificationCode,
-                  ),
-                );
-              case 'CreateListPage':
-                final mainPageContext = settings.arguments as BuildContext;
-                return MaterialPageRoute(
-                  builder: (context) =>
-                      CreateTripPage(mainPageContext: mainPageContext),
-                );
-              case 'CreateExpensePage':
-                final arguments = settings.arguments as Map<String, dynamic>;
-                final expenseListPageContext =
-                    arguments['expenseListPageContext'] as BuildContext;
-                final tripProvider = arguments['tripProvider'] as TripProvider;
-                return MaterialPageRoute(
-                  builder: (context) => CreateExpensePage(
-                    expenseListPageContext: expenseListPageContext,
-                    tripProvider: tripProvider,
-                  ),
-                );
-              default:
-                return null;
-            }
-          },
+          home: FutureBuilder<Widget>(
+            future: _setStartingPage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                debugPrint('Error: ${snapshot.error}');
+                return const LoginPage();
+              }
+              return snapshot.data ?? const LoginPage();
+            },
+          ),
+          onGenerateRoute: _onGenerateRoute,
         ),
       ),
     );
+  }
+
+  Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case 'LoginPage':
+        return MaterialPageRoute(builder: (_) => const LoginPage());
+      case 'SignUpPage':
+        return MaterialPageRoute(builder: (_) => const SignUpPage());
+      case 'TripListPage':
+        return MaterialPageRoute(builder: (_) => const TripListPage());
+      case 'ForgotPasswordPage':
+        return MaterialPageRoute(builder: (_) => ForgotPasswordPage());
+      case 'ChangePasswordPage':
+        return MaterialPageRoute(builder: (_) => ChangePasswordPage());
+      case 'VerificationCodePage':
+        final email = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => VerificationCodePage(email: email),
+        );
+      case 'CreateNewPasswordPage':
+        final args = settings.arguments as Map<String, String>;
+        final email = args['email']!;
+        final verificationCode = args['verificationCode']!;
+        return MaterialPageRoute(
+          builder: (_) => CreateNewPasswordPage(
+            email: email,
+            verificationCode: verificationCode,
+          ),
+        );
+      case 'CreateListPage':
+        final mainPageContext = settings.arguments as BuildContext;
+        return MaterialPageRoute(
+          builder: (_) => CreateTripPage(mainPageContext: mainPageContext),
+        );
+      case 'CreateExpensePage':
+        final arguments = settings.arguments as Map<String, dynamic>;
+        final expenseListPageContext =
+            arguments['expenseListPageContext'] as BuildContext;
+        final tripProvider = arguments['tripProvider'] as TripProvider;
+        return MaterialPageRoute(
+          builder: (_) => CreateExpensePage(
+            expenseListPageContext: expenseListPageContext,
+            tripProvider: tripProvider,
+          ),
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(child: Text('Page not found')),
+          ),
+        );
+    }
   }
 }
