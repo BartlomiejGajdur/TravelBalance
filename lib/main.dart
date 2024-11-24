@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
             future: _setStartingPage(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return TripListPage();
               }
               if (snapshot.hasError) {
                 debugPrint('Error: ${snapshot.error}');
