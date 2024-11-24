@@ -15,9 +15,42 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-enum BaseTokenType { Token, Bearer, None }
+enum BaseTokenType {
+  Token,
+  Bearer,
+  None;
 
-enum LoginType { Google, Apple, Email, None }
+  static BaseTokenType fromString(String baseTokenType) {
+    switch (baseTokenType) {
+      case 'Bearer':
+        return BaseTokenType.Bearer;
+      case 'Token':
+        return BaseTokenType.Token;
+      default:
+        return BaseTokenType.None;
+    }
+  }
+}
+
+enum LoginType {
+  Google,
+  Apple,
+  Email,
+  None;
+
+  static LoginType fromString(String loginType) {
+    switch (loginType) {
+      case 'Google':
+        return LoginType.Google;
+      case 'Apple':
+        return LoginType.Apple;
+      case 'Email':
+        return LoginType.Email;
+      default:
+        return LoginType.None;
+    }
+  }
+}
 
 class Authentication {
   String token;
@@ -131,31 +164,6 @@ class ApiService {
     _authentication.reset();
   }
 
-  BaseTokenType getBaseTokenTypeFromString(String tokenType) {
-    switch (tokenType) {
-      case 'Bearer':
-        return BaseTokenType.Bearer;
-      case 'Token':
-        return BaseTokenType.Token;
-      case '':
-      default:
-        return BaseTokenType.None;
-    }
-  }
-
-  LoginType getLoginTypeFromString(String loginType) {
-    switch (loginType) {
-      case 'Google':
-        return LoginType.Google;
-      case 'Apple':
-        return LoginType.Apple;
-      case 'Email':
-        return LoginType.Email;
-      default:
-        return LoginType.None;
-    }
-  }
-
   String _getAuthorizationHeader() {
     final tokenPrefix = _authentication.tokenType.name;
     return '$tokenPrefix ${_authentication.token}';
@@ -187,7 +195,6 @@ class ApiService {
         final userData = jsonDecode(userDataResponse.body);
         return User.fromJson(tripsData, userData);
       } else {
-       
         debugPrint(
             'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
         return null;

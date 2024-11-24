@@ -66,7 +66,7 @@ class SharedPrefsStorage {
     return Authentication(
         l_token,
         l_refreshToken,
-        ApiService().getBaseTokenTypeFromString(l_tokenType),
-        ApiService().getLoginTypeFromString(l_loginType));
+        BaseTokenType.fromString(l_tokenType),
+        LoginType.fromString(l_loginType));
   }
 }
