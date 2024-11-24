@@ -15,6 +15,7 @@ class SecureStorage {
     return _instance;
   }
 
+  //FlutterSecureStorage? _secureStorage; ->Test
   late final FlutterSecureStorage _secureStorage;
 
   SecureStorage._internal() {
@@ -44,6 +45,12 @@ class SecureStorage {
     } catch (e) {
       debugPrint('Error saving authentication: $e');
     }
+  }
+
+  /// Setter for testing purposes
+  @visibleForTesting
+  void setSecureStorage(FlutterSecureStorage mockStorage) {
+    _secureStorage = mockStorage;
   }
 
   /// Reset authentication data
@@ -78,13 +85,13 @@ class SecureStorage {
       if (token == null || tokenType == null || loginType == null) {
         return null;
       }
-
-      return Authentication(
+      Authentication auth = Authentication(
         token,
         refreshToken,
         BaseTokenType.fromString(tokenType),
         LoginType.fromString(loginType),
       );
+      return auth;
     } catch (e) {
       debugPrint('Error retrieving authentication: $e');
       return null;

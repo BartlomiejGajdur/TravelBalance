@@ -60,6 +60,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_test: ^1.0.0
+  mockito: ^5.4.0
+  build_runner: ^2.4.6
 
 flutter_launcher_icons:
   android: true

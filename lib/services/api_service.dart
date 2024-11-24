@@ -64,7 +64,7 @@ class Authentication {
     this.tokenType,
     this.loginType,
   );
-
+  
   void reset() {
     token = "";
     refreshToken = null;
