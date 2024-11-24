@@ -38,7 +38,7 @@ class User {
     Statistics statistics = Statistics.fromJson(fetchTripJson['statistics']);
     Currency baseCurrency =
         currency(userDataJson['base_currency'] ?? defaultCurrencyCode);
-    bool isPremium = fetchTripJson['is_premium'] ?? false;
+    bool isPremium = userDataJson['is_premium'] ?? false;
     return User(
         trips: trips,
         statistics: statistics,
