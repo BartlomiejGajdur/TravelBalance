@@ -7,6 +7,7 @@ import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:TravelBalance/models/user.dart';
+import 'package:TravelBalance/services/secure_storage_service.dart';
 import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -157,7 +158,7 @@ class ApiService {
 
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
-    SharedPrefsStorage().saveAuthentication(newAuthentication);
+    SecureStorage().saveAuthentication(newAuthentication);
   }
 
   void resetAuthentication() {
