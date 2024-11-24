@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
   Future<Widget> _setStartingPage() async {
     try {
       final bool wasIntroductionScreenShown =
-          SharedPrefsStorage().getBool('wasIntroductionScreenShown') ?? false;
+          SharedPrefsStorage().getBool('wasIntroductionScreenShown');
 
       if (!wasIntroductionScreenShown) {
         return IntroductionPage();
