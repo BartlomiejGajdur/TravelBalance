@@ -2,7 +2,6 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
@@ -39,7 +38,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
   @override
   void initState() {
-    AdManagerService().interstitialAdManager.loadAd();
     super.initState();
   }
 
@@ -53,7 +51,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
     if (!(formKey.currentState?.validate() ?? false)) return false;
 
-    AdManagerService().adOnCreateTrip(context, userProvider.user!.trips.length);
+    AdManagerService().manager().onCreateTrip(userProvider.user!.trips.length);
     userProvider.addTrip(tripName, imagePicked, countries);
     Navigator.of(context).pop();
 
@@ -64,11 +62,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
       return true;
     } else {
       userProvider.deleteLastAddedTrip();
-      showCustomSnackBar(
-          context: widget.mainPageContext,
-          message:
-              "Failed to create $tripName. Please check your Internet connection.",
-          type: SnackBarType.error);
       return false;
     }
   }

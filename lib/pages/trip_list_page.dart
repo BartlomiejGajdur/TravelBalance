@@ -43,7 +43,7 @@ class _TripListPageState extends State<TripListPage> {
 
   @override
   void dispose() {
-    AdManagerService().bannerAdManager.disposeAd();
+    AdManagerService().manager().disposeBannerAd();
     super.dispose();
   }
 
@@ -296,7 +296,7 @@ class _TripListPageState extends State<TripListPage> {
         isSwitched
             ? _buildShortTripList(userProvider)
             : _buildExtendedTripList(userProvider),
-        AdManagerService().bannerAdManager.getAdWidget(),
+        AdManagerService().manager().bannerAd(),
       ],
     );
   }

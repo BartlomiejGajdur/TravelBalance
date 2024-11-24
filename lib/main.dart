@@ -11,7 +11,6 @@ import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
-import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:TravelBalance/services/hive_last_used_currency_storage.dart';
@@ -72,7 +71,6 @@ void main() async {
     LastUsedCurrencyStorage().initialize(),
     CountryPicker.loadCountryData(),
     SharedPrefsStorage().initialize(),
-    AdManagerService().initialize(),
   ]);
   ApiService().initializeSecrets(await loadSecrets());
 

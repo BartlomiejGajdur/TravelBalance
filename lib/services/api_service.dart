@@ -187,7 +187,7 @@ class ApiService {
         final userData = jsonDecode(userDataResponse.body);
         return User.fromJson(tripsData, userData);
       } else {
-        //Last Response code (?)
+       
         debugPrint(
             'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
         return null;

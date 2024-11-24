@@ -12,19 +12,23 @@ class User {
   List<Trip> _trips;
   Statistics _statistics;
   Currency _baseCurrency;
+  bool _isPremiumUser;
   User(
       {required List<Trip> trips,
       required Statistics statistics,
-      required Currency baseCurrency})
+      required Currency baseCurrency,
+      bool isPremiumUser = false})
       : _trips = trips,
         _statistics = statistics,
-        _baseCurrency = baseCurrency {
+        _baseCurrency = baseCurrency,
+        _isPremiumUser = isPremiumUser {
     sortTrips(SortOrder.ascending);
   }
 
   List<Trip> get trips => _trips;
   Statistics get statistics => _statistics;
   Currency get baseCurrency => _baseCurrency;
+  bool get isPremiumUser => _isPremiumUser;
 
   factory User.fromJson(
       Map<String, dynamic> fetchTripJson, Map<String, dynamic> userDataJson) {
@@ -34,8 +38,13 @@ class User {
     Statistics statistics = Statistics.fromJson(fetchTripJson['statistics']);
     Currency baseCurrency =
         currency(userDataJson['base_currency'] ?? defaultCurrencyCode);
+
+    bool isPremium = userDataJson['is_premium'] ?? false;
     return User(
-        trips: trips, statistics: statistics, baseCurrency: baseCurrency);
+        trips: trips,
+        statistics: statistics,
+        baseCurrency: baseCurrency,
+        isPremiumUser: isPremium);
   }
 
   void setBaseCurrency(Currency newCurrency) {
