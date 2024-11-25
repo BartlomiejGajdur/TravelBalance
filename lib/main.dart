@@ -125,13 +125,12 @@ class MyApp extends StatelessWidget {
             future: _setStartingPage(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return TripListPage();
-              }
-              if (snapshot.hasError) {
-                debugPrint('Error: ${snapshot.error}');
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasData) {
+                return snapshot.data ?? const LoginPage();
+              } else {
                 return const LoginPage();
               }
-              return snapshot.data ?? const LoginPage();
             },
           ),
           onGenerateRoute: _onGenerateRoute,
