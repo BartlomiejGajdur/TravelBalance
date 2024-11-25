@@ -64,7 +64,7 @@ class Authentication {
     this.tokenType,
     this.loginType,
   );
-  
+
   void reset() {
     token = "";
     refreshToken = null;
@@ -143,14 +143,14 @@ class ApiService {
           BaseTokenType.Bearer,
           loginType,
         ));
-        debugPrint('Refresh Token Apple successful');
+        debugPrint('Refresh Token Apple/Google successful');
         return true;
       } else {
-        debugPrint('Refresh Token Apple failed:');
+        debugPrint('Refresh Token Apple/Google failed:');
         return false;
       }
     } catch (e) {
-      debugPrint('Refresh Token Apple failed: $e');
+      debugPrint('Refresh Token Apple/Google failed: $e');
       return false;
     }
   }
@@ -778,6 +778,30 @@ class ApiService {
       }
     } catch (e) {
       debugPrint("Update Base Currency in: $e");
+      return false;
+    }
+  }
+
+  Future<bool> deleteUser() async {
+    try {
+      const endPoint = 'user/me/';
+      final response = await http.delete(
+        Uri.parse('$_baseUrl$endPoint'),
+        headers: {
+          'Authorization': _getAuthorizationHeader(),
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint('Delete Account successful');
+        return true;
+      } else {
+        debugPrint('Delete Account failed with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Delete Account failed in: $e");
       return false;
     }
   }

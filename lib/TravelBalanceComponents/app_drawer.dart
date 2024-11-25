@@ -11,12 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
 
-enum Option {
-  currency,
-  changePassword,
-  sendFeedback,
-  about,
-}
+enum Option { currency, changePassword, sendFeedback, about, deleteAccount }
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -65,6 +60,7 @@ class AppDrawer extends StatelessWidget {
                 context, "Change password", Option.changePassword),
             clickableListTile(context, "Send feedback", Option.sendFeedback),
             clickableListTile(context, "About", Option.about),
+            clickableListTile(context, "Delete Account", Option.deleteAccount),
             const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
@@ -102,6 +98,14 @@ class AppDrawer extends StatelessWidget {
 
     final bool isChangePasswordUnaccessible = option == Option.changePassword &&
         ApiService().loginType != LoginType.Email;
+    final bool isDeleteAccount = option == Option.deleteAccount;
+    Color setTextColor() {
+      if (isDeleteAccount) return Colors.red;
+
+      if (isChangePasswordUnaccessible) return Colors.grey;
+
+      return mainTextColor;
+    }
 
     return GestureDetector(
       onTap: () {
@@ -120,6 +124,9 @@ class AppDrawer extends StatelessWidget {
           case Option.about:
             showAbout(context);
             break;
+          case Option.deleteAccount:
+            showDeleteAccount(context);
+            break;
 
           default:
         }
@@ -136,9 +143,8 @@ class AppDrawer extends StatelessWidget {
               givenText,
               style: GoogleFonts.outfit(
                 fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color:
-                    isChangePasswordUnaccessible ? Colors.grey : mainTextColor,
+                fontWeight: isDeleteAccount ? FontWeight.bold : FontWeight.w500,
+                color: setTextColor(),
               ),
             ),
             option == Option.currency
@@ -368,4 +374,122 @@ void showCurrency(BuildContext context) {
       }
     },
   );
+}
+
+void showDeleteAccount(BuildContext context) {
+  TextEditingController confirmationController = TextEditingController();
+  ValueNotifier<String?> errorNotifier = ValueNotifier<String?>(null);
+
+  Future<bool> deleteAccount() async {
+    if (confirmationController.text == "I want to delete this account") {
+      await ApiService().deleteUser();
+      Navigator.pop(context);
+      Provider.of<UserProvider>(context, listen: false).logout(context);
+      return true;
+    } else {
+      errorNotifier.value = "Type 'I want to delete this account' exactly.";
+      return false;
+    }
+  }
+
+  showBlurDialog(
+      context: context,
+      childBuilder: (ctx) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.red, // Red border for the container
+              width: 2.w,
+            ),
+            borderRadius: BorderRadius.circular(24.r),
+          ),
+          padding: const EdgeInsets.all(0),
+          width: 335.w,
+          height: 400.h,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Danger Zone!",
+                style: GoogleFonts.outfit(
+                  fontSize: 22.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red, // Red text for the heading
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text:
+                        "Deleting your account is permanent and cannot be undone. Please confirm your decision by typing ",
+                    style: GoogleFonts.outfit(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF718096),
+                      letterSpacing: 0.3,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "'I want to delete this account'",
+                        style: GoogleFonts.outfit(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " in the box below.",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24.h,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
+                child: ValueListenableBuilder<String?>(
+                  valueListenable: errorNotifier,
+                  builder: (context, error, _) {
+                    return Column(
+                      children: [
+                        TextFormField(
+                          controller: confirmationController,
+                          decoration: InputDecoration(
+                            hintText: "I want to delete this account",
+                            hintStyle: GoogleFonts.outfit(
+                              fontSize: 14.sp,
+                              color: const Color(0xFF718096),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                              borderSide: BorderSide(
+                                color: primaryColor,
+                              ),
+                            ),
+                            errorText: error,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 24.h,
+              ),
+              CustomButton(
+                buttonText: "Delete Account",
+                onPressed: deleteAccount,
+              ),
+            ],
+          ),
+        );
+      });
 }
