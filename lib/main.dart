@@ -51,8 +51,9 @@ Future<SecretKeys> loadSecrets() async {
       GOOGLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_ID == missingVariable) {
-    throw Exception(
-        'One or more required environment variables are missing:\n');
+    // throw Exception(
+    //     'One or more required environment variables are missing:\n');
+    debugPrint("VALUES ARE MISSING")
   }
 
   return SecretKeys(
