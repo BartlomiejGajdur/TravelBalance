@@ -53,7 +53,7 @@ Future<SecretKeys> loadSecrets() async {
       APPLE_CLIENT_ID == missingVariable) {
     // throw Exception(
     //     'One or more required environment variables are missing:\n');
-    debugPrint("VALUES ARE MISSING")
+    debugPrint("VALUES ARE MISSING");
   }
 
   return SecretKeys(
