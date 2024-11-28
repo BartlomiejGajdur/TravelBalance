@@ -121,7 +121,10 @@ class _CountryPickerState extends State<CountryPicker> {
                 return Card(
                   color: thirdColor.withOpacity(0.4),
                   child: ListTile(
-                    leading: Text(country.flagEmoji),
+                    leading: Text(
+                      country.flagEmoji,
+                      style: TextStyle(fontSize: 24.sp),
+                    ),
                     title: Text(country.displayNameNoCountryCode),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),

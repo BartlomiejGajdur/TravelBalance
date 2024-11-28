@@ -32,7 +32,8 @@ class ShortTripComponent extends StatelessWidget {
               motion: const StretchMotion(),
               children: [
                 SlidableAction(
-                  onPressed: (context) => showDeleteTripDialog(context, trip),
+                  onPressed: (context) =>
+                      showDeleteTripDialog(context, trip, false),
                   backgroundColor: const Color(0xFFFE4A49),
                   foregroundColor: Colors.white,
                   icon: Icons.delete,

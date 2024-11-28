@@ -119,7 +119,7 @@ class _EditTripState extends State<EditTrip> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    showDeleteTripDialog(context, widget.tripProvider.trip);
+                    showDeleteTripDialog(context, widget.tripProvider.trip, true);
                   },
                   child: Container(
                     height: 56.h,

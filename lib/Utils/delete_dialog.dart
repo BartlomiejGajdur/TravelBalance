@@ -9,15 +9,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-void deleteTrip(BuildContext context, Trip trip) {
+bool deleteTrip(BuildContext context, Trip trip) {
   int? tripId = trip.getId();
   if (tripId != null) {
     Provider.of<UserProvider>(context, listen: false).deleteTrip(tripId);
     ApiService().deleteTrip(tripId);
+    return true;
   }
+  return false;
 }
 
-void showDeleteTripDialog(BuildContext context, Trip trip) {
+void showDeleteTripDialog(BuildContext context, Trip trip, bool isEditPage) {
   final String tripName = trip.name;
 
   showBlurDialog(
@@ -68,8 +70,12 @@ void showDeleteTripDialog(BuildContext context, Trip trip) {
             children: [
               GestureDetector(
                 onTap: () {
-                  deleteTrip(ctx, trip);
+                  bool isdeleted = deleteTrip(ctx, trip);
                   Navigator.of(ctx).pop();
+                  if (isEditPage && isdeleted) {
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pop();
+                  }
                 },
                 child: Container(
                   height: 46.h,
