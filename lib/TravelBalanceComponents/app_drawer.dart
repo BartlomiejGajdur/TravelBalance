@@ -59,7 +59,7 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(
                 context, "Change password", Option.changePassword),
             clickableListTile(context, "Send feedback", Option.sendFeedback),
-            clickableListTile(context, "About", Option.about),
+            clickableListTile(context, "About us", Option.about),
             clickableListTile(context, "Delete Account", Option.deleteAccount),
             const Spacer(),
             Padding(
@@ -166,42 +166,121 @@ class AppDrawer extends StatelessWidget {
 
 void showAbout(BuildContext context) {
   showBlurDialog(
-      context: context,
-      childBuilder: (ctx) {
-        return Container(
-          padding: const EdgeInsets.all(0),
-          width: 335.w,
-          height: 300.h,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "About Travel Balance",
-                style: GoogleFonts.outfit(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  color: mainTextColor,
+    context: context,
+    childBuilder: (ctx) {
+      return Container(
+        padding: EdgeInsets.all(16.w),
+        width: 335.w,
+        height: 650.h,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Nagłówek z ikoną
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.info_outline_rounded,
+                  color: Colors.blueAccent,
+                  size: 28.sp,
                 ),
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28.0.w),
-                child: Text(
-                  "Travel Balance is an app designed to simplify expense management during your travels. It helps you monitor costs, manage budgets, and log travel-related expenses effortlessly. Our goal is to provide a convenient tool for tracking expenses across different countries, making it easier to manage your finances on the go.",
+                SizedBox(width: 8.w),
+                Text(
+                  "About Us",
                   style: GoogleFonts.outfit(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF718096),
-                      letterSpacing: 0.3),
-                  textAlign: TextAlign.center,
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: mainTextColor,
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
+
+            // Podział na sekcje z ikonami i kolorami
+            Expanded(
+              child: ListView(
+                children: [
+                  // Sekcja 1
+                  _buildSection(
+                    icon: Icons.favorite_rounded,
+                    iconColor: Colors.redAccent,
+                    title: "Who we are 💡",
+                    content:
+                        "We are a team of young, passionate developers and avid travelers who created Travel Balance out of our love for both programming and exploring the world.",
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  // Sekcja 2
+                  _buildSection(
+                    icon: Icons.explore_rounded,
+                    iconColor: Colors.greenAccent,
+                    title: "Our Inspiration 🌍",
+                    content:
+                        "As travelers ourselves, we wanted to build a tool that would not only help us track and manage our expenses during our trips but also provide others with an easy and efficient way to handle their travel finances.",
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  // Sekcja 3
+                  _buildSection(
+                    icon: Icons.check_circle_rounded,
+                    iconColor: Colors.tealAccent,
+                    title: "Our Goal 🎯",
+                    content:
+                        "Our goal is to offer a practical solution for managing finances across different countries, helping travelers stay organized and stress-free, no matter where they are.",
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+// Helper do budowania sekcji
+Widget _buildSection({
+  required IconData icon,
+  required Color iconColor,
+  required String title,
+  required String content,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Icon(
+            icon,
+            color: iconColor,
+            size: 24.sp,
           ),
-        );
-      });
+          SizedBox(width: 8.w),
+          Text(
+            title,
+            style: GoogleFonts.outfit(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+      SizedBox(height: 8.h),
+      Text(
+        content,
+        style: GoogleFonts.outfit(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF718096),
+          letterSpacing: 0.3,
+        ),
+        textAlign: TextAlign.left,
+      ),
+    ],
+  );
 }
 
 void showSendFeedback(BuildContext context) {
