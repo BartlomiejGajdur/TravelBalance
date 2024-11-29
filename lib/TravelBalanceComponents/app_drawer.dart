@@ -54,7 +54,7 @@ class AppDrawer extends StatelessWidget {
               height: 214.h,
               width: 270.w,
             ),
-            SizedBox(height: 53.h),
+            const Spacer(),
             clickableListTile(context, "Currency", Option.currency),
             clickableListTile(
                 context, "Change password", Option.changePassword),
@@ -143,7 +143,7 @@ class AppDrawer extends StatelessWidget {
               givenText,
               style: GoogleFonts.outfit(
                 fontSize: 16.sp,
-                fontWeight: isDeleteAccount ? FontWeight.bold : FontWeight.w500,
+                fontWeight: isDeleteAccount ? FontWeight.w500 : FontWeight.w500,
                 color: setTextColor(),
               ),
             ),
