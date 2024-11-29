@@ -1,10 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class SharedPrefsStorage {
-  final String token = "Token";
-  final String refreshToken = "RefreshToken";
-  final String tokenType = "TokenType";
-  final String loginType = "LoginType";
+  final String isShortListTripViewKey = "isShortListTripViewKey";
   //Singleton
   static final SharedPrefsStorage _instance = SharedPrefsStorage._internal();
 

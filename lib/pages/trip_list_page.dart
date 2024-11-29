@@ -5,6 +5,7 @@ import 'package:TravelBalance/TravelBalanceComponents/short_trip_component.dart'
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:TravelBalance/services/ad_manager_service.dart';
+import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +26,7 @@ class TripListPage extends StatefulWidget {
 
 class _TripListPageState extends State<TripListPage> {
   bool isLoading = false;
-  bool isSwitched = false;
+  late bool isSwitched;
 
   @override
   void initState() {
@@ -33,6 +34,8 @@ class _TripListPageState extends State<TripListPage> {
     if (Provider.of<UserProvider>(context, listen: false).user == null) {
       _fetchUserData();
     }
+    isSwitched = SharedPrefsStorage()
+        .getBool(SharedPrefsStorage().isShortListTripViewKey);
   }
 
   @override
@@ -288,6 +291,8 @@ class _TripListPageState extends State<TripListPage> {
               onChanged: (value) {
                 setState(() {
                   isSwitched = value;
+                  SharedPrefsStorage().setBool(
+                      SharedPrefsStorage().isShortListTripViewKey, value);
                 });
               },
             ),
