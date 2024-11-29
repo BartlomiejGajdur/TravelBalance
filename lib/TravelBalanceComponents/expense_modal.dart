@@ -159,7 +159,7 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
                 children: [
                   DeleteExpenseIcon(
                     tripProvider: widget.expenseProvider.tripProvider,
-                    expenseId: widget.expenseProvider.expense.getId()!,
+                    expenseId: widget.expenseProvider.expense.getId(),
                   ),
                   SizedBox(width: 11.w),
                   SizedBox(
@@ -182,7 +182,7 @@ class _ModalBottomSheetExpenseState extends State<ModalBottomSheetExpense> {
 
 class DeleteExpenseIcon extends StatelessWidget {
   final TripProvider tripProvider;
-  final int expenseId;
+  final int? expenseId;
 
   const DeleteExpenseIcon({
     super.key,
@@ -222,11 +222,6 @@ class DeleteExpenseIcon extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           tripProvider.deleteExpense(expenseId);
-                          int? tripIndex = tripProvider.trip.getId();
-                          if (tripIndex != null) {
-                            ApiService().deleteExpense(tripIndex, expenseId);
-                          }
-
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },

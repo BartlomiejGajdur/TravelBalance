@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:TravelBalance/TravelBalanceComponents/expense_component.dart';
 import 'package:TravelBalance/models/expense.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -48,10 +49,26 @@ class ExpenseSheetComponent extends StatelessWidget {
                 ),
               ),
               for (var expense in expenses)
-                ExpenseComponent(
-                  key: ValueKey(expense.getId()),
-                  expense: expense,
-                  tripProvider: tripProvider,
+                Slidable(
+                  endActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          tripProvider.deleteExpense(expense.getId());
+                        },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      ),
+                    ],
+                  ),
+                  child: ExpenseComponent(
+                    key: ValueKey(expense.getId()),
+                    expense: expense,
+                    tripProvider: tripProvider,
+                  ),
                 ),
             ],
           ),

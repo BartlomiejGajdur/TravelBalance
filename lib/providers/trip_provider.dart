@@ -2,6 +2,7 @@ import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/models/trip.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -37,8 +38,14 @@ class TripProvider with ChangeNotifier {
     notifyUi();
   }
 
-  void deleteExpense(int expenseId) {
+  void deleteExpense(int? expenseId) {
+    if (expenseId == null) return;
+
     trip.deleteExpense(expenseId);
+    int? tripIndex = trip.getId();
+    if (tripIndex != null) {
+      ApiService().deleteExpense(tripIndex, expenseId);
+    }
     notifyUi();
   }
 
