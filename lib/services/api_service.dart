@@ -718,8 +718,6 @@ class ApiService {
         debugPrint('Add Expense successful');
         final responseData = jsonDecode(response.body);
         return responseData["id"];
-      } else if (response.statusCode >= 500) {
-        throw "Internal Server Error. Please try again later.";
       } else {
         debugPrint('Add Expense failed with status: ${response.statusCode}');
         return null;
