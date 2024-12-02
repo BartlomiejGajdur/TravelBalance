@@ -224,6 +224,8 @@ class ApiService {
             responseBody['token'], null, BaseTokenType.Token, LoginType.Email));
         debugPrint('Login successful: $responseBody');
         return true;
+      } else if (response.statusCode >= 500) {
+        throw "Internal Server Error. Please try again later.";
       } else {
         final responseBody = jsonDecode(response.body);
         debugPrint('Login failed with status: ${response.statusCode}');
@@ -369,6 +371,8 @@ class ApiService {
         final responseBody = jsonDecode(response.body);
         debugPrint('Signup successful: $responseBody');
         return true;
+      } else if (response.statusCode >= 500) {
+        throw "Internal Server Error. Please try again later.";
       } else {
         final responseBody = jsonDecode(response.body);
         String errorString = [
@@ -714,6 +718,8 @@ class ApiService {
         debugPrint('Add Expense successful');
         final responseData = jsonDecode(response.body);
         return responseData["id"];
+      } else if (response.statusCode >= 500) {
+        throw "Internal Server Error. Please try again later.";
       } else {
         debugPrint('Add Expense failed with status: ${response.statusCode}');
         return null;
