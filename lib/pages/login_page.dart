@@ -6,6 +6,7 @@ import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
+import 'package:TravelBalance/services/in_app_purchase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool forceLoading = false;
+  final InAppPurchaseUtils inAppPurchaseUtils = InAppPurchaseUtils();
   @override
   void dispose() {
     usernameController.dispose();
@@ -59,6 +61,16 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 108.h),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await inAppPurchaseUtils.initialize(context);
+                    await inAppPurchaseUtils.buyNonConsumableProduct(
+                        context, "com.domainname.travelbalance.premium");
+                  },
+                  child: Text('Purchase Plan'),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.only(left: horizontalPadding),
                 child: Text("Welcome back wanderer!", style: mainTextStyle),
