@@ -124,5 +124,10 @@
     <!-- Identyfikator aplikacji AdMob (do wyświetlania reklam) -->
     <key>GADApplicationIdentifier</key>
     <string>ca-app-pub-7301667226211856~9393157406</string>
+
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>in-app-purchase</string>
+    </array>
 </dict>
 </plist>
