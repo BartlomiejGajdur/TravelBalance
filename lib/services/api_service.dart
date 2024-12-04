@@ -15,6 +15,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:http/http.dart';
+
 enum BaseTokenType {
   Token,
   Bearer,
@@ -135,20 +137,17 @@ class ApiService {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        setAuthentication(Authentication(
-          responseBody['access_token'],
-          responseBody['refresh_token'],
-          BaseTokenType.Bearer,
-          loginType,
-        ));
-        debugPrint('Refresh Token Apple/Google successful');
-        return true;
-      } else {
-        debugPrint('Refresh Token Apple/Google failed:');
-        return false;
-      }
+      handleResponseProblems(response, 200, true, "RefreshToken");
+
+      final responseBody = jsonDecode(response.body);
+      setAuthentication(Authentication(
+        responseBody['access_token'],
+        responseBody['refresh_token'],
+        BaseTokenType.Bearer,
+        loginType,
+      ));
+
+      return true;
     } catch (e) {
       debugPrint('Refresh Token Apple/Google failed: $e');
       return false;
@@ -188,17 +187,12 @@ class ApiService {
       final tripsResponse = responses[0];
       final userDataResponse = responses[1];
 
-      if (tripsResponse.statusCode == 200 &&
-          userDataResponse.statusCode == 200) {
-        debugPrint('Fetch trips and user data successful');
-        final tripsData = jsonDecode(tripsResponse.body);
-        final userData = jsonDecode(userDataResponse.body);
-        return User.fromJson(tripsData, userData);
-      } else {
-        debugPrint(
-            'Failed to fetch data. Trips status: ${tripsResponse.statusCode}, User data status: ${userDataResponse.statusCode}');
-        return null;
-      }
+      handleResponseProblems(tripsResponse, 200, "FetchUserData_Trips");
+      handleResponseProblems(userDataResponse, 200, "FetchUserData_User");
+
+      final tripsData = jsonDecode(tripsResponse.body);
+      final userData = jsonDecode(userDataResponse.body);
+      return User.fromJson(tripsData, userData);
     } catch (e) {
       debugPrint("Error fetching data: $e");
       return null;
@@ -274,8 +268,7 @@ class ApiService {
         return false;
       }
     } catch (e) {
-      debugPrint("Error Google logging in: $e");
-      return false;
+      throw "Error Google logging in: $e";
     }
   }
 
@@ -557,27 +550,9 @@ class ApiService {
   }
 
   Future<bool> deleteTrip(int id) async {
-    try {
-      final endPoint = 'trip/$id/';
-      final response = await http.delete(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 204) {
-        debugPrint('Delete Trip successful');
-        return true;
-      } else {
-        debugPrint('Delete Trip failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Delete Trip in: $e");
-      return false;
-    }
+    final response = await deleteApiRequest('trip/$id/', "Delete Trip");
+    handleResponseProblems(response, 204, true, "Delete Trip");
+    return true;
   }
 
   Future<bool> editTrip(int id, String tripName, CustomImage customImage,
@@ -663,27 +638,10 @@ class ApiService {
   }
 
   Future<bool> deleteExpense(int tripId, int expenseId) async {
-    try {
-      final endPoint = 'trip/$tripId/expense/$expenseId/';
-      final response = await http.delete(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json'
-        },
-      );
-
-      if (response.statusCode == 204) {
-        debugPrint('Delete Expense successful');
-        return true;
-      } else {
-        debugPrint('Delete Expense failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Delete Expense in: $e");
-      return false;
-    }
+    final response = await deleteApiRequest(
+        'trip/$tripId/expense/$expenseId/', "Delete Expense");
+    handleResponseProblems(response, 204, true, "Delete Expense");
+    return true;
   }
 
   Future<int?> addExpense(int tripId, String title, double cost,
@@ -760,9 +718,7 @@ class ApiService {
       final body = {
         'base_currency': baseCurrency.code,
       };
-
       const endPoint = 'user/me/';
-
       final response = await http.patch(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {
@@ -787,26 +743,79 @@ class ApiService {
   }
 
   Future<bool> deleteUser() async {
+    final response = await deleteApiRequest('user/me/', "Delete Account");
+    handleResponseProblems(response, 204, true, "Delete Account");
+    return true;
+  }
+
+  Future<Response> deleteApiRequest(
+      String endPoint, String apiRequestName) async {
+    late final Response response;
+
     try {
-      const endPoint = 'user/me/';
-      final response = await http.delete(
+      response = await http.delete(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {
           'Authorization': _getAuthorizationHeader(),
           'Content-Type': 'application/json',
         },
       );
-
-      if (response.statusCode == 204) {
-        debugPrint('Delete Account successful');
-        return true;
-      } else {
-        debugPrint('Delete Account failed with status: ${response.statusCode}');
-        return false;
-      }
+    } on SocketException {
+      throw 'Error $apiRequestName: No Internet connection.';
+    } on FormatException {
+      throw 'Error $apiRequestName: Bad response format.';
     } catch (e) {
-      debugPrint("Delete Account failed in: $e");
-      return false;
+      throw 'Error $apiRequestName: Unexpected error occurred: $e';
+    }
+
+    debugPrint("API SERVICE $apiRequestName Correct");
+    return response;
+  }
+
+  void handleResponseProblems(Response response, int expectedResponseCode,
+      bool throwable, String apiRequestType) {
+    if (response.statusCode == expectedResponseCode) {
+      debugPrint("API SERVICE CODE: $apiRequestType Correct");
+      return;
+    }
+
+    if (!throwable) {
+      debugPrint(
+          "API SERVICE CODE NO THROW: $apiRequestType -  response (${response.statusCode}).");
+      return;
+    }
+
+    switch (response.statusCode) {
+      case 400:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Bad Request (400). The server could not understand the request due to invalid syntax.");
+      case 401:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Unauthorized (401). Authentication is required and has failed or not provided.");
+      case 403:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Forbidden (403). You do not have the necessary permissions.");
+      case 404:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Not Found (404). The requested resource could not be found.");
+      case 409:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Conflict (409). The request conflicts with the current state of the server.");
+      case 500:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Internal Server Error (500). The server encountered an unexpected condition.");
+      case 502:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Bad Gateway (502). The server received an invalid response from the upstream server.");
+      case 503:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Service Unavailable (503). The server is not ready to handle the request.");
+      case 504:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Gateway Timeout (504). The server took too long to respond.");
+      default:
+        throw Exception(
+            "API SERVICE CODE: $apiRequestType - Unexpected response (${response.statusCode}).");
     }
   }
 }
