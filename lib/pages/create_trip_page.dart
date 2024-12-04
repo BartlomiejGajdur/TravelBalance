@@ -2,6 +2,7 @@ import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_form_field.dart';
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_scaffold.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/image_picker.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
@@ -55,7 +56,17 @@ class _CreateTripPageState extends State<CreateTripPage> {
     userProvider.addTrip(tripName, imagePicked, countries);
     Navigator.of(context).pop();
 
-    int? tripId = await ApiService().addTrip(tripName, imagePicked, countries);
+    int? tripId;
+    try {
+      tripId = await ApiService().addTrip(tripName, imagePicked, countries);
+    } catch (e) {
+      tripId = null;
+      showCustomSnackBar(
+        context: widget.mainPageContext,
+        message: e.toString(),
+        type: SnackBarType.error,
+      );
+    }
 
     if (tripId != null) {
       userProvider.setTripIdOfLastAddedTrip(tripId);

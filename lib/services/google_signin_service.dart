@@ -23,7 +23,7 @@ class GoogleSignInButton extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         toggleLoadingFunc();
-        bool result = await ApiService().loginGoogle();
+        bool result = await ApiService().loginGoogle(context);
         if (result) {
           moveToTrips(context);
         }

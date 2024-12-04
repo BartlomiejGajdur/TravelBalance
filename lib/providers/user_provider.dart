@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/ad_manager_service.dart';
@@ -15,17 +16,31 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
 
   Future<void> fetchWholeUserData() async {
-    User? fetchedUser = await ApiService().fetchUserData();
-    if (fetchedUser == null) {
-      await ApiService().refreshToken();
+    User? fetchedUser;
+    try {
       fetchedUser = await ApiService().fetchUserData();
+    } catch (e) {
+      debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
+    }
+
+    if (fetchedUser == null) {
+      try {
+        await ApiService().refreshToken();
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      try {
+        fetchedUser = await ApiService().fetchUserData();
+      } catch (e) {
+        debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
+      }
     }
 
     if (fetchedUser == null) {
       debugPrint("Failed to fetch user data");
       return;
     }
-    
+
     AdManagerService().configure(fetchedUser.isPremiumUser);
 
     _user = fetchedUser;

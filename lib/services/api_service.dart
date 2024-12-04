@@ -104,56 +104,6 @@ class ApiService {
 
   LoginType get loginType => _authentication.loginType;
 
-  Future<bool> refreshToken() async {
-    if (loginType != LoginType.Google && loginType != LoginType.Apple)
-      return false;
-
-    if (_authentication.refreshToken == null) {
-      debugPrint('No refresh token available.');
-      return false;
-    }
-    try {
-      late final String CLIENT_ID, CLIENT_SECRET;
-      if (loginType == LoginType.Google) {
-        CLIENT_ID = _secrets.GOOGLE_CLIENT_ID;
-        CLIENT_SECRET = _secrets.GOOGLE_CLIENT_SECRET;
-      }
-      if (loginType == LoginType.Apple) {
-        CLIENT_ID = _secrets.APPLE_CLIENT_ID;
-        CLIENT_SECRET = _secrets.APPLE_CLIENT_SECRET;
-      }
-
-      final body = {
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-        "grant_type": "refresh_token",
-        "refresh_token": _authentication.refreshToken!,
-      };
-
-      const endPoint = 'auth/token/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-
-      handleResponseProblems(response, 200, true, "RefreshToken");
-
-      final responseBody = jsonDecode(response.body);
-      setAuthentication(Authentication(
-        responseBody['access_token'],
-        responseBody['refresh_token'],
-        BaseTokenType.Bearer,
-        loginType,
-      ));
-
-      return true;
-    } catch (e) {
-      debugPrint('Refresh Token Apple/Google failed: $e');
-      return false;
-    }
-  }
-
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
     SecureStorage().saveAuthentication(newAuthentication);
@@ -168,35 +118,71 @@ class ApiService {
     return '$tokenPrefix ${_authentication.token}';
   }
 
-  Future<User?> fetchUserData() async {
-    try {
-      const fetchTripsEndPoint = 'trip/';
-      const userDataEndPoint = 'user/me/';
-      final tripsRequest = http.get(
-        Uri.parse('$_baseUrl$fetchTripsEndPoint'),
-        headers: {'Authorization': _getAuthorizationHeader()},
-      );
+  Future<bool> refreshToken() async {
+    if (loginType != LoginType.Google && loginType != LoginType.Apple)
+      return false;
 
-      final userDataRequest = http.get(
-        Uri.parse('$_baseUrl$userDataEndPoint'),
-        headers: {'Authorization': _getAuthorizationHeader()},
-      );
-
-      final responses = await Future.wait([tripsRequest, userDataRequest]);
-
-      final tripsResponse = responses[0];
-      final userDataResponse = responses[1];
-
-      handleResponseProblems(tripsResponse, 200, "FetchUserData_Trips");
-      handleResponseProblems(userDataResponse, 200, "FetchUserData_User");
-
-      final tripsData = jsonDecode(tripsResponse.body);
-      final userData = jsonDecode(userDataResponse.body);
-      return User.fromJson(tripsData, userData);
-    } catch (e) {
-      debugPrint("Error fetching data: $e");
-      return null;
+    if (_authentication.refreshToken == null) {
+      debugPrint('No refresh token available.');
+      return false;
     }
+
+    late final String CLIENT_ID, CLIENT_SECRET;
+    if (loginType == LoginType.Google) {
+      CLIENT_ID = _secrets.GOOGLE_CLIENT_ID;
+      CLIENT_SECRET = _secrets.GOOGLE_CLIENT_SECRET;
+    }
+    if (loginType == LoginType.Apple) {
+      CLIENT_ID = _secrets.APPLE_CLIENT_ID;
+      CLIENT_SECRET = _secrets.APPLE_CLIENT_SECRET;
+    }
+
+    final body = {
+      "client_id": CLIENT_ID,
+      "client_secret": CLIENT_SECRET,
+      "grant_type": "refresh_token",
+      "refresh_token": _authentication.refreshToken!,
+    };
+    final apiRequestName = "Refresh Token";
+    final response =
+        await postApiRequest('auth/token/', body, false, false, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+
+    final responseBody = jsonDecode(response.body);
+    setAuthentication(Authentication(
+      responseBody['access_token'],
+      responseBody['refresh_token'],
+      BaseTokenType.Bearer,
+      loginType,
+    ));
+
+    return true;
+  }
+
+  Future<User?> fetchUserData() async {
+    const fetchTripsEndPoint = 'trip/';
+    const userDataEndPoint = 'user/me/';
+    final tripsRequest = http.get(
+      Uri.parse('$_baseUrl$fetchTripsEndPoint'),
+      headers: {'Authorization': _getAuthorizationHeader()},
+    );
+
+    final userDataRequest = http.get(
+      Uri.parse('$_baseUrl$userDataEndPoint'),
+      headers: {'Authorization': _getAuthorizationHeader()},
+    );
+
+    final responses = await Future.wait([tripsRequest, userDataRequest]);
+
+    final tripsResponse = responses[0];
+    final userDataResponse = responses[1];
+
+    handleResponseProblems(tripsResponse, 200, true, "FetchUserData_Trips");
+    handleResponseProblems(userDataResponse, 200, true, "FetchUserData_User");
+
+    final tripsData = jsonDecode(tripsResponse.body);
+    final userData = jsonDecode(userDataResponse.body);
+    return User.fromJson(tripsData, userData);
   }
 
   Future<bool> login(String username, String password) async {
@@ -204,350 +190,295 @@ class ApiService {
       'username': username,
       'password': password,
     };
-    const endPoint = 'login/';
-    try {
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
+    final apiRequestName = "Login";
+    String errorMsg = "$apiRequestName Undefined Error";
+    final response =
+        await postApiRequest('login/', body, false, false, apiRequestName);
 
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        setAuthentication(Authentication(
-            responseBody['token'], null, BaseTokenType.Token, LoginType.Email));
-        debugPrint('Login successful: $responseBody');
-        return true;
-      } else if (response.statusCode >= 500) {
-        throw "Internal Server Error. Please try again later.";
-      } else {
-        final responseBody = jsonDecode(response.body);
-        debugPrint('Login failed with status: ${response.statusCode}');
-        throw (responseBody['non_field_errors'].toString());
-      }
-    } on SocketException catch (e) {
-      debugPrint('No internet connection: $e');
-      throw ("No internet connection!");
+    try {
+      handleResponseProblems(response, 200, true, apiRequestName);
     } catch (e) {
-      debugPrint('Unexpected error: $e');
-      rethrow;
+      errorMsg = e.toString();
     }
+
+    final responseBody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      setAuthentication(Authentication(
+          responseBody['token'], null, BaseTokenType.Token, LoginType.Email));
+      return true;
+    }
+
+    if (responseBody.containsKey('non_field_errors'))
+      throw responseBody['non_field_errors'].toString();
+
+    throw errorMsg;
   }
 
-  Future<bool> loginGoogle() async {
-    try {
-      final user = await GoogleSignInButton.login();
-      if (user == null) {
-        return false;
-      }
-      final GoogleSignInAuthentication googleAuth = await user.authentication;
-      final body = {
-        "grant_type": "convert_token",
-        "client_id": _secrets.GOOGLE_CLIENT_ID,
-        "backend": "google-oauth2",
-        "token": googleAuth.accessToken.toString(),
-      };
-      const endPoint = 'auth/convert-token/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        setAuthentication(Authentication(
-            responseBody['access_token'],
-            responseBody['refresh_token'],
-            BaseTokenType.Bearer,
-            LoginType.Google));
-        debugPrint('Login Google successful');
-        return true;
-      } else {
-        debugPrint("Login Google failed with status: ${response.statusCode}");
-        return false;
-      }
-    } catch (e) {
-      throw "Error Google logging in: $e";
+  Future<bool> loginGoogle(BuildContext context) async {
+    final user = await GoogleSignInButton.login();
+    if (user == null) {
+      showCustomSnackBar(
+          context: context,
+          message: 'Google sign-in failed. Please try again.',
+          type: SnackBarType.error);
+      return false;
     }
+    final GoogleSignInAuthentication googleAuth = await user.authentication;
+    final body = {
+      "grant_type": "convert_token",
+      "client_id": _secrets.GOOGLE_CLIENT_ID,
+      "backend": "google-oauth2",
+      "token": googleAuth.accessToken.toString(),
+    };
+
+    final apiRequestName = "Login Google";
+    final response = await postApiRequest(
+        'auth/convert-token/', body, false, false, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+    final responseBody = jsonDecode(response.body);
+
+    setAuthentication(Authentication(responseBody['access_token'],
+        responseBody['refresh_token'], BaseTokenType.Bearer, LoginType.Google));
+
+    return true;
   }
 
   Future<bool> loginApple(BuildContext context) async {
-    try {
-      final user = await AppleSignInButton.signInWithApple();
-
-      if (user.identityToken == null) {
-        debugPrint('Identity token is null.');
-        showCustomSnackBar(
-            context: context,
-            message: 'Apple sign-in failed. Please try again.',
-            type: SnackBarType.error);
-        return false;
-      }
-
-      final body = {
-        "client_id": _secrets.APPLE_CLIENT_ID,
-        "backend": "apple-id",
-        "grant_type": "convert_token",
-        "token": user.identityToken!,
-      };
-
-      final encodedBody = body.entries
-          .map((e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-          .join('&');
-
-      const endPoint = 'auth/convert-token/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: encodedBody,
-      );
-
-      final responseBody = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        setAuthentication(Authentication(
-          responseBody['access_token'],
-          responseBody['refresh_token'],
-          BaseTokenType.Bearer,
-          LoginType.Apple,
-        ));
-        debugPrint('Login apple successful');
-        return true;
-      } else {
-        debugPrint('Login apple failed: $responseBody');
-        return false;
-      }
-    } catch (e, stacktrace) {
-      debugPrint("Error apple logging in: $e");
-      debugPrint("Stacktrace: $stacktrace");
+    final user = await AppleSignInButton.signInWithApple();
+    if (user.identityToken == null) {
+      showCustomSnackBar(
+          context: context,
+          message: 'Apple sign-in failed. Please try again.',
+          type: SnackBarType.error);
       return false;
     }
+
+    final body = {
+      "client_id": _secrets.APPLE_CLIENT_ID,
+      "backend": "apple-id",
+      "grant_type": "convert_token",
+      "token": user.identityToken!,
+    };
+
+    final apiRequestName = "Login Apple";
+    final response = await postApiRequest(
+        'auth/convert-token/', body, false, true, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+    final responseBody = jsonDecode(response.body);
+
+    setAuthentication(Authentication(
+      responseBody['access_token'],
+      responseBody['refresh_token'],
+      BaseTokenType.Bearer,
+      LoginType.Apple,
+    ));
+
+    return true;
   }
 
   Future<void> logout() async {
-    try {
-      const endPoint = 'logout/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Authorization': _getAuthorizationHeader()},
-      );
-
-      if (response.statusCode == 204) {
-        debugPrint('Logout successful');
-      } else {
-        debugPrint('Logout failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint("Error logging out: $e");
-    }
+    final apiRequestName = "Logout";
+    final response =
+        await postApiRequest('logout/', {}, true, false, apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
   }
 
   Future<bool> signUp(String username, String email, String password,
       String repeatedPassword) async {
+    final body = {
+      "username": username,
+      "email": email,
+      "password": password,
+      "password2": repeatedPassword
+    };
+
+    final apiRequestName = "Sign Up";
+    String errorMsg = "$apiRequestName Undefined Error";
+    final response =
+        await postApiRequest('user/', body, false, false, apiRequestName);
+
     try {
-      final body = {
-        "username": username,
-        "email": email,
-        "password": password,
-        "password2": repeatedPassword
-      };
-      const endPoint = 'user/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 201) {
-        final responseBody = jsonDecode(response.body);
-        debugPrint('Signup successful: $responseBody');
-        return true;
-      } else if (response.statusCode >= 500) {
-        throw "Internal Server Error. Please try again later.";
-      } else {
-        final responseBody = jsonDecode(response.body);
-        String errorString = [
-          responseBody['non_field_errors'],
-          responseBody['username'],
-          responseBody['email'],
-          responseBody['password']
-        ].where((error) => error != null).map((error) {
-          if (error is List) {
-            return error.join(" ");
-          }
-          return error.toString();
-        }).join(" ");
-
-        throw errorString;
-      }
-    } on SocketException catch (e) {
-      debugPrint('No internet connection: $e');
-      throw ("No internet connection!");
+      handleResponseProblems(response, 201, true, apiRequestName);
     } catch (e) {
-      debugPrint('Unexpected error: $e');
-      rethrow;
+      errorMsg = e.toString();
     }
+
+    if (response.statusCode == 201) return true;
+
+    final responseBody = jsonDecode(response.body);
+    String errorString = [
+      responseBody['non_field_errors'],
+      responseBody['username'],
+      responseBody['email'],
+      responseBody['password']
+    ].where((error) => error != null).map((error) {
+      if (error is List) {
+        return error.join(" ");
+      }
+      return error.toString();
+    }).join(" ");
+
+    if (errorString.isNotEmpty) throw errorString;
+
+    throw errorMsg;
   }
 
   Future<bool> forgotPassword(String email) async {
-    try {
-      final body = {
-        'email': email,
-      };
-      const endPoint = 'user/forgot_password/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 204) {
-        debugPrint('Forgot Password successful');
-        return true;
-      } else {
-        debugPrint(
-            'Forgot Password failed with status: ${response.statusCode}');
-        return false;
-      }
-    } on SocketException catch (e) {
-      debugPrint('No internet connection: $e');
-      throw ("No internet connection!");
-    } catch (e) {
-      throw 'Unexpected error: $e';
-    }
+    final body = {
+      'email': email,
+    };
+    final apiRequestName = "Forgot Password";
+    final response = await postApiRequest(
+        'user/forgot_password/', body, false, false, apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
+    return true;
   }
 
   Future<bool> changePassword(String oldPassword, String newPassword,
       String newPasswordRepeated) async {
-    try {
-      final body = {
-        'old_password': oldPassword,
-        'password': newPassword,
-        'password2': newPasswordRepeated
-      };
-      const endPoint = 'user/change_password/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
+    final body = {
+      'old_password': oldPassword,
+      'password': newPassword,
+      'password2': newPasswordRepeated
+    };
+    final apiRequestName = "Change Password";
+    String errorMsg = "$apiRequestName Undefined Error";
+    final response = await postApiRequest(
+        'user/change_password/', body, true, false, apiRequestName);
 
-      if (response.statusCode == 204) {
-        debugPrint('Change Password successful');
-        return true;
-      } else {
-        final responseBody = jsonDecode(response.body);
-        if (responseBody.containsKey('old_password')) {
-          throw responseBody['old_password'];
-        } else {
-          throw "Change Password failed with status: ${response.statusCode}";
-        }
-      }
-    } on SocketException catch (e) {
-      debugPrint('No internet connection: $e');
-      throw ("No internet connection!");
+    try {
+      handleResponseProblems(response, 204, true, apiRequestName);
     } catch (e) {
-      debugPrint('Unexpected error: $e');
-      throw 'Unexpected error: $e';
+      errorMsg = e.toString();
     }
+
+    if (response.statusCode == 204) return true;
+
+    final responseBody = jsonDecode(response.body);
+    if (responseBody.containsKey('old_password'))
+      throw responseBody['old_password'];
+
+    throw errorMsg;
   }
 
   Future<bool> validateVerificationCode(
       String email, String verificationCode) async {
-    try {
-      final body = {'email': email, 'token': verificationCode};
-      const endPoint = 'user/forgot_password_check_token/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 204) {
-        debugPrint('Validate Verification Code successful');
-        return true;
-      } else {
-        debugPrint(
-            'Validate Verification Code failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Error Validate Verification Code in: $e");
-      return false;
-    }
+    final body = {'email': email, 'token': verificationCode};
+    final apiRequestName = "Validate Verification Code";
+    final response = await postApiRequest('user/forgot_password_check_token/',
+        body, false, false, apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
+    return true;
   }
 
   Future<bool> changeForgottenPassword(String email, String verificationCode,
       String password, String repeatedPassword) async {
-    try {
-      final body = {
-        'email': email,
-        'token': verificationCode,
-        'password': password,
-        'password2': repeatedPassword
-      };
-      const endPoint = 'user/forgot_password_confirm/';
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(body),
-      );
+    final body = {
+      'email': email,
+      'token': verificationCode,
+      'password': password,
+      'password2': repeatedPassword
+    };
 
-      if (response.statusCode == 204) {
-        debugPrint('Change Forgotten Password successful');
-        return true;
-      } else {
-        debugPrint(
-            'Change Forgotten Password failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Error Change Forgotten Password in: $e");
-      return false;
-    }
+    final apiRequestName = "Change Forgotten Password";
+    final response = await postApiRequest(
+        'user/forgot_password_confirm/', body, false, false, apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
+    return true;
   }
 
   Future<int?> addTrip(
       String tripName, CustomImage customImage, List<Country> countries) async {
-    try {
-      final body = {
-        'name': tripName,
-        'image_id': customImage.index,
-        'countries': countries
-            .map((country) => CountryPicker.getIdByCountry(country))
-            .toList(),
-      };
+    final body = {
+      'name': tripName,
+      'image_id': customImage.index,
+      'countries': countries
+          .map((country) => CountryPicker.getIdByCountry(country))
+          .toList(),
+    };
 
-      const endPoint = 'trip/';
-      final response = await http.post(
+    final apiRequestName = "Add Trip";
+    final response =
+        await postApiRequest('trip/', body, true, false, apiRequestName);
+    handleResponseProblems(response, 201, true, apiRequestName);
+
+    final responseData = jsonDecode(response.body);
+    return responseData["id"];
+  }
+
+  Future<int?> addExpense(int tripId, String title, double cost,
+      Currency currency, Category category, DateTime dateTime) async {
+    final body = {
+      'cost': cost,
+      'category': category.index,
+      'date': dateTime.toIso8601String(),
+      'currency': currency.code
+    };
+
+    if (title.isNotEmpty) {
+      body['title'] = title;
+    }
+
+    final apiRequestName = "Add Expense";
+    final response = await postApiRequest(
+        'trip/$tripId/expense/', body, true, false, apiRequestName);
+    handleResponseProblems(response, 201, true, apiRequestName);
+
+    final responseData = jsonDecode(response.body);
+    return responseData["id"];
+  }
+
+  Future<bool> sendFeedback(String message, String type) async {
+    final body = {'message': message, 'type': type};
+    final apiRequestName = "Send Feedback";
+    final response = await postApiRequest(
+        'user/feedback/', body, true, false, apiRequestName);
+    handleResponseProblems(response, 201, true, apiRequestName);
+    return true;
+  }
+
+  Future<Response> postApiRequest(
+    String endPoint,
+    Map<String, Object> body,
+    bool sendAuthorizationHeader,
+    bool isEncoded,
+    String apiRequestName,
+  ) async {
+    late final Response response;
+
+    String? encodedBody;
+    if (isEncoded) {
+      encodedBody = body.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
+          .join('&');
+    }
+
+    try {
+      response = await http.post(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json'
+          if (sendAuthorizationHeader)
+            'Authorization': _getAuthorizationHeader(),
+          'Content-Type': isEncoded
+              ? 'application/x-www-form-urlencoded'
+              : 'application/json',
         },
-        body: jsonEncode(body),
+        body: isEncoded ? encodedBody : jsonEncode(body),
       );
-
-      if (response.statusCode == 201) {
-        debugPrint('Add Trip successful');
-        final responseData = jsonDecode(response.body);
-        return responseData["id"];
-      } else {
-        debugPrint('Add Trip failed with status: ${response.statusCode}');
-        final responseData = jsonDecode(response.body);
-        print(responseData.toString());
-        return null;
-      }
+    } on SocketException {
+      throw 'Error $apiRequestName: No Internet connection.';
+    } on FormatException {
+      throw 'Error $apiRequestName: Bad response format.';
     } catch (e) {
-      debugPrint("Error Add Trip in: $e");
-      return null;
+      throw 'Error $apiRequestName: Unexpected error occurred: $e';
     }
+
+    print("API SERVICE $apiRequestName Correct");
+    return response;
   }
+
+// PUT TBD
 
   Future<bool> editTrip(int id, String tripName, CustomImage customImage,
       List<Country> countries) async {
@@ -631,82 +562,7 @@ class ApiService {
     }
   }
 
-  Future<int?> addExpense(int tripId, String title, double cost,
-      Currency currency, Category category, DateTime dateTime) async {
-    try {
-      var body = {
-        'cost': cost,
-        'category': category.index,
-        'date': dateTime.toIso8601String(),
-        'currency': currency.code
-      };
-
-      if (title.isNotEmpty) {
-        body['title'] = title;
-      }
-
-      debugPrint(body.toString());
-      final endPoint = 'trip/$tripId/expense/';
-
-      debugPrint(body.toString());
-      debugPrint(endPoint);
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 201) {
-        debugPrint('Add Expense successful');
-        final responseData = jsonDecode(response.body);
-        return responseData["id"];
-      } else {
-        debugPrint('Add Expense failed with status: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      debugPrint("Error Expense Trip in: $e");
-      return null;
-    }
-  }
-
-  Future<bool> sendFeedback(String message, String type) async {
-    try {
-      final body = {'message': message, 'type': type};
-
-      const endPoint = 'user/feedback/';
-
-      final response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 201) {
-        debugPrint('Feedback send successful');
-        return true;
-      } else {
-        throw 'Feedback failed with status: ${response.statusCode}';
-      }
-    } catch (e) {
-      debugPrint("Feedback failed in: $e");
-      rethrow;
-    }
-  }
-
-/*
-
-
-PATCH DONE
-
-
-*/
+  ///
 
   Future<bool> updateBaseCurrency(Currency baseCurrency) async {
     final body = {
@@ -739,16 +595,9 @@ PATCH DONE
       throw 'Error $apiRequestName: Unexpected error occurred: $e';
     }
 
+    print("API SERVICE $apiRequestName Correct");
     return response;
   }
-
-/*
-
-
-Delete DONE
-
-
-*/
 
   Future<bool> deleteUser() async {
     final apiRequestName = "Delete Account";
@@ -792,7 +641,7 @@ Delete DONE
       throw 'Error $apiRequestName: Unexpected error occurred: $e';
     }
 
-    debugPrint("API SERVICE $apiRequestName Correct");
+    debugPrint("API SERVICE: $apiRequestName Correct");
     return response;
   }
 

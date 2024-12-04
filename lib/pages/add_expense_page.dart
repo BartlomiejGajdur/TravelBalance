@@ -165,14 +165,24 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
     Navigator.of(context).pop();
 
     //Send currency to API
-    int? expenseId = await ApiService().addExpense(
-      tripId,
-      title,
-      cost,
-      _expenseCurrency,
-      category,
-      dateTime,
-    );
+    int? expenseId;
+    try {
+      expenseId = await ApiService().addExpense(
+        tripId,
+        title,
+        cost,
+        _expenseCurrency,
+        category,
+        dateTime,
+      );
+    } catch (e) {
+      expenseId = null;
+      showCustomSnackBar(
+        context: widget.expenseListPageContext,
+        message: e.toString(),
+        type: SnackBarType.error,
+      );
+    }
 
     if (expenseId != null) {
       widget.tripProvider.setExpenseIdOfLastAddedExpense(expenseId);
@@ -180,12 +190,6 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
       return true;
     } else {
       widget.tripProvider.deleteLastAddedExpense();
-      showCustomSnackBar(
-        context: widget.expenseListPageContext,
-        message:
-            "Failed to create Expense. Please check your Internet connection.",
-        type: SnackBarType.error,
-      );
       return false;
     }
   }
