@@ -549,12 +549,6 @@ class ApiService {
     }
   }
 
-  Future<bool> deleteTrip(int id) async {
-    final response = await deleteApiRequest('trip/$id/', "Delete Trip");
-    handleResponseProblems(response, 204, true, "Delete Trip");
-    return true;
-  }
-
   Future<bool> editTrip(int id, String tripName, CustomImage customImage,
       List<Country> countries) async {
     try {
@@ -637,13 +631,6 @@ class ApiService {
     }
   }
 
-  Future<bool> deleteExpense(int tripId, int expenseId) async {
-    final response = await deleteApiRequest(
-        'trip/$tripId/expense/$expenseId/', "Delete Expense");
-    handleResponseProblems(response, 204, true, "Delete Expense");
-    return true;
-  }
-
   Future<int?> addExpense(int tripId, String title, double cost,
       Currency currency, Category category, DateTime dateTime) async {
     try {
@@ -713,13 +700,30 @@ class ApiService {
     }
   }
 
+/*
+
+
+PATCH DONE
+
+
+*/
+
   Future<bool> updateBaseCurrency(Currency baseCurrency) async {
+    final body = {
+      'base_currency': baseCurrency.code,
+    };
+    final apiRequestName = "Update Base Currency";
+    final response = await patchApiRequest('user/me/', body, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+    return true;
+  }
+
+  Future<Response> patchApiRequest(
+      String endPoint, Map<String, String> body, String apiRequestName) async {
+    late final Response response;
+
     try {
-      final body = {
-        'base_currency': baseCurrency.code,
-      };
-      const endPoint = 'user/me/';
-      final response = await http.patch(
+      response = await http.patch(
         Uri.parse('$_baseUrl$endPoint'),
         headers: {
           'Authorization': _getAuthorizationHeader(),
@@ -727,24 +731,44 @@ class ApiService {
         },
         body: jsonEncode(body),
       );
-
-      if (response.statusCode == 200) {
-        debugPrint('Update Base Currency successful');
-        return true;
-      } else {
-        debugPrint(
-            'Update Base Currency failed with status: ${response.statusCode}');
-        return false;
-      }
+    } on SocketException {
+      throw 'Error $apiRequestName: No Internet connection.';
+    } on FormatException {
+      throw 'Error $apiRequestName: Bad response format.';
     } catch (e) {
-      debugPrint("Update Base Currency in: $e");
-      return false;
+      throw 'Error $apiRequestName: Unexpected error occurred: $e';
     }
+
+    return response;
   }
 
+/*
+
+
+Delete DONE
+
+
+*/
+
   Future<bool> deleteUser() async {
-    final response = await deleteApiRequest('user/me/', "Delete Account");
-    handleResponseProblems(response, 204, true, "Delete Account");
+    final apiRequestName = "Delete Account";
+    final response = await deleteApiRequest('user/me/', apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
+    return true;
+  }
+
+  Future<bool> deleteTrip(int id) async {
+    final apiRequestName = "Delete Trip";
+    final response = await deleteApiRequest('trip/$id/', apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
+    return true;
+  }
+
+  Future<bool> deleteExpense(int tripId, int expenseId) async {
+    final apiRequestName = "Delete Expense";
+    final response = await deleteApiRequest(
+        'trip/$tripId/expense/$expenseId/', apiRequestName);
+    handleResponseProblems(response, 204, true, apiRequestName);
     return true;
   }
 
