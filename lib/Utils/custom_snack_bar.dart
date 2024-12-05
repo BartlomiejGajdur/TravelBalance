@@ -1,7 +1,6 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// Definicja enum dla różnych typów SnackBar
 enum SnackBarType { error, warning, information, correct, none }
 
 void showCustomSnackBar({
@@ -9,40 +8,34 @@ void showCustomSnackBar({
   required String message,
   SnackBarType type = SnackBarType.none,
 }) {
-  Color backgroundColor;
+  AnimatedSnackBarType snackBarType;
 
   switch (type) {
     case SnackBarType.error:
-      backgroundColor = Colors.red;
+      snackBarType = AnimatedSnackBarType.error;
       break;
     case SnackBarType.warning:
-      backgroundColor = Colors.orange;
+      snackBarType = AnimatedSnackBarType.warning;
       break;
     case SnackBarType.information:
-      backgroundColor = Colors.blue;
+      snackBarType = AnimatedSnackBarType.info;
       break;
     case SnackBarType.correct:
-      backgroundColor = Colors.green;
+      snackBarType = AnimatedSnackBarType.success;
       break;
     case SnackBarType.none:
-      backgroundColor = Colors.grey;
+    default:
+      snackBarType = AnimatedSnackBarType.info;
       break;
   }
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-      ),
-      duration: const Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: backgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0.r),
-      ),
-      margin: EdgeInsets.all(16.0.w),
-      showCloseIcon: true,
-    ),
-  );
+  AnimatedSnackBar.material(
+    message,
+    type: snackBarType,
+    mobileSnackBarPosition:
+        MobileSnackBarPosition.top, // Dolna pozycja na ekranie
+    desktopSnackBarPosition:
+        DesktopSnackBarPosition.topRight, // Pozycja na desktopie
+    duration: const Duration(seconds: 4), // Czas wyświetlania
+  ).show(context);
 }

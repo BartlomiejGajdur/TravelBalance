@@ -1,5 +1,6 @@
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/user.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -445,11 +446,18 @@ void showCurrency(BuildContext context) {
     showFlag: true,
     showCurrencyName: true,
     showCurrencyCode: true,
-    onSelect: (Currency newCurrency) {
+    onSelect: (Currency newCurrency) async {
       User? user = userProvider.user;
       if (user != null) {
         userProvider.setBaseCurrency(newCurrency);
-        ApiService().updateBaseCurrency(newCurrency);
+        try {
+          await ApiService().updateBaseCurrency(newCurrency);
+        } catch (error) {
+          showCustomSnackBar(
+              context: context,
+              message: error.toString(),
+              type: SnackBarType.error);
+        }
       }
     },
   );

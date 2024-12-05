@@ -31,6 +31,9 @@ SvgPicture.asset(
                 ),
 */
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 Future<SecretKeys> loadSecrets() async {
   const String missingVariable = "MISSING";
 
@@ -51,8 +54,8 @@ Future<SecretKeys> loadSecrets() async {
       GOOGLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_SECRET == missingVariable ||
       APPLE_CLIENT_ID == missingVariable) {
-     throw Exception(
-         'One or more required environment variables are missing:\n');
+    throw Exception(
+        'One or more required environment variables are missing:\n');
   }
 
   return SecretKeys(
@@ -114,6 +117,7 @@ class MyApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) => MaterialApp(
+          scaffoldMessengerKey: scaffoldMessengerKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,

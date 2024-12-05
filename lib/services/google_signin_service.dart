@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:TravelBalance/TravelBalanceComponents/mock.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -22,8 +23,18 @@ class GoogleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        toggleLoadingFunc();
-        bool result = await ApiService().loginGoogle(context);
+        bool result = false;
+        try {
+          result = await ApiService().loginGoogle(context);
+        } catch (error) {
+          showCustomSnackBar(
+              context: context,
+              message: error.toString(),
+              type: SnackBarType.error);
+        } finally {
+          toggleLoadingFunc();
+        }
+
         if (result) {
           moveToTrips(context);
         }
