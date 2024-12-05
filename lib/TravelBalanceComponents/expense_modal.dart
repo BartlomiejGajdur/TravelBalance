@@ -1,6 +1,7 @@
 import 'package:TravelBalance/TravelBalanceComponents/currency_pick.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/TravelBalanceComponents/custom_text_field.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/Utils/date_picker.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/expense.dart';
@@ -221,7 +222,14 @@ class DeleteExpenseIcon extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          tripProvider.deleteExpense(expenseId);
+                          try {
+                            tripProvider.deleteExpense(expenseId);
+                          } catch (error) {
+                            showCustomSnackBar(
+                                context: context,
+                                message: error.toString(),
+                                type: SnackBarType.error);
+                          }
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },

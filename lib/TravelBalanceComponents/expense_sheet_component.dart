@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,7 +56,14 @@ class ExpenseSheetComponent extends StatelessWidget {
                     children: [
                       SlidableAction(
                         onPressed: (context) {
-                          tripProvider.deleteExpense(expense.getId());
+                          try {
+                            tripProvider.deleteExpense(expense.getId());
+                          } catch (error) {
+                            showCustomSnackBar(
+                                context: context,
+                                message: error.toString(),
+                                type: SnackBarType.error);
+                          }
                         },
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
