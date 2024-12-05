@@ -11,11 +11,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/in_app_purchase_service.dart';
 
-enum Option { currency, changePassword, sendFeedback, about, deleteAccount }
+enum Option {
+  currency,
+  changePassword,
+  sendFeedback,
+  about,
+  deleteAccount,
+  premiumAccount
+}
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+  final InAppPurchaseUtils inAppPurchaseUtils = InAppPurchaseUtils();
+  AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +71,8 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(context, "Send feedback", Option.sendFeedback),
             clickableListTile(context, "About us", Option.about),
             clickableListTile(context, "Delete Account", Option.deleteAccount),
+            clickableListTile(
+                context, "TravelBalance Pro", Option.premiumAccount),
             const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
@@ -99,9 +110,9 @@ class AppDrawer extends StatelessWidget {
 
     final bool isChangePasswordUnaccessible = option == Option.changePassword &&
         ApiService().loginType != LoginType.Email;
-    final bool isDeleteAccount = option == Option.deleteAccount;
+    final bool isPremiumAccount = option == Option.premiumAccount;
     Color setTextColor() {
-      if (isDeleteAccount) return Colors.red;
+      if (isPremiumAccount) return premiumColor;
 
       if (isChangePasswordUnaccessible) return Colors.grey;
 
@@ -109,7 +120,7 @@ class AppDrawer extends StatelessWidget {
     }
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         switch (option) {
           case Option.currency:
             showCurrency(context);
@@ -128,6 +139,11 @@ class AppDrawer extends StatelessWidget {
           case Option.deleteAccount:
             showDeleteAccount(context);
             break;
+          case Option.premiumAccount:
+            await inAppPurchaseUtils.initialize(context);
+            await inAppPurchaseUtils.buyNonConsumableProduct(
+                context, "com.domainname.travelbalance.premium");
+            break;
 
           default:
         }
@@ -144,7 +160,7 @@ class AppDrawer extends StatelessWidget {
               givenText,
               style: GoogleFonts.outfit(
                 fontSize: 16.sp,
-                fontWeight: isDeleteAccount ? FontWeight.w500 : FontWeight.w500,
+                fontWeight: FontWeight.w500,
                 color: setTextColor(),
               ),
             ),

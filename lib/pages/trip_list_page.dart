@@ -90,7 +90,7 @@ class _TripListPageState extends State<TripListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const AppDrawer(),
+      endDrawer:  AppDrawer(),
       backgroundColor: secondaryColor,
       body: Stack(
         children: [

@@ -14,6 +14,7 @@ const Color thirdColor = Color(0xFF92A332);
 const Color mainTextColor = Color(0xFF192048);
 const Color secondaryTextColor = Color(0xFF575555);
 const Color redWarningColor = Color(0xFFED5E68);
+const Color premiumColor = Color(0xFF1591EA);
 const Color buttonTextColor = Colors.white;
 
 // Button Text Style with Google Fonts
