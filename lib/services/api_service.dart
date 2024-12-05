@@ -118,6 +118,8 @@ class ApiService {
     return '$tokenPrefix ${_authentication.token}';
   }
 
+// Post Requests
+
   Future<bool> refreshToken() async {
     if (loginType != LoginType.Google && loginType != LoginType.Apple)
       return false;
@@ -144,8 +146,8 @@ class ApiService {
       "refresh_token": _authentication.refreshToken!,
     };
     final apiRequestName = "Refresh Token";
-    final response =
-        await postApiRequest('auth/token/', body, false, false, apiRequestName);
+    final response = await _postApiRequest(
+        'auth/token/', body, false, false, apiRequestName);
     handleResponseProblems(response, 200, true, apiRequestName);
 
     final responseBody = jsonDecode(response.body);
@@ -193,7 +195,7 @@ class ApiService {
     final apiRequestName = "Login";
     String errorMsg = "$apiRequestName Undefined Error";
     final response =
-        await postApiRequest('login/', body, false, false, apiRequestName);
+        await _postApiRequest('login/', body, false, false, apiRequestName);
 
     try {
       handleResponseProblems(response, 200, true, apiRequestName);
@@ -232,7 +234,7 @@ class ApiService {
     };
 
     final apiRequestName = "Login Google";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'auth/convert-token/', body, false, false, apiRequestName);
     handleResponseProblems(response, 200, true, apiRequestName);
     final responseBody = jsonDecode(response.body);
@@ -261,7 +263,7 @@ class ApiService {
     };
 
     final apiRequestName = "Login Apple";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'auth/convert-token/', body, false, true, apiRequestName);
     handleResponseProblems(response, 200, true, apiRequestName);
     final responseBody = jsonDecode(response.body);
@@ -279,7 +281,7 @@ class ApiService {
   Future<void> logout() async {
     final apiRequestName = "Logout";
     final response =
-        await postApiRequest('logout/', {}, true, false, apiRequestName);
+        await _postApiRequest('logout/', {}, true, false, apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
   }
 
@@ -295,7 +297,7 @@ class ApiService {
     final apiRequestName = "Sign Up";
     String errorMsg = "$apiRequestName Undefined Error";
     final response =
-        await postApiRequest('user/', body, false, false, apiRequestName);
+        await _postApiRequest('user/', body, false, false, apiRequestName);
 
     try {
       handleResponseProblems(response, 201, true, apiRequestName);
@@ -328,7 +330,7 @@ class ApiService {
       'email': email,
     };
     final apiRequestName = "Forgot Password";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'user/forgot_password/', body, false, false, apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
@@ -343,7 +345,7 @@ class ApiService {
     };
     final apiRequestName = "Change Password";
     String errorMsg = "$apiRequestName Undefined Error";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'user/change_password/', body, true, false, apiRequestName);
 
     try {
@@ -365,7 +367,7 @@ class ApiService {
       String email, String verificationCode) async {
     final body = {'email': email, 'token': verificationCode};
     final apiRequestName = "Validate Verification Code";
-    final response = await postApiRequest('user/forgot_password_check_token/',
+    final response = await _postApiRequest('user/forgot_password_check_token/',
         body, false, false, apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
@@ -381,7 +383,7 @@ class ApiService {
     };
 
     final apiRequestName = "Change Forgotten Password";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'user/forgot_password_confirm/', body, false, false, apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
@@ -399,7 +401,7 @@ class ApiService {
 
     final apiRequestName = "Add Trip";
     final response =
-        await postApiRequest('trip/', body, true, false, apiRequestName);
+        await _postApiRequest('trip/', body, true, false, apiRequestName);
     handleResponseProblems(response, 201, true, apiRequestName);
 
     final responseData = jsonDecode(response.body);
@@ -420,7 +422,7 @@ class ApiService {
     }
 
     final apiRequestName = "Add Expense";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'trip/$tripId/expense/', body, true, false, apiRequestName);
     handleResponseProblems(response, 201, true, apiRequestName);
 
@@ -431,89 +433,28 @@ class ApiService {
   Future<bool> sendFeedback(String message, String type) async {
     final body = {'message': message, 'type': type};
     final apiRequestName = "Send Feedback";
-    final response = await postApiRequest(
+    final response = await _postApiRequest(
         'user/feedback/', body, true, false, apiRequestName);
     handleResponseProblems(response, 201, true, apiRequestName);
     return true;
   }
 
-  Future<Response> postApiRequest(
-    String endPoint,
-    Map<String, Object> body,
-    bool sendAuthorizationHeader,
-    bool isEncoded,
-    String apiRequestName,
-  ) async {
-    late final Response response;
-
-    String? encodedBody;
-    if (isEncoded) {
-      encodedBody = body.entries
-          .map((e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
-          .join('&');
-    }
-
-    try {
-      response = await http.post(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          if (sendAuthorizationHeader)
-            'Authorization': _getAuthorizationHeader(),
-          'Content-Type': isEncoded
-              ? 'application/x-www-form-urlencoded'
-              : 'application/json',
-        },
-        body: isEncoded ? encodedBody : jsonEncode(body),
-      );
-    } on SocketException {
-      throw 'Error $apiRequestName: No Internet connection.';
-    } on FormatException {
-      throw 'Error $apiRequestName: Bad response format.';
-    } catch (e) {
-      throw 'Error $apiRequestName: Unexpected error occurred: $e';
-    }
-
-    print("API SERVICE $apiRequestName Correct");
-    return response;
-  }
-
-// PUT TBD
+// Put Requests
 
   Future<bool> editTrip(int id, String tripName, CustomImage customImage,
       List<Country> countries) async {
-    try {
-      final body = {
-        'name': tripName,
-        'image_id': customImage.index,
-        'countries': countries
-            .map((country) => CountryPicker.getIdByCountry(country))
-            .toList(),
-      };
+    final body = {
+      'name': tripName,
+      'image_id': customImage.index,
+      'countries': countries
+          .map((country) => CountryPicker.getIdByCountry(country))
+          .toList(),
+    };
 
-      print(body.toString());
-
-      final endPoint = 'trip/$id/';
-      final response = await http.put(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        debugPrint('Edit Trip successful');
-        return true;
-      } else {
-        debugPrint('Edit Trip failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Edit Trip in: $e");
-      return false;
-    }
+    final apiRequestName = "Edit Trip";
+    final response = await _putApiRequest('trip/$id/', body, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+    return true;
   }
 
   Future<bool> editExpense(
@@ -524,115 +465,117 @@ class ApiService {
       Currency newCurrency,
       Category newCategory,
       DateTime newDate) async {
-    try {
-      final body = {
-        'cost': newCost,
-        'category': newCategory.index,
-        'date': newDate.toIso8601String(),
-        'currency': newCurrency.code
-      };
+    final body = {
+      'cost': newCost,
+      'category': newCategory.index,
+      'date': newDate.toIso8601String(),
+      'currency': newCurrency.code
+    };
 
-      if (newTitle.isNotEmpty) {
-        body['title'] = newTitle;
-      }
-
-      final endPoint = 'trip/$tripId/expense/$expenseId/';
-
-      debugPrint(body.toString());
-      debugPrint(endPoint);
-      final response = await http.put(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        debugPrint('Edit Expense successful');
-        return true;
-      } else {
-        debugPrint('Edit Expense failed with status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      debugPrint("Edit Expense in: $e");
-      return false;
+    if (newTitle.isNotEmpty) {
+      body['title'] = newTitle;
     }
+
+    final apiRequestName = "Edit Expense";
+    final response = await _putApiRequest(
+        'trip/$tripId/expense/$expenseId/', body, apiRequestName);
+    handleResponseProblems(response, 200, true, apiRequestName);
+    return true;
   }
 
-  ///
+// Patch Requests
 
   Future<bool> updateBaseCurrency(Currency baseCurrency) async {
     final body = {
       'base_currency': baseCurrency.code,
     };
     final apiRequestName = "Update Base Currency";
-    final response = await patchApiRequest('user/me/', body, apiRequestName);
+    final response = await _patchApiRequest('user/me/', body, apiRequestName);
     handleResponseProblems(response, 200, true, apiRequestName);
     return true;
   }
 
-  Future<Response> patchApiRequest(
-      String endPoint, Map<String, String> body, String apiRequestName) async {
-    late final Response response;
-
-    try {
-      response = await http.patch(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-    } on SocketException {
-      throw 'Error $apiRequestName: No Internet connection.';
-    } on FormatException {
-      throw 'Error $apiRequestName: Bad response format.';
-    } catch (e) {
-      throw 'Error $apiRequestName: Unexpected error occurred: $e';
-    }
-
-    print("API SERVICE $apiRequestName Correct");
-    return response;
-  }
+// Delete Requests
 
   Future<bool> deleteUser() async {
     final apiRequestName = "Delete Account";
-    final response = await deleteApiRequest('user/me/', apiRequestName);
+    final response = await _deleteApiRequest('user/me/', apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
   }
 
   Future<bool> deleteTrip(int id) async {
     final apiRequestName = "Delete Trip";
-    final response = await deleteApiRequest('trip/$id/', apiRequestName);
+    final response = await _deleteApiRequest('trip/$id/', apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
   }
 
   Future<bool> deleteExpense(int tripId, int expenseId) async {
     final apiRequestName = "Delete Expense";
-    final response = await deleteApiRequest(
+    final response = await _deleteApiRequest(
         'trip/$tripId/expense/$expenseId/', apiRequestName);
     handleResponseProblems(response, 204, true, apiRequestName);
     return true;
   }
 
-  Future<Response> deleteApiRequest(
-      String endPoint, String apiRequestName) async {
+// Requests Funcionality
+
+  Future<Response> _sendApiRequest(
+    String method,
+    String endPoint,
+    String apiRequestName, {
+    Map<String, Object>? body,
+    bool sendAuthorizationHeader = true,
+    bool isEncoded = false,
+  }) async {
     late final Response response;
 
+    String? encodedBody;
+    if (isEncoded && body != null) {
+      encodedBody = body.entries
+          .map((e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value.toString())}')
+          .join('&');
+    }
+
     try {
-      response = await http.delete(
-        Uri.parse('$_baseUrl$endPoint'),
-        headers: {
-          'Authorization': _getAuthorizationHeader(),
-          'Content-Type': 'application/json',
-        },
-      );
+      final uri = Uri.parse('$_baseUrl$endPoint');
+      final headers = {
+        if (sendAuthorizationHeader) 'Authorization': _getAuthorizationHeader(),
+        'Content-Type': isEncoded
+            ? 'application/x-www-form-urlencoded'
+            : 'application/json',
+      };
+
+      switch (method) {
+        case 'POST':
+          response = await http.post(
+            uri,
+            headers: headers,
+            body: isEncoded ? encodedBody : jsonEncode(body),
+          );
+          break;
+        case 'PUT':
+          response = await http.put(
+            uri,
+            headers: headers,
+            body: jsonEncode(body),
+          );
+          break;
+        case 'PATCH':
+          response = await http.patch(
+            uri,
+            headers: headers,
+            body: jsonEncode(body),
+          );
+          break;
+        case 'DELETE':
+          response = await http.delete(uri, headers: headers);
+          break;
+        default:
+          throw 'Unsupported HTTP method: $method';
+      }
     } on SocketException {
       throw 'Error $apiRequestName: No Internet connection.';
     } on FormatException {
@@ -641,8 +584,34 @@ class ApiService {
       throw 'Error $apiRequestName: Unexpected error occurred: $e';
     }
 
-    debugPrint("API SERVICE: $apiRequestName Correct");
+    debugPrint("API SERVICE $apiRequestName Correct");
     return response;
+  }
+
+  Future<Response> _postApiRequest(String endPoint, Map<String, Object> body,
+      bool sendAuthorizationHeader, bool isEncoded, String apiRequestName) {
+    return _sendApiRequest(
+      'POST',
+      endPoint,
+      apiRequestName,
+      body: body,
+      sendAuthorizationHeader: sendAuthorizationHeader,
+      isEncoded: isEncoded,
+    );
+  }
+
+  Future<Response> _putApiRequest(
+      String endPoint, Map<String, Object> body, String apiRequestName) {
+    return _sendApiRequest('PUT', endPoint, apiRequestName, body: body);
+  }
+
+  Future<Response> _patchApiRequest(
+      String endPoint, Map<String, Object> body, String apiRequestName) {
+    return _sendApiRequest('PATCH', endPoint, apiRequestName, body: body);
+  }
+
+  Future<Response> _deleteApiRequest(String endPoint, String apiRequestName) {
+    return _sendApiRequest('DELETE', endPoint, apiRequestName);
   }
 
   void handleResponseProblems(Response response, int expectedResponseCode,
