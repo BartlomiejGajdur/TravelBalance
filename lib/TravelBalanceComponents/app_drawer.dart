@@ -11,7 +11,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/providers/user_provider.dart';
-import 'package:TravelBalance/services/in_app_purchase_service.dart';
 
 enum Option {
   currency,
@@ -23,11 +22,11 @@ enum Option {
 }
 
 class AppDrawer extends StatelessWidget {
-  final InAppPurchaseUtils inAppPurchaseUtils = InAppPurchaseUtils();
   AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(TravelBalanceProBackgroundPath), context);
     return Drawer(
       width: 300.w,
       child: SafeArea(
@@ -121,6 +120,8 @@ class AppDrawer extends StatelessWidget {
 
     return GestureDetector(
       onTap: () async {
+        if (user == null) return;
+
         switch (option) {
           case Option.currency:
             showCurrency(context);
@@ -140,9 +141,7 @@ class AppDrawer extends StatelessWidget {
             showDeleteAccount(context);
             break;
           case Option.premiumAccount:
-            await inAppPurchaseUtils.initialize(context);
-            await inAppPurchaseUtils.buyNonConsumableProduct(
-                context, "com.domainname.travelbalance.premium");
+            Navigator.pushNamed(context, "TravelBalanceProPage");
             break;
 
           default:

@@ -7,6 +7,7 @@ import 'package:TravelBalance/pages/forgotPassword/verification_code_page.dart';
 import 'package:TravelBalance/pages/introduction_screens.dart';
 import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/pages/sign_up_page.dart';
+import 'package:TravelBalance/pages/travelbalance_pro_page.dart';
 import 'package:TravelBalance/pages/trip_list_page.dart';
 import 'package:TravelBalance/pages/create_trip_page.dart';
 import 'package:TravelBalance/providers/trip_provider.dart';
@@ -22,7 +23,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 /* HELPERS
-Navigator.pushNamed(context, LoginPage);
+Navigator.pushNamed(context, "LoginPage");
 
 SvgPicture.asset(
                   "lib/assets/Logout.svg",
@@ -186,6 +187,8 @@ class MyApp extends StatelessWidget {
             tripProvider: tripProvider,
           ),
         );
+      case 'TravelBalanceProPage':
+        return MaterialPageRoute(builder: (_) => TravelBalanceProPage());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

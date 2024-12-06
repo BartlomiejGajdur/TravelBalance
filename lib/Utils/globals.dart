@@ -7,6 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 String defaultCurrencyCode = "USD";
 Currency defaultCurrency = CurrencyService().findByCode(defaultCurrencyCode)!;
 
+//Background TravelBalance Pro page
+String TravelBalanceProBackgroundPath = "lib/assets/ProPageBackground.png";
+
 //AppColors
 const Color primaryColor = Color(0xFF56642A);
 const Color secondaryColor = Color(0xFF849531);
@@ -22,6 +25,12 @@ TextStyle buttonTextStyle = GoogleFonts.outfit(
   fontSize: 18.sp,
   fontWeight: FontWeight.bold,
   color: buttonTextColor,
+);
+
+TextStyle buttonTextStyle_2 = GoogleFonts.outfit(
+  fontSize: 18.sp,
+  fontWeight: FontWeight.bold,
+  color: mainTextColor,
 );
 
 TextStyle mainTextStyle = GoogleFonts.outfit(
