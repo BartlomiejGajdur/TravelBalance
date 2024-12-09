@@ -111,26 +111,25 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 return InAppPurchaseButton(
                   buttonText: buttonText,
                   onPressed: () async {
-                    showCustomSnackBar(
-                        context: context,
-                        message: "To be implemented soon! :)",
-                        type: SnackBarType.information);
-                    return false;
+                    // showCustomSnackBar(
+                    //     context: context,
+                    //     message: "To be implemented soon! :)",
+                    //     type: SnackBarType.information);
+                    // return false;
 
-                    // if (snapshot.connectionState == ConnectionState.done &&
-                    //     snapshot.hasData &&
-                    //     snapshot.data != null) {
-                    //   await inAppPurchaseUtils.buyNonConsumableProduct(
-                    //       context, productId);
-                    //   return true;
-                    // } else {
-                    //   showCustomSnackBar(
-                    //       context: context,
-                    //       message: "Price not available",
-                    //       type: SnackBarType.warning);
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData &&
+                        snapshot.data != null) {
+                      return await inAppPurchaseUtils.buyNonConsumableProduct(
+                          context, productId);
+                    } else {
+                      showCustomSnackBar(
+                          context: context,
+                          message: "Price not available",
+                          type: SnackBarType.warning);
 
-                    //   return false;
-                    // }
+                      return false;
+                    }
                   },
                   type: InAppPurchaseButtonType.purchase,
                 );
@@ -140,12 +139,12 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
             InAppPurchaseButton(
                 buttonText: "Restore purchase",
                 onPressed: () async {
-                  showCustomSnackBar(
-                      context: context,
-                      message: "To be implemented soon! :)",
-                      type: SnackBarType.information);
-                  return false;
-                  //return await inAppPurchaseUtils.restorePurchases(context);
+                  // showCustomSnackBar(
+                  //     context: context,
+                  //     message: "To be implemented soon! :)",
+                  //     type: SnackBarType.information);
+                  // return false;
+                  return await inAppPurchaseUtils.restorePurchases(context);
                 },
                 type: InAppPurchaseButtonType.restore),
             SizedBox(height: 50.h),

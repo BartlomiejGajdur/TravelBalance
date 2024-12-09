@@ -67,7 +67,7 @@ class InAppPurchaseUtils {
 Transaction ID: ${purchaseDetails.purchaseID ?? "NULL"}
 Product ID: ${purchaseDetails.productID}
 Purchase Token Android: ${purchaseDetails.verificationData.serverVerificationData}
-Purchase Token IOS: ${purchaseDetails.verificationData.localVerificationData }
+Purchase Token IOS: ${purchaseDetails.verificationData.localVerificationData}
 Platform: ${Theme.of(context).platform}
     ''';
 
@@ -119,7 +119,7 @@ Platform: ${Theme.of(context).platform}
   }
 
   // Method to purchase a non-consumable product
-  Future<void> buyNonConsumableProduct(
+  Future<bool> buyNonConsumableProduct(
       BuildContext context, String productId) async {
     try {
       Set<String> productIds = {productId};
@@ -130,17 +130,18 @@ Platform: ${Theme.of(context).platform}
             context: context,
             message: 'Failed to load products: ${response.error}',
             type: SnackBarType.error);
-        return;
+        return false;
       }
       final ProductDetails productDetails = response.productDetails.first;
       final PurchaseParam purchaseParam =
           PurchaseParam(productDetails: productDetails);
-      await _iap.buyNonConsumable(purchaseParam: purchaseParam);
+      return await _iap.buyNonConsumable(purchaseParam: purchaseParam);
     } catch (e) {
       showCustomSnackBar(
           context: context,
           message: 'Failed to buy non-consumable product: $e',
           type: SnackBarType.error);
+      return false;
     }
   }
 
