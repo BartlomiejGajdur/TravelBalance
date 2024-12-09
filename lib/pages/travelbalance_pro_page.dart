@@ -141,7 +141,7 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 onPressed: () async {
                   // showCustomSnackBar(
                   //     context: context,
-                  //     message: "To be implemented soon! :)",
+                  //     message: "To be implemented soon! :) ",
                   //     type: SnackBarType.information);
                   // return false;
                   return await inAppPurchaseUtils.restorePurchases(context);
