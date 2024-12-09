@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:flutter/services.dart';
 
 class InAppPurchaseUtils {
   // Instance of InAppPurchase
@@ -60,8 +61,50 @@ class InAppPurchaseUtils {
                 context: context,
                 message: 'Purchase completed.',
                 type: SnackBarType.correct);
+
+            // Wyświetlenie okienka z danymi
+            final purchaseData = '''
+Transaction ID: ${purchaseDetails.purchaseID ?? "NULL"}
+Product ID: ${purchaseDetails.productID}
+Purchase Token Android: ${purchaseDetails.verificationData.serverVerificationData}
+Purchase Token IOS: ${purchaseDetails.verificationData.localVerificationData }
+Platform: ${Theme.of(context).platform}
+    ''';
+
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Purchase Details'),
+                  content: SingleChildScrollView(
+                    child: SelectableText(purchaseData),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: purchaseData));
+                        Navigator.of(context).pop(); // Zamknięcie dialogu
+                        showCustomSnackBar(
+                          context: context,
+                          message: 'Copied to clipboard.',
+                          type: SnackBarType.correct,
+                        );
+                      },
+                      child: const Text('Copy to Clipboard'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Zamknięcie dialogu
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                );
+              },
+            );
+
             //
-            // Send to Api !
+            // Send to API!
             //
           }
           break;
@@ -116,32 +159,6 @@ class InAppPurchaseUtils {
       return productDetails.price;
     } catch (e) {
       return null;
-    }
-  }
-
-  // Method to purchase a consumable product
-  Future<void> buyConsumableProduct(
-      BuildContext context, String productId) async {
-    try {
-      Set<String> productIds = {productId};
-      final ProductDetailsResponse response =
-          await _iap.queryProductDetails(productIds);
-      if (response.error != null) {
-        showCustomSnackBar(
-            context: context,
-            message: 'Failed to load products: ${response.error}',
-            type: SnackBarType.error);
-        return;
-      }
-      final ProductDetails productDetails = response.productDetails.first;
-      final PurchaseParam purchaseParam =
-          PurchaseParam(productDetails: productDetails);
-      await _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
-    } catch (e) {
-      showCustomSnackBar(
-          context: context,
-          message: 'Failed to buy consumable product: $e',
-          type: SnackBarType.error);
     }
   }
 
