@@ -181,20 +181,20 @@ class InfoText extends StatelessWidget {
                 ),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
+                    padding: EdgeInsets.only(bottom: 20.0.h),
                   ),
                 ),
                 TextSpan(text: "No recurring fees, no surprises.\n"),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0),
+                    padding: EdgeInsets.only(bottom: 20.0.h),
                   ),
                 ),
                 hyperlinkTextSpan(
                     "Terms of Use", "https://travelbalance.pl/terms-of-use/"),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 5.0),
+                    padding: EdgeInsets.only(right: 5.0.h),
                   ),
                 ),
                 hyperlinkTextSpan("Privacy Policy",

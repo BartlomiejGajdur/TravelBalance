@@ -191,25 +191,13 @@ void showAbout(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Nagłówek z ikoną
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.info_outline_rounded,
-                  color: Colors.blueAccent,
-                  size: 28.sp,
-                ),
-                SizedBox(width: 8.w),
-                Text(
-                  "About Us",
-                  style: GoogleFonts.outfit(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: mainTextColor,
-                  ),
-                ),
-              ],
+            Text(
+              "About Us",
+              style: GoogleFonts.outfit(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+                color: mainTextColor,
+              ),
             ),
 
             // Podział na sekcje z ikonami i kolorami

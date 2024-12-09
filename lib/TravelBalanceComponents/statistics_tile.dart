@@ -98,7 +98,6 @@ class StatisticsTile extends StatelessWidget {
     double offset = 50.h;
     double calculateHeight = sizeOfCountries * 61.h + offset;
 
-    // Upewnij się, że wysokość nie przekracza 700.h
     if (calculateHeight > 500.h) {
       calculateHeight = 500.h;
     }
@@ -122,7 +121,8 @@ class StatisticsTile extends StatelessWidget {
                 return Card(
                   color: thirdColor.withOpacity(0.4),
                   child: ListTile(
-                    leading: Text(country.flagEmoji),
+                    leading: Text(country.flagEmoji,
+                        style: TextStyle(fontSize: 24.sp)),
                     title: Text(country.displayNameNoCountryCode),
                   ),
                 );
