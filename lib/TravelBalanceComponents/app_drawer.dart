@@ -143,8 +143,6 @@ class AppDrawer extends StatelessWidget {
           case Option.premiumAccount:
             Navigator.pushNamed(context, "TravelBalanceProPage");
             break;
-
-          default:
         }
       },
       child: ListTile(

@@ -24,7 +24,6 @@ void showCustomSnackBar({
       snackBarType = AnimatedSnackBarType.success;
       break;
     case SnackBarType.none:
-    default:
       snackBarType = AnimatedSnackBarType.info;
       break;
   }

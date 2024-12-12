@@ -1,6 +1,5 @@
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
-import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
 import 'package:TravelBalance/services/secure_storage_service.dart';
 import 'package:country_picker/country_picker.dart';

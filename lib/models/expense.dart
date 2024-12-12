@@ -125,8 +125,6 @@ class Expense {
         return 'Souvenirs';
       case Category.others:
         return 'Others';
-      default:
-        return 'Unknown';
     }
   }
 
@@ -148,8 +146,6 @@ class Expense {
         return 'Souvenirs';
       case Category.others:
         return 'Others';
-      default:
-        return 'Unknown';
     }
   }
 
