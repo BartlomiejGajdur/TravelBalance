@@ -2,9 +2,11 @@ import 'package:TravelBalance/TravelBalanceComponents/currency_pick.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/statistics.dart';
+import 'package:TravelBalance/services/ad_manager_service.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:TravelBalance/models/trip.dart';
+import 'package:flutter/material.dart';
 
 enum SortOrder { ascending, descending }
 
@@ -44,6 +46,12 @@ class User {
         statistics: statistics,
         baseCurrency: baseCurrency,
         isPremiumUser: isPremium);
+  }
+
+  void setPremiumUser(bool isPremium) {
+    _isPremiumUser = isPremium;
+    AdManagerService().configure(isPremium);
+    debugPrint(isPremium ? "User set as PREMIUM" : "Non premium user!");
   }
 
   void setBaseCurrency(Currency newCurrency) {

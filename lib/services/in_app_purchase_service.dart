@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:TravelBalance/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class InAppPurchaseUtils {
   // Instance of InAppPurchase
@@ -61,6 +63,14 @@ class InAppPurchaseUtils {
                 context: context,
                 message: 'Purchase completed.',
                 type: SnackBarType.correct);
+
+            //
+            Provider.of<UserProvider>(context, listen: false)
+                .user!
+                .setPremiumUser(true);
+
+            //WEBHOOK OR API SEND FOR SAVING IN DB
+            //
 
             // Wyświetlenie okienka z danymi
             final purchaseData = '''

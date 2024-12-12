@@ -40,7 +40,7 @@ class UserProvider with ChangeNotifier {
       return;
     }
 
-    AdManagerService().configure(fetchedUser.isPremiumUser);
+    fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
 
     _user = fetchedUser;
     _user!.recalculateCostInBaseCurrency();

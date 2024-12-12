@@ -53,7 +53,7 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 50.w),
+            SizedBox(height: 15.h),
             Row(
               children: [
                 SizedBox(
@@ -77,7 +77,7 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 ),
               ],
             ),
-            SizedBox(height: 50.h),
+            SizedBox(height: 65.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 21.w),
               child: Text(
@@ -87,12 +87,12 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                     GoogleFonts.outfit(fontSize: 16.sp, color: mainTextColor),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 15.h),
             FeatureItem(text: "🚫 Ad-free experience"),
             FeatureItem(text: "🤝 Support independent creators"),
             FeatureItem(text: "📊 Access to new features first"),
             FeatureItem(text: "🌟 Lifetime access"),
-            SizedBox(height: 30.h),
+            SizedBox(height: 15.h),
             FutureBuilder<String?>(
               future: productPrice,
               builder: (context, snapshot) {
@@ -135,7 +135,7 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 );
               },
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: 20.h),
             InAppPurchaseButton(
                 buttonText: "Restore purchase",
                 onPressed: () async {
@@ -147,7 +147,7 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                   return await inAppPurchaseUtils.restorePurchases(context);
                 },
                 type: InAppPurchaseButtonType.restore),
-            SizedBox(height: 50.h),
+            SizedBox(height: 23.h),
             InfoText(),
           ],
         ),
@@ -193,7 +193,7 @@ class InfoText extends StatelessWidget {
                     "Terms of Use", "https://travelbalance.pl/terms-of-use/"),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 5.0.h),
+                    padding: EdgeInsets.only(right: 5.0),
                   ),
                 ),
                 hyperlinkTextSpan("Privacy Policy",
@@ -287,9 +287,9 @@ class _InAppPurchaseButtonState extends State<InAppPurchaseButton> {
           ),
         ),
         child: isLoading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
+            ? SizedBox(
+                width: 24.w,
+                height: 24.h,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.0,
                   color: Colors.white,
