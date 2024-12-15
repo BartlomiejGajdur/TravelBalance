@@ -16,8 +16,8 @@ class AdManager extends IAdManager {
   factory AdManager() => _instance;
   AdManager._internal();
 
-  final int maxTripsWithoutAds = 2;
-  final int showAdAfterAddingExpensesCount = 5;
+  final int maxTripsWithoutAds = 4;
+  final int showAdAfterAddingExpensesCount = 1000;
   final InterstitialAdManager _interstitialAdManager = InterstitialAdManager();
   final BannerAdManager _bannerAdManager = BannerAdManager();
 
@@ -48,7 +48,8 @@ class AdManager extends IAdManager {
 
   Widget bannerAd() {
     debugPrint("Real Ad Manager: Banner AD");
-    return _bannerAdManager.getAdWidget();
+    return SizedBox();
+    //return _bannerAdManager.getAdWidget();
   }
 
   void disposeBannerAd() {
