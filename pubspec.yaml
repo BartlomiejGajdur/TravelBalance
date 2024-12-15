@@ -59,10 +59,7 @@ dependencies:
   animated_snack_bar: ^0.4.0
   in_app_purchase: ^3.2.0
   url_launcher: ^6.3.1
-  #flutter_slidable: ^3.1.1 temporarru solution 
-  flutter_slidable:
-    git:
-      url: "https://github.com/letsar/flutter_slidable"
+  flutter_slidable: ^3.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
