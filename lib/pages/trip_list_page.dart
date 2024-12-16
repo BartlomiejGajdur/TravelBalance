@@ -10,7 +10,6 @@ import 'package:TravelBalance/services/shared_prefs_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:TravelBalance/TravelBalanceComponents/extended_trip_component.dart';
