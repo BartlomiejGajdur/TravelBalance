@@ -30,9 +30,9 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void toggleLoading() {
+  void toggleLoading(bool isLoading) {
     setState(() {
-      forceLoading = !forceLoading;
+      forceLoading = isLoading;
     });
   }
 

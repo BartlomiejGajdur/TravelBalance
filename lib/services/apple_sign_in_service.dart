@@ -7,7 +7,7 @@ import 'dart:io' show Platform;
 
 class AppleSignInButton extends StatelessWidget {
   final ActionType actionTypeButton;
-  final Function() toggleLoadingFunc;
+  final Function(bool isLoading) toggleLoadingFunc;
 
   AppleSignInButton(
       {super.key,
@@ -23,7 +23,7 @@ class AppleSignInButton extends StatelessWidget {
     return Platform.isIOS
         ? GestureDetector(
             onTap: () async {
-              toggleLoadingFunc();
+              toggleLoadingFunc(true);
               bool result = false;
               try {
                 result = await ApiService().loginApple(context);
@@ -33,13 +33,13 @@ class AppleSignInButton extends StatelessWidget {
                     message: error.toString(),
                     type: SnackBarType.error);
               } finally {
-                toggleLoadingFunc();
+                toggleLoadingFunc(false);
               }
               
               if (result) {
                 moveToTrips(context);
               }
-              toggleLoadingFunc();
+              toggleLoadingFunc(false);
             },
             child: MockButton(
               buttonType: ButtonType.apple,

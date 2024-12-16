@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   final ActionType actionTypeButton;
-  final Function() toggleLoadingFunc;
+  final Function(bool isLoading) toggleLoadingFunc;
 
   GoogleSignInButton(
       {super.key,
@@ -23,6 +23,7 @@ class GoogleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        toggleLoadingFunc(true);
         bool result = false;
         try {
           result = await ApiService().loginGoogle(context);
@@ -32,13 +33,13 @@ class GoogleSignInButton extends StatelessWidget {
               message: error.toString(),
               type: SnackBarType.error);
         } finally {
-          toggleLoadingFunc();
+          toggleLoadingFunc(false);
         }
 
         if (result) {
           moveToTrips(context);
         }
-        toggleLoadingFunc();
+        toggleLoadingFunc(false);
       },
       child: MockButton(
         buttonType: ButtonType.google,

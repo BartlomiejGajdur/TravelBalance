@@ -38,9 +38,9 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  void toggleLoading() {
+  void toggleLoading(bool isLoading) {
     setState(() {
-      forceLoading = !forceLoading;
+      forceLoading = isLoading;
     });
   }
 
