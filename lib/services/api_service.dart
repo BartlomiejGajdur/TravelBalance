@@ -439,6 +439,39 @@ class ApiService {
     return true;
   }
 
+  Future<bool> sendIAP(String transactionId) async {
+    final body = {'transaction_id': transactionId};
+    final apiRequestName = "In App Purchase";
+    final response = await _postApiRequest(
+        'subscription/', body, true, false, apiRequestName);
+
+    return handleResponseProblems(response, 200, true, apiRequestName);
+  }
+
+  Future<bool> sendIAPWithRetry(String transactionId,
+      {int maxRetries = 4,
+      Duration delayBetweenRetries = const Duration(seconds: 10)}) async {
+    int attempt = 0;
+
+    while (attempt < maxRetries) {
+      try {
+        if (await sendIAP(transactionId)) {
+          return true;
+        } else {
+          attempt++;
+        }
+      } catch (e) {
+        attempt++;
+        if (attempt >= maxRetries) {
+          return false;
+        }
+        await Future.delayed(delayBetweenRetries);
+      }
+    }
+
+    return false;
+  }
+
 // Put Requests
 
   Future<bool> editTrip(int id, String tripName, CustomImage customImage,
@@ -614,17 +647,17 @@ class ApiService {
     return _sendApiRequest('DELETE', endPoint, apiRequestName);
   }
 
-  void handleResponseProblems(Response response, int expectedResponseCode,
+  bool handleResponseProblems(Response response, int expectedResponseCode,
       bool throwable, String apiRequestType) {
     if (response.statusCode == expectedResponseCode) {
       debugPrint("API SERVICE CODE: $apiRequestType Correct");
-      return;
+      return true;
     }
 
     if (!throwable) {
       debugPrint(
           "API SERVICE CODE NO THROW: $apiRequestType -  response (${response.statusCode}).");
-      return;
+      return false;
     }
 
     switch (response.statusCode) {

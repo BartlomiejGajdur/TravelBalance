@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:TravelBalance/TravelBalanceComponents/custom_button.dart';
 import 'package:TravelBalance/Utils/blur_dialog.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
@@ -70,8 +72,10 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(context, "Send feedback", Option.sendFeedback),
             clickableListTile(context, "About us", Option.about),
             clickableListTile(context, "Delete Account", Option.deleteAccount),
-            clickableListTile(
-                context, "TravelBalance Pro", Option.premiumAccount),
+            Platform.isIOS
+                ? clickableListTile(
+                    context, "TravelBalance Pro", Option.premiumAccount)
+                : SizedBox(),
             const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),

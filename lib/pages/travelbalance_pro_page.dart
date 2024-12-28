@@ -111,11 +111,6 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 return InAppPurchaseButton(
                   buttonText: buttonText,
                   onPressed: () async {
-                    // showCustomSnackBar(
-                    //     context: context,
-                    //     message: "To be implemented soon! :)",
-                    //     type: SnackBarType.information);
-                    // return false;
 
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData &&

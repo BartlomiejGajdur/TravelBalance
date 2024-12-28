@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:TravelBalance/providers/user_provider.dart';
+import 'package:TravelBalance/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class InAppPurchaseUtils {
@@ -59,63 +59,24 @@ class InAppPurchaseUtils {
           showCustomSnackBar(context: context, message: 'Purchase successful.');
           if (purchaseDetails.pendingCompletePurchase) {
             await _iap.completePurchase(purchaseDetails);
-            showCustomSnackBar(
-                context: context,
-                message: 'Purchase completed.',
-                type: SnackBarType.correct);
 
-            //
-            Provider.of<UserProvider>(context, listen: false)
-                .user!
-                .setPremiumUser(true);
-
-            //WEBHOOK OR API SEND FOR SAVING IN DB
-            //
-
-            // Wyświetlenie okienka z danymi
-            final purchaseData = '''
-Transaction ID: ${purchaseDetails.purchaseID ?? "NULL"}
-Product ID: ${purchaseDetails.productID}
-Purchase Token Android: ${purchaseDetails.verificationData.serverVerificationData}
-Purchase Token IOS: ${purchaseDetails.verificationData.localVerificationData}
-Platform: ${Theme.of(context).platform}
-    ''';
-
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Purchase Details'),
-                  content: SingleChildScrollView(
-                    child: SelectableText(purchaseData),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: purchaseData));
-                        Navigator.of(context).pop(); // Zamknięcie dialogu
-                        showCustomSnackBar(
-                          context: context,
-                          message: 'Copied to clipboard.',
-                          type: SnackBarType.correct,
-                        );
-                      },
-                      child: const Text('Copy to Clipboard'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Zamknięcie dialogu
-                      },
-                      child: const Text('Close'),
-                    ),
-                  ],
-                );
-              },
-            );
-
-            //
-            // Send to API!
-            //
+            final String? transactionId = purchaseDetails.purchaseID;
+            if (transactionId != null) {
+              final success =
+                  await ApiService().sendIAPWithRetry(transactionId);
+              if (success) {
+                showCustomSnackBar(
+                    context: context, message: 'Transaction Succesfull.');
+                Provider.of<UserProvider>(context, listen: false)
+                    .user!
+                    .setPremiumUser(true);
+              } else {
+                showCustomSnackBar(
+                    context: context,
+                    message:
+                        'Failed to send transaction. Please contact the developers at twincodecorp@gmail.com');
+              }
+            }
           }
           break;
         case PurchaseStatus.restored:
