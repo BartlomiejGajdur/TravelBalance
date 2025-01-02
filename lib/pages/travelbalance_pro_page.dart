@@ -44,12 +44,12 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
         ),
       ),
       body: Container(
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage(TravelBalanceProBackgroundPath),
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(TravelBalanceProBackgroundPath),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -133,11 +133,6 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
             InAppPurchaseButton(
                 buttonText: "Restore purchase",
                 onPressed: () async {
-                  // showCustomSnackBar(
-                  //     context: context,
-                  //     message: "To be implemented soon! :) ",
-                  //     type: SnackBarType.information);
-                  // return false;
                   return await inAppPurchaseUtils.restorePurchases(context);
                 },
                 type: InAppPurchaseButtonType.restore),
@@ -159,8 +154,6 @@ class InfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 220.w,
-        height: 64.h,
         child: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
@@ -180,14 +173,14 @@ class InfoText extends StatelessWidget {
                 TextSpan(text: "No recurring fees, no surprises.\n"),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 20.0.h),
+                    padding: EdgeInsets.only(bottom: 28.0.h),
                   ),
                 ),
                 hyperlinkTextSpan(
                     "Terms of Use", "https://travelbalance.pl/terms-of-use/"),
                 WidgetSpan(
                   child: Padding(
-                    padding: EdgeInsets.only(right: 5.0),
+                    padding: EdgeInsets.only(right: 5.0.w),
                   ),
                 ),
                 hyperlinkTextSpan("Privacy Policy",
@@ -221,9 +214,9 @@ class FeatureItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 4.0.h, horizontal: 64.w),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: "Outfit",
-          fontSize: 16,
+          fontSize: 16.sp,
           color: mainTextColor,
         ),
       ),
