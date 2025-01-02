@@ -44,12 +44,12 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(TravelBalanceProBackgroundPath),
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage(TravelBalanceProBackgroundPath),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,7 +111,6 @@ class _TravelBalanceProPageState extends State<TravelBalanceProPage> {
                 return InAppPurchaseButton(
                   buttonText: buttonText,
                   onPressed: () async {
-
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData &&
                         snapshot.data != null) {

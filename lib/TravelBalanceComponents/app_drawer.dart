@@ -72,10 +72,7 @@ class AppDrawer extends StatelessWidget {
             clickableListTile(context, "Send feedback", Option.sendFeedback),
             clickableListTile(context, "About us", Option.about),
             clickableListTile(context, "Delete Account", Option.deleteAccount),
-            Platform.isIOS
-                ? clickableListTile(
-                    context, "TravelBalance Pro", Option.premiumAccount)
-                : SizedBox(),
+            clickableListTilePremium(context),
             const Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h),
@@ -97,6 +94,20 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+  Widget clickableListTilePremium(BuildContext context) {
+    bool isPremiumUser = Provider.of<UserProvider>(
+      context,
+      listen: true,
+    ).user!.isPremiumUser;
+
+    final String listTileText =
+        isPremiumUser ? "TravelBalance Pro unlocked!" : "TravelBalance Pro";
+
+    return Platform.isIOS
+        ? clickableListTile(context, listTileText, Option.premiumAccount)
+        : SizedBox();
+  }
+
   Widget clickableListTile(
       BuildContext context, String givenText, Option option,
       [String? moveTo]) {
@@ -113,9 +124,13 @@ class AppDrawer extends StatelessWidget {
 
     final bool isChangePasswordUnaccessible = option == Option.changePassword &&
         ApiService().loginType != LoginType.Email;
-    final bool isPremiumAccount = option == Option.premiumAccount;
+    final bool isPremiumAccountOption = option == Option.premiumAccount;
+    final bool isPremiumAccount = user?.isPremiumUser ?? false;
+
     Color setTextColor() {
-      if (isPremiumAccount) return premiumColor;
+      if (isPremiumAccount && isPremiumAccountOption) return Color(0xFFdaa520);
+
+      if (isPremiumAccountOption) return premiumColor;
 
       if (isChangePasswordUnaccessible) return Colors.grey;
 
@@ -145,14 +160,19 @@ class AppDrawer extends StatelessWidget {
             showDeleteAccount(context);
             break;
           case Option.premiumAccount:
-            Navigator.pushNamed(context, "TravelBalanceProPage");
+            if (!user.isPremiumUser) {
+              Navigator.pushNamed(context, "TravelBalanceProPage");
+            }
             break;
         }
       },
       child: ListTile(
         trailing: Icon(
           Icons.arrow_forward_ios_rounded,
-          color: isChangePasswordUnaccessible ? Colors.grey : secondaryColor,
+          color: isChangePasswordUnaccessible ||
+                  isPremiumAccount && isPremiumAccountOption
+              ? Colors.grey
+              : secondaryColor,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
