@@ -1,10 +1,12 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
+import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:TravelBalance/models/expense.dart';
+import 'dart:convert';
 
 class Trip {
   int? _id;
@@ -52,7 +54,7 @@ class Trip {
 
   factory Trip.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];
-    final String name = data['name'];
+    final String name = utf8.decode(data['name'].runes.toList()); // TEST ON PROD
     final int image = data['image_id'] ?? 0;
     DateTime dateTime = DateTime.parse(data['date']);
     final List<Expense> expenses = (data['expenses'] as List)
