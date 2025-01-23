@@ -95,10 +95,16 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget clickableListTilePremium(BuildContext context) {
-    bool isPremiumUser = Provider.of<UserProvider>(
+    bool isPremiumUser = false;
+
+    User? user = Provider.of<UserProvider>(
       context,
       listen: true,
-    ).user!.isPremiumUser;
+    ).user;
+
+    if (user != null) {
+      isPremiumUser = user.isPremiumUser;
+    }
 
     final String listTileText =
         isPremiumUser ? "TravelBalance Pro unlocked!" : "TravelBalance Pro";
