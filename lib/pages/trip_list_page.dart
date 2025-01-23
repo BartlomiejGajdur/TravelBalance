@@ -182,7 +182,8 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildTripList(UserProvider userProvider) {
     if (isLoading) {
-      return Center(child: LoadingTent());
+      //return Center(child: LoadingTent());
+      return Text(userProvider.ErrorText);
     } else {
       return _buildRefreshableContent(userProvider);
     }
@@ -200,7 +201,8 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildContent(UserProvider userProvider) {
     if (userProvider.user == null) {
-      return _buildSomethingWentWrongMessage();
+      // return _buildSomethingWentWrongMessage();
+      return Text(userProvider.ErrorText);
     } else if (userProvider.user!.trips.isEmpty) {
       return _buildNoContentMessage();
     } else {

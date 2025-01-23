@@ -12,13 +12,16 @@ class UserProvider with ChangeNotifier {
   User? _user;
 
   User? get user => _user;
+  String ErrorText = "";
 
   Future<void> fetchWholeUserData() async {
     User? fetchedUser;
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
+      ErrorText = "Fetch whole data. First Attempt: ${e.toString()}";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
+      notifyListeners();
     }
 
     if (fetchedUser == null) {
@@ -26,11 +29,15 @@ class UserProvider with ChangeNotifier {
         await ApiService().refreshToken();
       } catch (e) {
         debugPrint(e.toString());
+        ErrorText = "Refresh token error: ${e.toString()}";
+        notifyListeners();
       }
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
+        ErrorText = "Fetch whole data. Second Attempt: ${e.toString()}";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
+        notifyListeners();
       }
     }
 

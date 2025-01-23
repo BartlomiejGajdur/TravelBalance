@@ -182,7 +182,8 @@ class ApiService {
     handleResponseProblems(tripsResponse, 200, true, "FetchUserData_Trips");
     handleResponseProblems(userDataResponse, 200, true, "FetchUserData_User");
 
-    final tripsData = json.decode(utf8.decode(tripsResponse.bodyBytes)); // CHECK ON PROD
+    final tripsData =
+        jsonDecode(utf8.decode(tripsResponse.bodyBytes)); // CHECK ON PROD
     final userData = jsonDecode(userDataResponse.body);
     return User.fromJson(tripsData, userData);
   }
