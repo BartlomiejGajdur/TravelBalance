@@ -20,7 +20,7 @@ class UserProvider with ChangeNotifier {
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
-      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}";
+      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}\n";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
       notifyListeners();
     }
@@ -30,13 +30,13 @@ class UserProvider with ChangeNotifier {
         await ApiService().refreshToken();
       } catch (e) {
         debugPrint(e.toString());
-        ErrorText += "Refresh token error: ${e.toString()}";
+        ErrorText += "Refresh token error: ${e.toString()}\n";
         notifyListeners();
       }
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
-        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}";
+        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}\n";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
         notifyListeners();
       }
@@ -52,7 +52,7 @@ class UserProvider with ChangeNotifier {
       fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
     } catch (e) {
       debugPrint("Setting premium user failed ${e}");
-      ErrorText += "Setting premium user failed ${e}";
+      ErrorText += "Setting premium user failed ${e}\n";
     }
 
     _user = fetchedUser;
