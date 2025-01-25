@@ -182,8 +182,7 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildTripList(UserProvider userProvider) {
     if (isLoading) {
-      //return Center(child: LoadingTent());
-      return Text(userProvider.ErrorText);
+      return Center(child: LoadingTent());
     } else {
       return _buildRefreshableContent(userProvider);
     }
@@ -201,8 +200,7 @@ class _TripListPageState extends State<TripListPage> {
 
   Widget _buildContent(UserProvider userProvider) {
     if (userProvider.user == null) {
-      // return _buildSomethingWentWrongMessage();
-      return Text(userProvider.ErrorText);
+      return _buildSomethingWentWrongMessage(userProvider.ErrorText);
     } else if (userProvider.user!.trips.isEmpty) {
       return _buildNoContentMessage();
     } else {
@@ -210,7 +208,7 @@ class _TripListPageState extends State<TripListPage> {
     }
   }
 
-  Widget _buildSomethingWentWrongMessage() {
+  Widget _buildSomethingWentWrongMessage(String errorText) {
     return ListView(
       children: [
         Padding(
@@ -232,7 +230,7 @@ class _TripListPageState extends State<TripListPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text(
-                "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!",
+                "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!\n${errorText}",
                 style: GoogleFonts.outfit(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,

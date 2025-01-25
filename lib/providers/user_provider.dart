@@ -15,11 +15,12 @@ class UserProvider with ChangeNotifier {
   String ErrorText = "";
 
   Future<void> fetchWholeUserData() async {
+    ErrorText = "";
     User? fetchedUser;
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
-      ErrorText = "Fetch whole data. First Attempt: ${e.toString()}";
+      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
       notifyListeners();
     }
@@ -29,24 +30,30 @@ class UserProvider with ChangeNotifier {
         await ApiService().refreshToken();
       } catch (e) {
         debugPrint(e.toString());
-        ErrorText = "Refresh token error: ${e.toString()}";
+        ErrorText += "Refresh token error: ${e.toString()}";
         notifyListeners();
       }
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
-        ErrorText = "Fetch whole data. Second Attempt: ${e.toString()}";
+        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
         notifyListeners();
       }
     }
 
     if (fetchedUser == null) {
+      ErrorText += "Failed to fetch";
       debugPrint("Failed to fetch user data");
       return;
     }
 
-    fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
+    try {
+      fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
+    } catch (e) {
+      debugPrint("Setting premium user failed ${e}");
+      ErrorText += "Setting premium user failed ${e}";
+    }
 
     _user = fetchedUser;
     _user!.recalculateCostInBaseCurrency();
