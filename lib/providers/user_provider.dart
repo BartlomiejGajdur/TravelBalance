@@ -20,12 +20,21 @@ class UserProvider with ChangeNotifier {
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
-      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}";
+      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}\n";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
       notifyListeners();
     }
 
     if (fetchedUser == null) {
+      //Check if authentication is present (should be)
+      final authS = ApiService().auth;
+      ErrorText += "TOKENNNNN: ${authS.token}\n";
+
+      if (authS.refreshToken != null)
+        ErrorText += "REFRESH TOKEN: ${authS.refreshToken}\n";
+      else
+        ErrorText += "REFRESH TOKEN: null GG\n";
+
       try {
         await ApiService().refreshToken();
       } catch (e) {
@@ -36,14 +45,14 @@ class UserProvider with ChangeNotifier {
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
-        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}";
+        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}\n";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
         notifyListeners();
       }
     }
 
     if (fetchedUser == null) {
-      ErrorText += "Failed to fetch";
+      ErrorText += "Failed to fetch. USER JEST NULL \n";
       debugPrint("Failed to fetch user data");
       return;
     }
@@ -51,7 +60,7 @@ class UserProvider with ChangeNotifier {
     try {
       fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
     } catch (e) {
-      debugPrint("Setting premium user failed ${e}");
+      debugPrint("Setting premium user failed ${e}\n");
       ErrorText += "Setting premium user failed ${e}";
     }
 

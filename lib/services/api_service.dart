@@ -103,7 +103,7 @@ class ApiService {
   }
 
   LoginType get loginType => _authentication.loginType;
-
+  Authentication get auth => _authentication;
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
     SecureStorage().saveAuthentication(newAuthentication);
@@ -125,8 +125,7 @@ class ApiService {
       return false;
 
     if (_authentication.refreshToken == null) {
-      debugPrint('No refresh token available.');
-      return false;
+      throw "refreshToken function: No refresh token available. LoginType: ${loginType.name} \ TOKEN: ${_authentication.token}";
     }
 
     late final String CLIENT_ID, CLIENT_SECRET;

@@ -229,8 +229,10 @@ class _TripListPageState extends State<TripListPage> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              // child: Text(
+              //   "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!\n${errorText}",
               child: Text(
-                "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!\n${errorText}",
+                "${errorText}",
                 style: GoogleFonts.outfit(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
