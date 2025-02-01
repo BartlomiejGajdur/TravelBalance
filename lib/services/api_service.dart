@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:TravelBalance/Utils/exceptions.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
@@ -103,7 +104,7 @@ class ApiService {
   }
 
   LoginType get loginType => _authentication.loginType;
-  Authentication get auth => _authentication;
+
   void setAuthentication(Authentication newAuthentication) {
     _authentication = newAuthentication;
     SecureStorage().saveAuthentication(newAuthentication);
@@ -125,7 +126,7 @@ class ApiService {
       return false;
 
     if (_authentication.refreshToken == null) {
-      throw "refreshToken function: No refresh token available. LoginType: ${loginType.name} \ TOKEN: ${_authentication.token}";
+      throw NoRefreshTokenException;
     }
 
     late final String CLIENT_ID, CLIENT_SECRET;

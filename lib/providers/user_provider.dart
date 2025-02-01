@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/exceptions.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
@@ -14,45 +15,34 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
   String ErrorText = "";
 
-  Future<void> fetchWholeUserData() async {
-    ErrorText = "";
+  Future<void> fetchWholeUserData(BuildContext context) async {
     User? fetchedUser;
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
-      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}\n";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
       notifyListeners();
     }
 
     if (fetchedUser == null) {
-      //Check if authentication is present (should be)
-      final authS = ApiService().auth;
-      ErrorText += "TOKENNNNN: ${authS.token}\n";
-
-      if (authS.refreshToken != null)
-        ErrorText += "REFRESH TOKEN: ${authS.refreshToken}\n";
-      else
-        ErrorText += "REFRESH TOKEN: null GG\n";
-
       try {
         await ApiService().refreshToken();
+      } on NoRefreshTokenException catch (e) {
+        print("${e.toString()}");
+        logout(context);
       } catch (e) {
         debugPrint(e.toString());
-        ErrorText += "Refresh token error: ${e.toString()}";
         notifyListeners();
       }
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
-        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}\n";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
         notifyListeners();
       }
     }
 
     if (fetchedUser == null) {
-      ErrorText += "Failed to fetch. USER JEST NULL \n";
       debugPrint("Failed to fetch user data");
       return;
     }
@@ -61,7 +51,6 @@ class UserProvider with ChangeNotifier {
       fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
     } catch (e) {
       debugPrint("Setting premium user failed ${e}\n");
-      ErrorText += "Setting premium user failed ${e}";
     }
 
     _user = fetchedUser;

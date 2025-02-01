@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:TravelBalance/Utils/globals.dart';
 import 'package:currency_picker/currency_picker.dart';
 
@@ -90,7 +92,7 @@ class Expense {
 
   factory Expense.fromJson(Map<String, dynamic> data, final int tripId) {
     final int id = data['id'];
-    final String title = data['title'];
+    final String title = utf8.decode(data['title']);
     final double cost = data['cost'].toDouble();
     final Category category = Category.values[data['category']];
     final Currency currency =

@@ -54,7 +54,7 @@ class _TripListPageState extends State<TripListPage> {
   Future<void> _fetchUserData() async {
     _toggleLoading();
     await Provider.of<UserProvider>(context, listen: false)
-        .fetchWholeUserData();
+        .fetchWholeUserData(context);
     _toggleLoading();
   }
 
@@ -192,7 +192,7 @@ class _TripListPageState extends State<TripListPage> {
     return RefreshIndicator(
       color: primaryColor,
       onRefresh: () async {
-        await userProvider.fetchWholeUserData();
+        await userProvider.fetchWholeUserData(context);
       },
       child: _buildContent(userProvider),
     );

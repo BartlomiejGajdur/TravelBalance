@@ -54,7 +54,7 @@ class Trip {
 
   factory Trip.fromJson(Map<String, dynamic> data) {
     final int id = data['id'];
-    final String name = utf8.decode(data['name'].runes.toList()); // TEST ON PROD
+    final String name = utf8.decode(data['name'].runes.toList());
     final int image = data['image_id'] ?? 0;
     DateTime dateTime = DateTime.parse(data['date']);
     final List<Expense> expenses = (data['expenses'] as List)
