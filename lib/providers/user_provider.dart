@@ -17,10 +17,12 @@ class UserProvider with ChangeNotifier {
 
   Future<void> fetchWholeUserData(BuildContext context) async {
     User? fetchedUser;
+    ErrorText = "";
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
+      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}\n";
       notifyListeners();
     }
 
@@ -29,6 +31,7 @@ class UserProvider with ChangeNotifier {
         await ApiService().refreshToken();
       } on NoRefreshTokenException catch (e) {
         print("${e.toString()}");
+        ErrorText += "${e.toString()}\n";
         logout(context);
       } catch (e) {
         debugPrint(e.toString());
@@ -38,6 +41,7 @@ class UserProvider with ChangeNotifier {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
+        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}\n";
         notifyListeners();
       }
     }

@@ -92,7 +92,7 @@ class Expense {
 
   factory Expense.fromJson(Map<String, dynamic> data, final int tripId) {
     final int id = data['id'];
-    final String title = utf8.decode(data['title']);
+    final String title = data['title'];
     final double cost = data['cost'].toDouble();
     final Category category = Category.values[data['category']];
     final Currency currency =
