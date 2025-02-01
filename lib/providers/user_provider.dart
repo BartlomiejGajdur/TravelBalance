@@ -1,3 +1,4 @@
+import 'package:TravelBalance/Utils/exceptions.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/pages/login_page.dart';
 import 'package:TravelBalance/services/google_signin_service.dart';
@@ -14,13 +15,11 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
   String ErrorText = "";
 
-  Future<void> fetchWholeUserData() async {
-    ErrorText = "";
+  Future<void> fetchWholeUserData(BuildContext context) async {
     User? fetchedUser;
     try {
       fetchedUser = await ApiService().fetchUserData();
     } catch (e) {
-      ErrorText += "Fetch whole data. First Attempt: ${e.toString()}\n";
       debugPrint("Fetch whole data. First Attempt: ${e.toString()}");
       notifyListeners();
     }
@@ -28,22 +27,22 @@ class UserProvider with ChangeNotifier {
     if (fetchedUser == null) {
       try {
         await ApiService().refreshToken();
+      } on NoRefreshTokenException catch (e) {
+        print("${e.toString()}");
+        logout(context);
       } catch (e) {
         debugPrint(e.toString());
-        ErrorText += "Refresh token error: ${e.toString()}\n";
         notifyListeners();
       }
       try {
         fetchedUser = await ApiService().fetchUserData();
       } catch (e) {
-        ErrorText += "Fetch whole data. Second Attempt: ${e.toString()}\n";
         debugPrint("Fetch whole data. Second Attempt: ${e.toString()}");
         notifyListeners();
       }
     }
 
     if (fetchedUser == null) {
-      ErrorText += "Failed to fetch";
       debugPrint("Failed to fetch user data");
       return;
     }
@@ -51,8 +50,7 @@ class UserProvider with ChangeNotifier {
     try {
       fetchedUser.setPremiumUser(fetchedUser.isPremiumUser);
     } catch (e) {
-      debugPrint("Setting premium user failed ${e}");
-      ErrorText += "Setting premium user failed ${e}\n";
+      debugPrint("Setting premium user failed ${e}\n");
     }
 
     _user = fetchedUser;

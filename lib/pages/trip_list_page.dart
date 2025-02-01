@@ -54,7 +54,7 @@ class _TripListPageState extends State<TripListPage> {
   Future<void> _fetchUserData() async {
     _toggleLoading();
     await Provider.of<UserProvider>(context, listen: false)
-        .fetchWholeUserData();
+        .fetchWholeUserData(context);
     _toggleLoading();
   }
 
@@ -192,7 +192,7 @@ class _TripListPageState extends State<TripListPage> {
     return RefreshIndicator(
       color: primaryColor,
       onRefresh: () async {
-        await userProvider.fetchWholeUserData();
+        await userProvider.fetchWholeUserData(context);
       },
       child: _buildContent(userProvider),
     );
@@ -229,8 +229,10 @@ class _TripListPageState extends State<TripListPage> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              // child: Text(
+              //   "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!\n${errorText}",
               child: Text(
-                "Looks like our tent’s gotten a little torn! 🚧 Something went wrong on our adventure. Double-check your connection or try again soon. Even the most epic trips need a little break!\n${errorText}",
+                "${errorText}",
                 style: GoogleFonts.outfit(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,

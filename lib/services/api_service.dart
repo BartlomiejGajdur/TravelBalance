@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:TravelBalance/Utils/country_picker.dart';
 import 'package:TravelBalance/Utils/custom_snack_bar.dart';
+import 'package:TravelBalance/Utils/exceptions.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/models/expense.dart';
 import 'package:TravelBalance/services/apple_sign_in_service.dart';
@@ -125,8 +126,7 @@ class ApiService {
       return false;
 
     if (_authentication.refreshToken == null) {
-      debugPrint('No refresh token available.');
-      return false;
+      throw NoRefreshTokenException;
     }
 
     late final String CLIENT_ID, CLIENT_SECRET;
