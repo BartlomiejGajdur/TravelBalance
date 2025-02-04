@@ -1,5 +1,4 @@
 import 'package:TravelBalance/Utils/country_picker.dart';
-import 'package:TravelBalance/Utils/custom_snack_bar.dart';
 import 'package:TravelBalance/models/custom_image.dart';
 import 'package:TravelBalance/services/currency_converter.dart';
 import 'package:TravelBalance/services/hive_currency_rate_storage.dart';
