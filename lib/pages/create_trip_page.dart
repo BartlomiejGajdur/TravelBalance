@@ -12,6 +12,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class CreateTripPage extends StatefulWidget {
   final BuildContext mainPageContext;
@@ -135,7 +136,67 @@ class _CreateTripPageState extends State<CreateTripPage> {
     return CustomScaffold(
       text1: "Create trip",
       text2: "Let the journey begin!",
-      childWidget: _buildFormContent(context),
+      childWidget: AudioPlayerWidget(),
+    );
+  }
+}
+
+class AudioPlayerWidget extends StatefulWidget {
+  @override
+  _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
+}
+
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? _currentPlaying;
+
+  final List<String> audioFiles = [
+    "Pan-z-wami-b.mp3",
+    "Pan-z-wami-b.wav",
+    "Pan-z-wami-f.mp3",
+    "Pan-z-wami-f.wav",
+    "Pan-z-wami-fis.mp3",
+    "Pan-z-wami-fis.wav",
+    "Pan-z-wami-g.mp3",
+    "Pan-z-wami-g.wav",
+    "Pan-z-wami-h.mp3",
+    "Pan-z-wami-h.wav",
+  ];
+
+  void _playAudio(String fileName) async {
+    if (_currentPlaying == fileName) {
+      await _audioPlayer.stop();
+      setState(() {
+        _currentPlaying = null;
+      });
+    } else {
+      await _audioPlayer.play(AssetSource('music/$fileName'));
+      setState(() {
+        _currentPlaying = fileName;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: audioFiles.length,
+      itemBuilder: (context, index) {
+        final fileName = audioFiles[index];
+        return ListTile(
+          title: Text(fileName),
+          trailing: Icon(
+            _currentPlaying == fileName ? Icons.stop : Icons.play_arrow,
+          ),
+          onTap: () => _playAudio(fileName),
+        );
+      },
     );
   }
 }
